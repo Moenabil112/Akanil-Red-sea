@@ -99,7 +99,7 @@
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: var(--color-nile);
+  color: var(--color-nile-on-dark);
   text-transform: uppercase;
 }
 

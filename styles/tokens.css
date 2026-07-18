@@ -22,12 +22,14 @@
   --surface-panel-dark: rgba(245, 242, 234, 0.04);
   --surface-panel-dark-hover: rgba(245, 242, 234, 0.07);
   --text-on-dark: #f2efe6;
-  --text-on-dark-soft: rgba(242, 239, 230, 0.72);
-  --text-on-dark-mute: rgba(242, 239, 230, 0.55);
+  --text-on-dark-soft: rgba(242, 239, 230, 0.8);
+  --text-on-dark-mute: rgba(242, 239, 230, 0.68);
   --text-on-light: #1c2530;
-  --text-on-light-soft: rgba(28, 37, 48, 0.72);
-  --text-on-light-mute: rgba(28, 37, 48, 0.55);
+  --text-on-light-soft: rgba(28, 37, 48, 0.78);
+  --text-on-light-mute: rgba(28, 37, 48, 0.66);
   --gold-soft: #e8cd96;
+  --color-copper-text: #96522c;
+  --color-nile-on-dark: #7fc0c7;
   --line-on-dark: rgba(216, 196, 165, 0.18);
   --line-on-dark-strong: rgba(216, 196, 165, 0.34);
   --line-on-light: rgba(31, 39, 45, 0.14);
