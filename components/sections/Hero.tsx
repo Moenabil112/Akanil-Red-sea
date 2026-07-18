@@ -1,13 +1,14 @@
 import Image from "next/image";
-import type { SiteContent } from "@/content/types";
-import OpenContactLink from "@/components/ui/OpenContactLink";
+import Link from "next/link";
+import type { Locale, SiteContent } from "@/content/types";
 import styles from "./Hero.module.css";
 
 interface HeroProps {
   hero: SiteContent["hero"];
+  locale: Locale;
 }
 
-export default function Hero({ hero }: HeroProps) {
+export default function Hero({ hero, locale }: HeroProps) {
   return (
     <section id="top" className={styles.hero}>
       <div className={`container ${styles.grid}`}>
@@ -26,12 +27,16 @@ export default function Hero({ hero }: HeroProps) {
           <p className={styles.lead}>{hero.lead}</p>
 
           <div className={styles.actions}>
-            <OpenContactLink className={styles.primaryCta} title={hero.primary.explanation}>
+            <Link
+              className={styles.primaryCta}
+              href={`/${locale}/reception`}
+              title={hero.primary.explanation}
+            >
               {hero.primary.label}
-            </OpenContactLink>
+            </Link>
             <a
               className={styles.secondaryCta}
-              href="#architecture"
+              href="#entry"
               title={hero.secondary.explanation}
             >
               {hero.secondary.label}

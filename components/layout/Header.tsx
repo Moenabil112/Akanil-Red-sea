@@ -2,29 +2,23 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import type { Locale, SiteContent } from "@/content/types";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type { ExperienceContent, Locale, SiteContent } from "@/content/types";
 import { locales } from "@/lib/i18n";
+import { localizedPath, switchLocalePath } from "@/lib/routes";
 import styles from "./Header.module.css";
 
 interface HeaderProps {
   locale: Locale;
   ui: SiteContent["ui"];
+  experience: ExperienceContent;
 }
 
-/** Returns the id of the section currently nearest the top of the viewport. */
-function currentSectionAnchor(): string {
-  const sections = document.querySelectorAll<HTMLElement>("main section[id]");
-  let current = "";
-  for (const section of sections) {
-    if (section.getBoundingClientRect().top <= 120) current = section.id;
-  }
-  return current;
-}
-
-export default function Header({ locale, ui }: HeaderProps) {
+export default function Header({ locale, ui, experience }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const navRef = useRef<HTMLElement>(null);
+  const pathname = usePathname() ?? `/${locale}`;
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -33,6 +27,10 @@ export default function Header({ locale, ui }: HeaderProps) {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -46,22 +44,41 @@ export default function Header({ locale, ui }: HeaderProps) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  /** Language switching preserves the section the reader is currently in. */
+  /** Language switching preserves the current route and hash (Phase 4). */
   const onLanguageClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     target: Locale,
   ) => {
-    const anchor = currentSectionAnchor();
-    if (anchor) {
-      event.preventDefault();
-      window.location.assign(`/${target}#${anchor}`);
-    }
+    event.preventDefault();
+    const hash = window.location.hash.replace(/^#/, "");
+    window.location.assign(
+      switchLocalePath(`${pathname}${hash ? `#${hash}` : ""}`, target),
+    );
   };
+
+  const isActive = (href: string) =>
+    pathname === localizedPath(locale, href) ||
+    pathname.startsWith(`${localizedPath(locale, href)}/`);
+
+  const languageLinks = (variant: "desktop" | "mobile") =>
+    locales.map((l) => (
+      <a
+        key={l}
+        href={switchLocalePath(pathname, l)}
+        lang={l}
+        hrefLang={l}
+        aria-current={l === locale ? "page" : undefined}
+        className={l === locale ? styles.langActive : styles.langLink}
+        onClick={(event) => onLanguageClick(event, l)}
+      >
+        {variant === "desktop" ? l.toUpperCase() : ui.languageNames[l]}
+      </a>
+    ));
 
   return (
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
       <div className={`container ${styles.bar}`}>
-        <a href={`/${locale}#top`} className={styles.brand}>
+        <Link href={`/${locale}`} className={styles.brand}>
           <Image
             src="/brand/akanil-emblem.png"
             alt=""
@@ -74,59 +91,55 @@ export default function Header({ locale, ui }: HeaderProps) {
             <strong className="latin-run">AKANIL</strong>
             <span>{ui.footer.tagline}</span>
           </span>
-        </a>
+        </Link>
 
         <nav
           id="site-nav"
-          ref={navRef}
           aria-label={ui.navLabel}
           className={`${styles.nav} ${open ? styles.navOpen : ""}`}
         >
           <ul className={styles.navList}>
-            {ui.nav.map((item) => (
-              <li key={item.anchor}>
-                <a
-                  href={`#${item.anchor}`}
+            {experience.navGroups.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={localizedPath(locale, item.href)}
                   className={styles.navLink}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  data-active={isActive(item.href) || undefined}
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
+          <ul className={styles.navListSecondary}>
+            {experience.footerNav
+              .filter(
+                (item) =>
+                  !experience.navGroups.some((g) => g.href === item.href),
+              )
+              .map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={localizedPath(locale, item.href)}
+                    className={styles.navLinkSecondary}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    onClick={() => setOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+          </ul>
           <div className={styles.langMobile} aria-label={ui.languageLabel}>
-            {locales.map((l) => (
-              <a
-                key={l}
-                href={`/${l}`}
-                lang={l}
-                hrefLang={l}
-                aria-current={l === locale ? "page" : undefined}
-                className={l === locale ? styles.langActive : styles.langLink}
-                onClick={(event) => onLanguageClick(event, l)}
-              >
-                {ui.languageNames[l]}
-              </a>
-            ))}
+            {languageLinks("mobile")}
           </div>
         </nav>
 
         <div className={styles.actions}>
           <nav aria-label={ui.languageLabel} className={styles.lang}>
-            {locales.map((l) => (
-              <a
-                key={l}
-                href={`/${l}`}
-                lang={l}
-                hrefLang={l}
-                aria-current={l === locale ? "page" : undefined}
-                className={l === locale ? styles.langActive : styles.langLink}
-                onClick={(event) => onLanguageClick(event, l)}
-              >
-                {l.toUpperCase()}
-              </a>
-            ))}
+            {languageLinks("desktop")}
           </nav>
           <button
             ref={menuButtonRef}

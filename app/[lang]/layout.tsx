@@ -24,7 +24,10 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale: Locale = isLocale(lang) ? lang : defaultLocale;
   const content = getContent(locale);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
   return {
+    // Set only when the production domain is configured; never guessed.
+    ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
     title: content.meta.title,
     description: content.meta.description,
     alternates: {

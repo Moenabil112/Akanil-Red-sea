@@ -51,13 +51,13 @@ export const fr: SiteContent = {
     ],
     lead: "Une infrastructure marocaine permanente de développement des affaires, de qualification et de suivi — reliant les capacités industrielles, financières et technologiques marocaines aux opportunités qualifiées au Soudan et dans l'espace économique de la mer Rouge.",
     primary: {
-      label: "Demander un briefing institutionnel",
+      label: "Démarrer une demande institutionnelle",
       explanation:
-        "Ouvre une note de contact décrivant le parcours contrôlé du briefing. Aucun engagement n'est créé.",
+        "Ouvre le bureau d'accueil pour préparer une demande structurée soumise à revue humaine. Aucun engagement n'est créé.",
     },
     secondary: {
-      label: "Explorer le modèle de la Passerelle",
-      explanation: "Conduit à l'architecture institutionnelle ci-dessous.",
+      label: "Choisir votre parcours d'entrée",
+      explanation: "Conduit aux parcours d'entrée ci-dessous.",
     },
     pillars: [
       {

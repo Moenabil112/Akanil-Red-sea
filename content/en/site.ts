@@ -52,13 +52,13 @@ export const en: SiteContent = {
     ],
     lead: "A permanent Moroccan infrastructure for business development, qualification and follow-up — connecting Moroccan industrial, financial and technological capabilities with qualified opportunities across Sudan and the Red Sea economic space.",
     primary: {
-      label: "Request an institutional briefing",
+      label: "Start an institutional request",
       explanation:
-        "Opens a contact note describing the controlled briefing path. No commitment is created.",
+        "Opens the reception desk to prepare a structured, human-reviewed request. No commitment is created.",
     },
     secondary: {
-      label: "Explore the Gateway model",
-      explanation: "Moves to the institutional architecture below.",
+      label: "Choose your entry path",
+      explanation: "Moves to the audience entry paths below.",
     },
     pillars: [
       {
