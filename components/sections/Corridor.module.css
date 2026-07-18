@@ -1,0 +1,5 @@
+.section {
+  background: var(--surface-deep-2);
+  padding-block: var(--section-pad);
+  border-block-start: 1px solid var(--line-on-dark);
+}

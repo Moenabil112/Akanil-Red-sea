@@ -1,0 +1,228 @@
+.section {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--section-pad);
+}
+
+.intro {
+  max-width: 46rem;
+  margin-block-end: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-copper);
+}
+
+[dir="rtl"] .eyebrow {
+  letter-spacing: 0.04em;
+}
+
+.number {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--text-on-light-mute);
+}
+
+.rule {
+  width: 2.25rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.title {
+  margin-block-start: var(--space-4);
+  font-size: var(--text-h2);
+  line-height: var(--leading-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+[dir="rtl"] .title {
+  letter-spacing: 0;
+}
+
+.lead {
+  margin-block-start: var(--space-4);
+  font-size: var(--text-lg);
+  color: var(--text-on-light-soft);
+  max-width: 42rem;
+}
+
+.shell {
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  border-block-end: 1px solid var(--line-on-light);
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab,
+.tabActive {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--text-on-light-mute);
+  border-block-end: 2px solid transparent;
+  min-height: 3.25rem;
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+
+.tab:hover {
+  color: var(--text-on-light);
+  background: rgba(216, 196, 165, 0.14);
+}
+
+.tabActive {
+  color: var(--color-atlantic);
+  border-color: var(--color-copper);
+  background: rgba(216, 196, 165, 0.18);
+}
+
+.tabIndex {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-copper);
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  padding: clamp(1.5rem, 1.25rem + 1.5vw, 2.75rem);
+}
+
+.chainName {
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+  font-weight: 700;
+}
+
+.chainSummary {
+  margin-block-start: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+}
+
+.outcome {
+  margin-block-start: var(--space-5);
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-green);
+  border-inline-start: 2px solid var(--color-green);
+  padding-inline-start: var(--space-4);
+}
+
+.outcomeLabel {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-on-light-mute);
+}
+
+[dir="rtl"] .outcomeLabel {
+  letter-spacing: 0.03em;
+}
+
+.stages {
+  display: grid;
+  counter-reset: stage;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem 1fr;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  animation: stage-in var(--duration-emphasis) var(--ease-enter) both;
+  animation-delay: var(--stage-delay, 0ms);
+}
+
+@keyframes stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    animation: none;
+  }
+}
+
+.stageIndex {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--line-on-light-strong);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-copper);
+  background: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.stageLink {
+  position: absolute;
+  inset-inline-start: 1rem;
+  inset-block-start: calc(var(--space-3) + 2rem);
+  inset-block-end: calc(-1 * var(--space-3) + 0.5rem);
+  width: 1px;
+  background: var(--line-on-light-strong);
+}
+
+.stageTitle {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.stageText {
+  margin-block-start: 2px;
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+}
+
+@media (max-width: 64rem) {
+  .panel {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,6 +8,9 @@ import Hero from "@/components/sections/Hero";
 import WhyGateway from "@/components/sections/WhyGateway";
 import Architecture from "@/components/sections/Architecture";
 import MoroccoValue from "@/components/sections/MoroccoValue";
+import SudanValue from "@/components/sections/SudanValue";
+import Corridor from "@/components/sections/Corridor";
+import ValueChains from "@/components/sections/ValueChains";
 import styles from "./page.module.css";
 
 interface PageProps {
@@ -35,6 +38,19 @@ export default async function Page({ params }: PageProps) {
         <MoroccoValue
           morocco={content.morocco}
           conceptArtLabel={content.ui.conceptArtLabel}
+          sectionLabel={content.ui.sectionLabel}
+        />
+        <SudanValue
+          sudan={content.sudan}
+          conceptArtLabel={content.ui.conceptArtLabel}
+          sectionLabel={content.ui.sectionLabel}
+        />
+        <Corridor
+          corridor={content.corridor}
+          sectionLabel={content.ui.sectionLabel}
+        />
+        <ValueChains
+          chains={content.chains}
           sectionLabel={content.ui.sectionLabel}
         />
       </main>
