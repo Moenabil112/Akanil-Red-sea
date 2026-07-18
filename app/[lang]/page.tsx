@@ -5,6 +5,9 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ContactNote from "@/components/ui/ContactNote";
 import Hero from "@/components/sections/Hero";
+import WhyGateway from "@/components/sections/WhyGateway";
+import Architecture from "@/components/sections/Architecture";
+import MoroccoValue from "@/components/sections/MoroccoValue";
 import styles from "./page.module.css";
 
 interface PageProps {
@@ -24,6 +27,16 @@ export default async function Page({ params }: PageProps) {
       <Header locale={locale} ui={content.ui} />
       <main id="main">
         <Hero hero={content.hero} />
+        <WhyGateway why={content.why} sectionLabel={content.ui.sectionLabel} />
+        <Architecture
+          architecture={content.architecture}
+          sectionLabel={content.ui.sectionLabel}
+        />
+        <MoroccoValue
+          morocco={content.morocco}
+          conceptArtLabel={content.ui.conceptArtLabel}
+          sectionLabel={content.ui.sectionLabel}
+        />
       </main>
       <Footer ui={content.ui} />
       <ContactNote modal={content.contact.modal} />
