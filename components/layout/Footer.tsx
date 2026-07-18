@@ -12,7 +12,7 @@ export default function Footer({ ui }: FooterProps) {
       <div className={`container ${styles.grid}`}>
         <div className={styles.brand}>
           <Image
-            src="/brand/akanil-logo.png"
+            src="/brand/akanil-emblem.png"
             alt=""
             width={56}
             height={56}

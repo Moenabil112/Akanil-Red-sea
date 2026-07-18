@@ -66,7 +66,7 @@ export default function SudanValue({
 
             <Reveal as="figure" className={styles.visual} delay={100}>
               <Image
-                src="/images/chains/shared-value-chains.webp"
+                src="/images/chains/value-chain-panorama.webp"
                 alt=""
                 width={1672}
                 height={941}

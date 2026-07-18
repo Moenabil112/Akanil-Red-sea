@@ -34,7 +34,7 @@ export default function MoroccoValue({
           </Reveal>
           <Reveal as="figure" className={styles.visual} delay={120}>
             <Image
-              src="/images/corridor/morocco-node-map.webp"
+              src="/images/morocco/energy-global-connections.webp"
               alt=""
               width={1672}
               height={941}

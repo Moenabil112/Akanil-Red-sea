@@ -21,6 +21,7 @@ export const fr: SiteContent = {
     close: "Fermer",
     sectionLabel: "Section",
     conceptArtLabel: "Illustration conceptuelle — non documentaire",
+    navLabel: "Navigation principale",
     nav: [
       { anchor: "why", label: "La Passerelle" },
       { anchor: "morocco", label: "Maroc" },

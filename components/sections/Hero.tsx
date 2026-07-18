@@ -44,7 +44,7 @@ export default function Hero({ hero }: HeroProps) {
         <figure className={styles.visual}>
           <div className={styles.portalFrame}>
             <Image
-              src="/images/hero/hero-gateway-portal.webp"
+              src="/images/hero/hero-abstract-flow.webp"
               alt=""
               width={1672}
               height={941}

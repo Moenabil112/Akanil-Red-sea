@@ -19,16 +19,25 @@ export const nodePositions: Record<CorridorNodeId, { x: number; y: number }> = {
   sudan: { x: 590, y: 420 },
 };
 
-/** Quadratic path between two nodes, optionally bent through a via node. */
+/**
+ * Path between two nodes. Via-routes pass through the intermediate node
+ * (two quadratic legs); direct routes bow north or south depending on
+ * travel direction so parallel scenarios stay visually distinct.
+ */
 export function routePath(route: CorridorRouteContent): string {
   const from = nodePositions[route.from];
   const to = nodePositions[route.to];
   if (route.via) {
     const via = nodePositions[route.via];
-    return `M ${from.x} ${from.y} Q ${via.x} ${via.y} ${to.x} ${to.y}`;
+    const c1x = (from.x + via.x) / 2;
+    const c1y = (from.y + via.y) / 2 - 30;
+    const c2x = (via.x + to.x) / 2;
+    const c2y = (via.y + to.y) / 2 - 30;
+    return `M ${from.x} ${from.y} Q ${c1x} ${c1y} ${via.x} ${via.y} Q ${c2x} ${c2y} ${to.x} ${to.y}`;
   }
+  const bend = route.from === "morocco" ? 70 : -60;
   const midX = (from.x + to.x) / 2;
-  const midY = (from.y + to.y) / 2 - 60;
+  const midY = (from.y + to.y) / 2 + bend;
   return `M ${from.x} ${from.y} Q ${midX} ${midY} ${to.x} ${to.y}`;
 }
 

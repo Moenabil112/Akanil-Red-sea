@@ -42,14 +42,14 @@ export async function generateMetadata({
       locale,
       images: [
         {
-          url: "/images/hero/hero-gateway-portal.webp",
+          url: "/images/hero/hero-abstract-flow.webp",
           width: 1672,
           height: 941,
           alt: content.meta.ogAlt,
         },
       ],
     },
-    icons: { icon: "/brand/akanil-logo.png" },
+    icons: { icon: "/brand/akanil-emblem.png" },
   };
 }
 

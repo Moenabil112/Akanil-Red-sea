@@ -68,6 +68,7 @@ export interface SiteContent {
     close: string;
     sectionLabel: string;
     conceptArtLabel: string;
+    navLabel: string;
     nav: { anchor: string; label: string }[];
     footer: {
       entity: string;

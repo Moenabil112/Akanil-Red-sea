@@ -20,6 +20,7 @@ export const ar: SiteContent = {
     close: "إغلاق",
     sectionLabel: "قسم",
     conceptArtLabel: "رسم مفاهيمي — ليس دليلاً توثيقياً",
+    navLabel: "التنقل الرئيسي",
     nav: [
       { anchor: "why", label: "البوابة" },
       { anchor: "morocco", label: "المغرب" },

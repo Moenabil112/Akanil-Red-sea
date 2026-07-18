@@ -22,6 +22,7 @@ export const en: SiteContent = {
     close: "Close",
     sectionLabel: "Section",
     conceptArtLabel: "Concept illustration — not documentary evidence",
+    navLabel: "Primary navigation",
     nav: [
       { anchor: "why", label: "The Gateway" },
       { anchor: "morocco", label: "Morocco" },

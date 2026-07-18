@@ -63,7 +63,7 @@ export default function Header({ locale, ui }: HeaderProps) {
       <div className={`container ${styles.bar}`}>
         <a href={`/${locale}#top`} className={styles.brand}>
           <Image
-            src="/brand/akanil-logo.png"
+            src="/brand/akanil-emblem.png"
             alt=""
             width={44}
             height={44}
@@ -79,7 +79,7 @@ export default function Header({ locale, ui }: HeaderProps) {
         <nav
           id="site-nav"
           ref={navRef}
-          aria-label={ui.nav[0] ? "Primary" : "Primary"}
+          aria-label={ui.navLabel}
           className={`${styles.nav} ${open ? styles.navOpen : ""}`}
         >
           <ul className={styles.navList}>
