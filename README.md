@@ -10,7 +10,11 @@ Trilingual (AR/FR/EN) institutional introduction website for the
 ## Stack
 
 - Next.js (App Router) + strict TypeScript, React Server Components
-- Static locale routes `/ar` (RTL, default), `/fr`, `/en`
+- Static locale routes `/ar` (RTL, default), `/fr`, `/en`, each with nine
+  content routes (`gateway`, `morocco`, `sudan`, `corridor`,
+  `value-chains`, `forum`, `trust`, `about-akanil`, `reception`)
+- Digital Reception Lite: structured, human-reviewed request desk with a
+  privacy-preserving mailto transport (no backend, no storage)
 - CSS Modules + centralized design tokens (`styles/tokens.css`)
 - No animation library, no CMS, no backend, no analytics, no external services
 - Vitest + Testing Library; ESLint; axe-verified WCAG 2.2 AA target
@@ -30,14 +34,18 @@ npm test           # Vitest suite
 ## Structure
 
 ```
-app/[lang]/        locale layout + single-page narrative (12 sections)
-components/        layout / sections / maps / motion / ui
-content/           independently edited AR/FR/EN records + terminology
-lib/               i18n, content access, corridor geometry
+app/[lang]/        clarity homepage + nine trilingual content routes
+components/        layout / sections (+ home summaries) / maps / motion /
+                   reception / ui
+content/           independently edited AR/FR/EN records: site, experience
+                   (status, audiences, summaries, page meta), reception
+lib/               i18n, content access, routes, reception transport,
+                   corridor geometry, page metadata
 styles/            tokens + globals (logical properties, native RTL)
 public/            optimized WebP derivatives + brand emblem only
-tests/             content parity, terminology, corridor, ARIA behavior
-docs/              plan, decisions (ADR), design registers, QA report
+tests/             content/experience parity, reception model + desk,
+                   corridor, tabs, homepage structure
+docs/              plan, ROUTES.md, decisions (ADR-001…011), QA reports
 .claude/skills/    project skills governing design and QA
 ```
 
@@ -51,5 +59,10 @@ docs/              plan, decisions (ADR), design registers, QA report
 - Do not deploy or connect external services without explicit
   authorization from the project owner.
 
+Reception channels: `akanil.consulting@proton.me` · `+212 663 177 864`.
+Set `NEXT_PUBLIC_SITE_URL` to the production domain before publishing so
+social metadata resolves absolutely.
+
 See `docs/implementation/IMPLEMENTATION-PLAN.md`,
-`docs/design/ASSET-USE-REGISTER.md` and `docs/qa/QA-REPORT.md`.
+`docs/implementation/ROUTES.md`, `docs/design/ASSET-USE-REGISTER.md`,
+`docs/qa/QA-REPORT.md` and `docs/qa/QA-REPORT-GATEWAY-EXPERIENCE.md`.
