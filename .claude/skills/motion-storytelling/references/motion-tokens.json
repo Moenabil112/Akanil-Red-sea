@@ -1,0 +1,24 @@
+{
+  "durations_ms": {
+    "instant": 120,
+    "fast": 180,
+    "standard": 320,
+    "emphasis": 600,
+    "cinematic": 1200
+  },
+  "easing": {
+    "standard": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+    "enter": "cubic-bezier(0.16, 1, 0.3, 1)",
+    "exit": "cubic-bezier(0.7, 0, 0.84, 0)"
+  },
+  "principles": [
+    "Motion communicates hierarchy, progression, route, trust or state.",
+    "Only one dominant cinematic motion event per viewport.",
+    "Reduced-motion mode removes parallax, route drawing and continuous loops."
+  ],
+  "loop_guidance_seconds": {
+    "ambient_min": 8,
+    "ambient_max": 16,
+    "logo_sting_max": 6
+  }
+}

@@ -1,0 +1,24 @@
+.reveal {
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.pending {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--duration-emphasis) var(--ease-enter),
+    transform var(--duration-emphasis) var(--ease-enter);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pending {
+    opacity: 1;
+    transform: none;
+  }
+}

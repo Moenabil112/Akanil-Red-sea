@@ -1,0 +1,129 @@
+.section {
+  background: var(--surface-deep);
+  padding-block: var(--section-pad);
+}
+
+.layers {
+  display: grid;
+  max-width: 56rem;
+}
+
+.layer {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: var(--space-4);
+}
+
+.layerRail {
+  display: grid;
+  justify-items: center;
+  grid-template-rows: auto 1fr;
+}
+
+.layerDot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-gold);
+  margin-block-start: var(--space-5);
+}
+
+.layerLine {
+  width: 1px;
+  background: linear-gradient(var(--color-gold), var(--line-on-dark));
+  min-height: 2rem;
+}
+
+.layerBody {
+  border: 1px solid var(--line-on-dark);
+  border-radius: var(--radius-md);
+  background: var(--surface-panel-dark);
+  padding: clamp(1.5rem, 1.25rem + 1.5vw, 2.5rem);
+  margin-block-end: var(--space-4);
+  transition: border-color var(--duration-standard) var(--ease-standard);
+}
+
+.layerBody:hover {
+  border-color: var(--line-on-dark-strong);
+}
+
+/* Descending indentation communicates hierarchy, not equality. */
+.layerBody[data-depth="1"] {
+  margin-inline-start: clamp(0rem, 4vw, 3rem);
+}
+
+.layerBody[data-depth="2"] {
+  margin-inline-start: clamp(0rem, 8vw, 6rem);
+}
+
+.layerBadge {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-midnight);
+  background: var(--color-sand);
+  border-radius: var(--radius-xs);
+  padding: 0.25rem 0.6rem;
+}
+
+[dir="rtl"] .layerBadge {
+  letter-spacing: 0.03em;
+}
+
+.layerName {
+  margin-block-start: var(--space-4);
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+  font-weight: 700;
+}
+
+.layerRole {
+  margin-block-start: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--gold-soft);
+}
+
+.layerText {
+  margin-block-start: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-on-dark-soft);
+  max-width: 40rem;
+}
+
+.layerKeywords {
+  margin-block-start: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--line-on-dark);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-nile-on-dark);
+  text-transform: uppercase;
+}
+
+[dir="rtl"] .layerKeywords {
+  letter-spacing: 0.02em;
+}
+
+.chamberNote {
+  max-width: 56rem;
+  margin-block-start: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--text-on-dark-mute);
+  border-inline-start: 2px solid var(--color-nile);
+  padding-inline-start: var(--space-4);
+}
+
+@media (max-width: 48rem) {
+  .layer {
+    grid-template-columns: 1.25rem 1fr;
+    gap: var(--space-3);
+  }
+
+  .layerBody[data-depth="1"],
+  .layerBody[data-depth="2"] {
+    margin-inline-start: 0;
+  }
+}

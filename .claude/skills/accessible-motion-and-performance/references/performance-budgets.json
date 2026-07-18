@@ -1,0 +1,19 @@
+{
+  "core_web_vitals_p75": {
+    "LCP_ms_max": 2500,
+    "INP_ms_max": 200,
+    "CLS_max": 0.1
+  },
+  "initial_route_budget": {
+    "compressed_js_kb_target": 220,
+    "compressed_css_kb_target": 80,
+    "hero_media_kb_mobile_target": 450,
+    "hero_media_kb_desktop_target": 1200,
+    "total_initial_transfer_kb_mobile_target": 1200
+  },
+  "rules": [
+    "Targets are project budgets, not guarantees.",
+    "Large videos load after a poster unless the visual is the true LCP asset.",
+    "No source-resolution PNG in the production public bundle."
+  ]
+}

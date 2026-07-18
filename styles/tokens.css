@@ -1,0 +1,106 @@
+/* ============================================================
+   AKANIL design tokens — single source of visual truth.
+   Palette and typography per approved brand tokens (P2-17).
+   ============================================================ */
+
+:root {
+  /* Color — approved working palette */
+  --color-atlantic: #0b2748;
+  --color-midnight: #07192a;
+  --color-green: #0b6655;
+  --color-copper: #b5673b;
+  --color-nile: #317b83;
+  --color-sand: #d8c4a5;
+  --color-ivory: #f5f2ea;
+  --color-charcoal: #1f272d;
+  --color-gold: #d5ad62;
+
+  /* Derived surfaces and text */
+  --surface-deep: var(--color-midnight);
+  --surface-deep-2: #0a2035;
+  --surface-light: var(--color-ivory);
+  --surface-panel-dark: rgba(245, 242, 234, 0.04);
+  --surface-panel-dark-hover: rgba(245, 242, 234, 0.07);
+  --text-on-dark: #f2efe6;
+  --text-on-dark-soft: rgba(242, 239, 230, 0.8);
+  --text-on-dark-mute: rgba(242, 239, 230, 0.68);
+  --text-on-light: #1c2530;
+  --text-on-light-soft: rgba(28, 37, 48, 0.78);
+  --text-on-light-mute: rgba(28, 37, 48, 0.66);
+  --gold-soft: #e8cd96;
+  --color-copper-text: #96522c;
+  --color-nile-on-dark: #7fc0c7;
+  --line-on-dark: rgba(216, 196, 165, 0.18);
+  --line-on-dark-strong: rgba(216, 196, 165, 0.34);
+  --line-on-light: rgba(31, 39, 45, 0.14);
+  --line-on-light-strong: rgba(31, 39, 45, 0.3);
+
+  /* Typography */
+  --font-latin: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --font-arabic: "Alexandria", "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: clamp(1.125rem, 1rem + 0.6vw, 1.3125rem);
+  --text-h3: clamp(1.25rem, 1.1rem + 0.9vw, 1.625rem);
+  --text-h2: clamp(1.875rem, 1.4rem + 2.4vw, 3.125rem);
+  --text-display: clamp(2.375rem, 1.6rem + 4.2vw, 4.5rem);
+
+  --leading-tight: 1.12;
+  --leading-heading: 1.2;
+  --leading-body: 1.65;
+  /* Arabic display needs taller leading; set on [dir="rtl"] below */
+  --leading-display: 1.06;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+  --section-pad: clamp(4.5rem, 3rem + 6vw, 8rem);
+
+  /* Grid */
+  --container: min(75rem, 100% - 2.5rem);
+  --container-wide: min(85rem, 100% - 2.5rem);
+
+  /* Borders and radii — restrained, editorial */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-pill: 999px;
+  --hairline: 1px;
+
+  /* Shadows — used sparingly */
+  --shadow-panel: 0 24px 60px rgba(2, 12, 24, 0.35);
+  --shadow-soft: 0 12px 32px rgba(2, 12, 24, 0.18);
+
+  /* Z-index */
+  --z-header: 100;
+  --z-menu: 110;
+  --z-dialog: 200;
+  --z-skip: 300;
+
+  /* Motion — per approved motion tokens */
+  --duration-instant: 120ms;
+  --duration-fast: 180ms;
+  --duration-standard: 320ms;
+  --duration-emphasis: 600ms;
+  --duration-cinematic: 1200ms;
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+}
+
+[dir="rtl"] {
+  --leading-display: 1.22;
+  --leading-heading: 1.32;
+  --leading-body: 1.85;
+}
