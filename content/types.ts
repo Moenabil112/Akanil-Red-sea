@@ -204,3 +204,185 @@ export interface SiteContent {
     };
   };
 }
+
+/* ================================================================
+   Gateway experience extension (Phases 1–4):
+   status layer, audience entry paths, homepage summaries,
+   per-route metadata and the Digital Reception Lite desk.
+   ================================================================ */
+
+export type PageRoute =
+  | "gateway"
+  | "morocco"
+  | "sudan"
+  | "corridor"
+  | "value-chains"
+  | "forum"
+  | "trust"
+  | "about-akanil"
+  | "reception";
+
+export type StatusKind =
+  | "approved"
+  | "live"
+  | "active"
+  | "controlled"
+  | "conceptual"
+  | "future";
+
+export type AudienceId =
+  | "moroccan-institution"
+  | "moroccan-company"
+  | "sudanese-organization"
+  | "financial-partner"
+  | "sector-partner";
+
+export type RequestTypeId =
+  | "briefing"
+  | "qualification"
+  | "value-chain"
+  | "meeting"
+  | "capability"
+  | "need-opportunity"
+  | "forum";
+
+export interface AudiencePathContent {
+  id: AudienceId;
+  name: string;
+  forWho: string;
+  purposes: string[];
+  requestTypes: RequestTypeId[];
+  defaultRequestType: RequestTypeId;
+  ctaLabel: string;
+  note?: string;
+}
+
+export interface SummaryBlock {
+  title: string;
+  text: string;
+  linkLabel: string;
+}
+
+export interface ExperienceContent {
+  status: {
+    eyebrow: string;
+    title: string;
+    items: { label: string; state: string; kind: StatusKind; note: string }[];
+  };
+  audiences: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    statesLegend: Record<StatusKind, string>;
+    paths: AudiencePathContent[];
+  };
+  summaries: {
+    value: SummaryBlock & { morocco: SummaryBlock; sudan: SummaryBlock };
+    journey: SummaryBlock & { stepsShown: number };
+    chains: SummaryBlock;
+    corridor: SummaryBlock;
+    forum: SummaryBlock;
+    trust: SummaryBlock;
+    about: SummaryBlock;
+  };
+  receptionCta: {
+    eyebrow: string;
+    title: string;
+    text: string;
+    emailLabel: string;
+    phoneLabel: string;
+    openLabel: string;
+    reviewNote: string;
+  };
+  pages: Record<PageRoute, { title: string; description: string }>;
+  gatewayPage: {
+    eyebrow: string;
+    heading: string;
+    lead: string;
+  };
+  navGroups: { href: string; label: string }[];
+  footerNav: { href: string; label: string }[];
+  learnMore: string;
+}
+
+export interface ReceptionContent {
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  channelsTitle: string;
+  emailChannelLabel: string;
+  phoneChannelLabel: string;
+  phoneNote: string;
+  noJsNote: string;
+  requestTypes: Record<RequestTypeId, { label: string; description: string }>;
+  audienceLabel: string;
+  form: {
+    legend: string;
+    requestType: string;
+    organization: string;
+    country: string;
+    sector: string;
+    contactName: string;
+    role: string;
+    email: string;
+    summary: string;
+    summaryHint: string;
+    phone: string;
+    website: string;
+    preferredLanguage: string;
+    valueChain: string;
+    valueChainNone: string;
+    optionalLegend: string;
+    consentLabel: string;
+    consentText: string;
+    requiredMark: string;
+    optionalMark: string;
+    errors: {
+      required: string;
+      email: string;
+      consent: string;
+      summaryLength: string;
+    };
+    reviewButton: string;
+    backButton: string;
+  };
+  review: {
+    title: string;
+    lead: string;
+    whatHappens: string;
+    steps: string[];
+    openEmailButton: string;
+    editButton: string;
+  };
+  afterOpen: {
+    title: string;
+    text: string;
+    notSentWarning: string;
+    directLine: string;
+  };
+  privacy: {
+    title: string;
+    points: string[];
+  };
+  email: {
+    subjectPrefix: string;
+    intro: string;
+    fieldLabels: Record<
+      | "requestType"
+      | "audience"
+      | "organization"
+      | "country"
+      | "sector"
+      | "contactName"
+      | "role"
+      | "email"
+      | "phone"
+      | "website"
+      | "preferredLanguage"
+      | "valueChain"
+      | "summary",
+      string
+    >;
+    outro: string;
+  };
+}

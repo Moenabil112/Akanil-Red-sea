@@ -7,9 +7,10 @@ import styles from "./Forum.module.css";
 interface ForumProps {
   forum: SiteContent["forum"];
   sectionLabel: string;
+  number?: string;
 }
 
-export default function Forum({ forum, sectionLabel }: ForumProps) {
+export default function Forum({ forum, sectionLabel, number = "08" }: ForumProps) {
   return (
     <section id="forum" className={styles.section}>
       <div className={`container ${styles.grid}`}>
@@ -29,7 +30,7 @@ export default function Forum({ forum, sectionLabel }: ForumProps) {
 
         <div className={styles.copy}>
           <SectionIntro
-            number="08"
+            number={number}
             eyebrow={forum.eyebrow}
             title={forum.title}
             lead={forum.lead}

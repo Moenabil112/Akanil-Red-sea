@@ -8,6 +8,7 @@ interface MoroccoValueProps {
   morocco: SiteContent["morocco"];
   conceptArtLabel: string;
   sectionLabel: string;
+  number?: string;
 }
 
 /** Major authored section for Moroccan stakeholders — not a small card list. */
@@ -15,12 +16,13 @@ export default function MoroccoValue({
   morocco,
   conceptArtLabel,
   sectionLabel,
+  number = "04",
 }: MoroccoValueProps) {
   return (
     <section id="morocco" className={styles.section}>
       <div className="container">
         <SectionIntro
-          number="04"
+          number={number}
           eyebrow={morocco.eyebrow}
           title={morocco.title}
           lead={morocco.lead}

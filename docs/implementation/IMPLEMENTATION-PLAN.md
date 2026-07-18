@@ -73,3 +73,12 @@ Date: 2026-07-18
 ## 7. Hard stops
 
 No deployment, no external contact service, no analytics, no push to remote without explicit user authorization.
+
+## V1.1 — Gateway experience and Digital Reception Lite (2026-07-18)
+
+Executed the four-phase UX specification on `feature/gateway-ux-and-reception-lite`:
+clarity homepage (ADR-007), audience entry paths (ADR-008), Digital Reception
+Lite with mailto transport and zero storage (ADR-009), and the nine-route
+trilingual content architecture with locale-preserving navigation (ADR-010)
+and legacy-anchor compatibility (ADR-011). See `ROUTES.md` and
+`../qa/QA-REPORT-GATEWAY-EXPERIENCE.md`.

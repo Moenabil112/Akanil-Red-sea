@@ -50,3 +50,19 @@
 ## Tests
 
 `tests/content-parity.test.ts` (structure, terminology, claim discipline), `tests/corridor.test.ts` (geometry/state model), `tests/value-chains.test.tsx` and `tests/corridor-map.test.tsx` (ARIA + keyboard behavior).
+
+## Gateway experience additions (V1.1)
+
+| Component | Kind | Responsibility |
+|---|---|---|
+| `layout/SiteChrome` | Server | Skip link + header + main + footer shell for every page |
+| `layout/PageHero` | Server | Subpage H1 with eyebrow and lead |
+| `layout/PageReceptionBand` | Server | End-of-page controlled next step with request-type preselection |
+| `sections/home/GatewayStatus` | Server | Seven-item textual status layer (no metrics, no dashboard) |
+| `sections/home/AudienceEntry` | Server | Five authored entry paths deep-linking to reception |
+| `sections/home/HomeSummaries` | Server | Condensed value/journey/chains/corridor/forum/trust/about/reception blocks with legacy anchors |
+| `reception/ReceptionDesk` | Client | Digital Reception Lite: form → validation → review → mailto handoff; state in memory only |
+| `lib/reception` | Lib | Channels, validation, preselection, localized subject/body builders, `ReceptionTransport` adapter (mailto default) |
+| `lib/routes` / `lib/page-meta` | Lib | Route registry, locale-preserving switching, localized metadata factory |
+
+Superseded and removed: `ui/ContactNote`, `ui/OpenContactLink`, `sections/Contact` (replaced by the reception route).
