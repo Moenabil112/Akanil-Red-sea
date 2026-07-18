@@ -8,18 +8,20 @@ interface SudanValueProps {
   sudan: SiteContent["sudan"];
   conceptArtLabel: string;
   sectionLabel: string;
+  number?: string;
 }
 
 export default function SudanValue({
   sudan,
   conceptArtLabel,
   sectionLabel,
+  number = "05",
 }: SudanValueProps) {
   return (
     <section id="sudan" className={styles.section}>
       <div className="container">
         <SectionIntro
-          number="05"
+          number={number}
           eyebrow={sudan.eyebrow}
           title={sudan.title}
           lead={sudan.lead}

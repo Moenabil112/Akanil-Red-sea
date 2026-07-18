@@ -6,14 +6,15 @@ import styles from "./WhyGateway.module.css";
 interface WhyGatewayProps {
   why: SiteContent["why"];
   sectionLabel: string;
+  number?: string;
 }
 
-export default function WhyGateway({ why, sectionLabel }: WhyGatewayProps) {
+export default function WhyGateway({ why, sectionLabel, number = "02" }: WhyGatewayProps) {
   return (
     <section id="why" className={styles.section}>
       <div className="container">
         <SectionIntro
-          number="02"
+          number={number}
           eyebrow={why.eyebrow}
           title={why.title}
           lead={why.lead}

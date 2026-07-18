@@ -6,15 +6,16 @@ import styles from "./Trust.module.css";
 interface TrustProps {
   trust: SiteContent["trust"];
   sectionLabel: string;
+  number?: string;
 }
 
-export default function Trust({ trust, sectionLabel }: TrustProps) {
+export default function Trust({ trust, sectionLabel, number = "10" }: TrustProps) {
   return (
     <section id="trust" className={styles.section}>
       <div className="container">
         <div className={styles.head}>
           <SectionIntro
-            number="10"
+            number={number}
             eyebrow={trust.eyebrow}
             title={trust.title}
             lead={trust.lead}

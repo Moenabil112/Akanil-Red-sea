@@ -6,14 +6,15 @@ import styles from "./Corridor.module.css";
 interface CorridorProps {
   corridor: SiteContent["corridor"];
   sectionLabel: string;
+  number?: string;
 }
 
-export default function Corridor({ corridor, sectionLabel }: CorridorProps) {
+export default function Corridor({ corridor, sectionLabel, number = "06" }: CorridorProps) {
   return (
     <section id="corridor" className={styles.section}>
       <div className="container">
         <SectionIntro
-          number="06"
+          number={number}
           eyebrow={corridor.eyebrow}
           title={corridor.title}
           lead={corridor.lead}

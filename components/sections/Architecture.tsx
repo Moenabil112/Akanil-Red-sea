@@ -6,6 +6,7 @@ import styles from "./Architecture.module.css";
 interface ArchitectureProps {
   architecture: SiteContent["architecture"];
   sectionLabel: string;
+  number?: string;
 }
 
 /**
@@ -16,12 +17,13 @@ interface ArchitectureProps {
 export default function Architecture({
   architecture,
   sectionLabel,
+  number = "03",
 }: ArchitectureProps) {
   return (
     <section id="architecture" className={styles.section}>
       <div className="container">
         <SectionIntro
-          number="03"
+          number={number}
           eyebrow={architecture.eyebrow}
           title={architecture.title}
           lead={architecture.lead}

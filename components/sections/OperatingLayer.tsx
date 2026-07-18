@@ -6,18 +6,20 @@ import styles from "./OperatingLayer.module.css";
 interface OperatingLayerProps {
   operating: SiteContent["operating"];
   sectionLabel: string;
+  number?: string;
 }
 
 export default function OperatingLayer({
   operating,
   sectionLabel,
+  number = "09",
 }: OperatingLayerProps) {
   return (
     <section id="operating" className={styles.section}>
       <div className={`container ${styles.grid}`}>
         <div className={styles.sticky}>
           <SectionIntro
-            number="09"
+            number={number}
             eyebrow={operating.eyebrow}
             title={operating.title}
             lead={operating.lead}

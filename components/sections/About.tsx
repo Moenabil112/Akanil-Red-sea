@@ -6,15 +6,16 @@ import styles from "./About.module.css";
 interface AboutProps {
   about: SiteContent["about"];
   sectionLabel: string;
+  number?: string;
 }
 
-export default function About({ about, sectionLabel }: AboutProps) {
+export default function About({ about, sectionLabel, number = "11" }: AboutProps) {
   return (
     <section id="about" className={styles.section}>
       <div className={`container ${styles.grid}`}>
         <div>
           <SectionIntro
-            number="11"
+            number={number}
             eyebrow={about.eyebrow}
             title={about.title}
             sectionLabel={sectionLabel}

@@ -1,0 +1,64 @@
+.band {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  border-block-start: 4px solid var(--color-atlantic);
+  padding-block: clamp(2.5rem, 2rem + 1.5vw, 3.5rem);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-copper-text);
+}
+
+[dir="rtl"] .eyebrow {
+  letter-spacing: 0.03em;
+}
+
+.text {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+  max-width: 38rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding-inline: var(--space-6);
+  border-radius: var(--radius-sm);
+  background: var(--color-copper);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+.button:hover,
+.button:focus-visible {
+  background: #a05a33;
+}
+
+@media (max-width: 48rem) {
+  .inner {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
+}

@@ -7,13 +7,18 @@ import styles from "./ValueChains.module.css";
 interface ValueChainsProps {
   chains: SiteContent["chains"];
   sectionLabel: string;
+  number?: string;
 }
 
 /**
  * Accessible value-chain tabs: roving tabindex, arrow-key navigation
  * (direction-aware for RTL), progressive stage reveal per activation.
  */
-export default function ValueChains({ chains, sectionLabel }: ValueChainsProps) {
+export default function ValueChains({
+  chains,
+  sectionLabel,
+  number = "07",
+}: ValueChainsProps) {
   const [active, setActive] = useState(0);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const baseId = useId();
@@ -51,7 +56,8 @@ export default function ValueChains({ chains, sectionLabel }: ValueChainsProps) 
         <div className={styles.intro}>
           <p className={styles.eyebrow}>
             <span className={styles.number}>
-              <span className="visually-hidden">{sectionLabel} </span>07
+              <span className="visually-hidden">{sectionLabel} </span>
+              {number}
             </span>
             <span aria-hidden="true" className={styles.rule} />
             {chains.eyebrow}
