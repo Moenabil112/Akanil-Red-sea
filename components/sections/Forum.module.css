@@ -1,0 +1,110 @@
+.section {
+  background: var(--surface-deep);
+  padding-block: var(--section-pad);
+  border-block-start: 1px solid var(--line-on-dark);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(2.5rem, 2rem + 3vw, 5rem);
+  align-items: center;
+}
+
+.poster {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--line-on-dark-strong);
+  box-shadow: var(--shadow-panel);
+  max-width: 26rem;
+  justify-self: center;
+}
+
+.posterImage {
+  width: 100%;
+  height: auto;
+}
+
+.posterLabel {
+  position: absolute;
+  inset-inline: var(--space-3);
+  inset-block-end: var(--space-3);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--gold-soft);
+  background: rgba(7, 25, 42, 0.86);
+  border: 1px solid var(--line-on-dark);
+  border-radius: var(--radius-xs);
+  padding: var(--space-2) var(--space-3);
+}
+
+.copy > :global(div) {
+  margin-block-end: var(--space-5);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4) var(--space-6);
+  margin: 0;
+}
+
+.fact {
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--line-on-dark);
+}
+
+.factTitle {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+[dir="rtl"] .factTitle {
+  letter-spacing: 0.03em;
+}
+
+.factText {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--text-on-dark-soft);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  margin-block-start: var(--space-6);
+  padding-inline: var(--space-5);
+  border: 1px solid var(--line-on-dark-strong);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  background: var(--surface-panel-dark);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.cta:hover,
+.cta:focus-visible {
+  border-color: var(--gold-soft);
+}
+
+@media (max-width: 64rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .poster {
+    max-width: 22rem;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 34rem) {
+  .facts {
+    grid-template-columns: 1fr;
+  }
+}

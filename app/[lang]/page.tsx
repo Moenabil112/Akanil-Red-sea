@@ -11,6 +11,11 @@ import MoroccoValue from "@/components/sections/MoroccoValue";
 import SudanValue from "@/components/sections/SudanValue";
 import Corridor from "@/components/sections/Corridor";
 import ValueChains from "@/components/sections/ValueChains";
+import Forum from "@/components/sections/Forum";
+import OperatingLayer from "@/components/sections/OperatingLayer";
+import Trust from "@/components/sections/Trust";
+import About from "@/components/sections/About";
+import Contact from "@/components/sections/Contact";
 import styles from "./page.module.css";
 
 interface PageProps {
@@ -51,6 +56,17 @@ export default async function Page({ params }: PageProps) {
         />
         <ValueChains
           chains={content.chains}
+          sectionLabel={content.ui.sectionLabel}
+        />
+        <Forum forum={content.forum} sectionLabel={content.ui.sectionLabel} />
+        <OperatingLayer
+          operating={content.operating}
+          sectionLabel={content.ui.sectionLabel}
+        />
+        <Trust trust={content.trust} sectionLabel={content.ui.sectionLabel} />
+        <About about={content.about} sectionLabel={content.ui.sectionLabel} />
+        <Contact
+          contact={content.contact}
           sectionLabel={content.ui.sectionLabel}
         />
       </main>
