@@ -113,7 +113,12 @@ export function JourneySummary({ locale, experience, site }: CommonProps) {
             </Reveal>
           ))}
         </ol>
-        <MoreLink locale={locale} href="/gateway" label={journey.linkLabel} />
+        <MoreLink
+          locale={locale}
+          href="/gateway"
+          label={journey.linkLabel}
+          tone="light"
+        />
       </div>
     </section>
   );

@@ -39,7 +39,7 @@
   min-height: 3.25rem;
   padding-inline: var(--space-6);
   border-radius: var(--radius-sm);
-  background: var(--color-copper);
+  background: var(--color-copper-text);
   color: #fff;
   font-size: var(--text-sm);
   font-weight: 700;
@@ -49,7 +49,7 @@
 
 .button:hover,
 .button:focus-visible {
-  background: #a05a33;
+  background: #7d4423;
 }
 
 @media (max-width: 48rem) {
