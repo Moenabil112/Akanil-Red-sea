@@ -1,15 +1,22 @@
 # QA Report — P0 Red Sea Ecosystem Architecture
 
 Date: 2026-07-19 · Branch: `feature/p0-red-sea-ecosystem-architecture`
-Status: draft PR only — not merged, not deployed.
+**Status: MERGED and accepted as the P1 baseline.** PR
+[#3](https://github.com/Moenabil112/Akanil-Red-sea/pull/3) was merged into
+`main` on 2026-07-19; merge commit
+`3b2b4c6436f0f7aedb7449052fa04a8911a5b749`. Not deployed to production (merge
+updates the repository only). P1 continues on
+`feature/p1-portfolio-institutional-trust`.
 
-> **Reconciliation pass (2026-07-19).** After the initial P0 build, the four
-> platform definitions and Akanil's institutional identity were reconciled
-> with `AKANIL_P1_Portfolio_and_Institutional_Trust_Context_V1.0.md`. Gates
-> re-run: typecheck 0 errors · **100/100 tests** · build **36 static pages** ·
-> lint clean · axe WCAG 2.2 AA **0 violations across 24 checks** (now including
-> the Arabic About institution block and the Arabic portfolio page). Language
-> switching still preserves `/portfolio`.
+> **Reconciliation pass (2026-07-19, in the merged PR).** After the initial P0
+> build, the four platform definitions and Akanil's institutional identity were
+> reconciled with `AKANIL_P1_Portfolio_and_Institutional_Trust_Context_V1.0.md`.
+> Final gates: typecheck 0 errors · **100/100 tests** · build **36 static
+> pages** · lint clean · axe WCAG 2.2 AA **0 violations across 24 checks** (the
+> single authoritative accessibility count for this report, superseding the
+> earlier 23-check figure from the pre-reconciliation run; it adds the Arabic
+> About institution block and the Arabic portfolio page). Language switching
+> still preserves `/portfolio`.
 
 ## Quality gates (directive §41)
 
@@ -26,11 +33,12 @@ Bundle: shared first-load JS 102 kB; heaviest route `/[lang]/reception`
 
 ## Accessibility (axe-core, WCAG 2.0/2.1/2.2 A + AA)
 
-23 page/state/viewport combinations in real Chromium (three homepage locales,
-Arabic phone viewport, portfolio ×3, morocco, sudan, corridor ×2, forum,
-gateway, value-chains, trust, about, reception general ×3 + three preselected
-request states + the completed Arabic review-before-email screen):
-**0 violations.**
+**24 page/state/viewport combinations** in real Chromium (three homepage
+locales, Arabic phone viewport, portfolio EN/FR/AR, morocco, sudan, corridor
+×2, forum, gateway, value-chains, trust, about EN/AR, reception general ×3 +
+three preselected request states + the completed Arabic review-before-email
+screen): **0 violations.** This is the single authoritative count for the P0
+report.
 
 Also verified in-browser: language switcher on `/fr/portfolio` links to
 `/en/portfolio` (route preserved); reception review step reached with the

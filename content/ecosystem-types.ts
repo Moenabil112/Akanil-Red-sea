@@ -134,6 +134,17 @@ export interface PortfolioPlatformContent {
     label: string;
     requestType: RequestTypeId;
   };
+  /* ---- P1 dedicated-profile fields (P1 §6, §13) ---- */
+  /** Localized source-document date, where applicable (distinct from lastReviewed). */
+  sourceDate?: string;
+  /** What is public about the project now. */
+  publicInformation: string[];
+  /** What may be available only after specialist review. */
+  reviewInformation: string[];
+  /** Claims and limitations notice, per platform. */
+  limitations: string[];
+  /** Project-specific preparation for a review request. */
+  preparationRequirements: string[];
 }
 
 /* ---------------- Geographical nodes (ADR-017) ---------------- */
@@ -281,6 +292,16 @@ export interface EcosystemContent {
     partnersLabel: string;
     fileStatusLabel: string;
     lastReviewedLabel: string;
+    /** P1 profile labels (§6). */
+    sourceDateLabel: string;
+    publicInfoLabel: string;
+    reviewInfoLabel: string;
+    limitationsLabel: string;
+    prepLabel: string;
+    snapshotLabel: string;
+    reviewPathwayLabel: string;
+    profileLinkLabel: string;
+    profileHeroEyebrow: string;
     /** Used by the node map for node status/evidence display. */
     statusLabel: string;
     evidenceLabel: string;
@@ -316,6 +337,16 @@ export interface EcosystemContent {
     routing: string[];
     guarantees: string[];
   };
+  /** Reusable visitor-facing review panel (P1 §11). */
+  reviewPanel: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    stepsTitle: string;
+    steps: string[];
+    statementsTitle: string;
+    statements: string[];
+  };
   states: {
     publicStatus: Record<PublicStatus, string>;
     evidenceState: Record<EvidenceState, string>;
@@ -330,6 +361,10 @@ export interface EcosystemContent {
     networkTitle: string;
     networkNote: string;
     representatives: string[];
+    /** Economic-bridge foundation (P1 §4.3): both sides of the bridge. */
+    bridgeTitle: string;
+    bridgeLead: string;
+    bridgeGroups: { title: string; items: string[] }[];
   };
   claims: {
     title: string;

@@ -1,0 +1,34 @@
+import type { MetadataRoute } from "next";
+import { locales } from "@/lib/i18n";
+import { pageRoutes } from "@/lib/routes";
+import { platformIds } from "@/lib/ecosystem";
+
+/**
+ * Sitemap for the trilingual routes, including the four dedicated
+ * platform profiles (P1 §15). The production domain is never guessed:
+ * when NEXT_PUBLIC_SITE_URL is unset, root-relative paths are emitted.
+ */
+export default function sitemap(): MetadataRoute.Sitemap {
+  const base = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
+  const url = (path: string) => `${base}${path}`;
+
+  const entries: MetadataRoute.Sitemap = [];
+  for (const locale of locales) {
+    entries.push({ url: url(`/${locale}`), changeFrequency: "monthly", priority: 1 });
+    for (const route of pageRoutes) {
+      entries.push({
+        url: url(`/${locale}/${route}`),
+        changeFrequency: "monthly",
+        priority: route === "portfolio" ? 0.9 : 0.7,
+      });
+    }
+    for (const platform of platformIds) {
+      entries.push({
+        url: url(`/${locale}/portfolio/${platform}`),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      });
+    }
+  }
+  return entries;
+}

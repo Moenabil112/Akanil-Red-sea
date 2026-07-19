@@ -212,6 +212,27 @@
 .cardFoot {
   margin-block-start: auto;
   padding-block-start: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+.profileLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 2.75rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-atlantic);
+  border-block-end: 1px solid transparent;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.profileLink:hover,
+.profileLink:focus-visible {
+  border-block-end-color: var(--color-atlantic);
 }
 
 .cardCta {

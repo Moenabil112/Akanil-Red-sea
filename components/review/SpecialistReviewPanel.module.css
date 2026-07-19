@@ -1,0 +1,144 @@
+.panel,
+.panelDark {
+  padding: var(--space-6);
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.panelDark {
+  border-color: var(--line-on-dark-strong);
+  background: var(--surface-panel-dark);
+}
+
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-nile-text);
+}
+
+.panelDark .eyebrow {
+  color: var(--color-nile-on-dark);
+}
+
+[dir="rtl"] .eyebrow {
+  letter-spacing: 0.03em;
+}
+
+.title {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+  font-weight: 700;
+  color: var(--color-atlantic);
+}
+
+.panelDark .title {
+  color: var(--gold-soft);
+}
+
+.lead {
+  margin-block-start: var(--space-3);
+  max-width: 46rem;
+  font-size: var(--text-base);
+  color: var(--text-on-light-soft);
+}
+
+.panelDark .lead {
+  color: var(--text-on-dark-soft);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  margin-block-start: var(--space-5);
+  align-items: start;
+}
+
+.subTitle {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-on-light-mute);
+}
+
+.panelDark .subTitle {
+  color: var(--text-on-dark-mute);
+}
+
+[dir="rtl"] .subTitle {
+  letter-spacing: 0.02em;
+}
+
+.steps {
+  margin-block-start: var(--space-3);
+  display: grid;
+}
+
+.step {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  padding-block: var(--space-2);
+  border-block-start: 1px solid var(--line-on-light);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-on-light);
+}
+
+.panelDark .step {
+  border-block-start-color: var(--line-on-dark);
+  color: var(--text-on-dark);
+}
+
+.stepIndex {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-copper-text);
+}
+
+.panelDark .stepIndex {
+  color: var(--gold-soft);
+}
+
+.statements {
+  margin-block-start: var(--space-3);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.statement {
+  position: relative;
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+  padding-inline-start: var(--space-4);
+}
+
+.panelDark .statement {
+  color: var(--text-on-dark-soft);
+}
+
+.statement::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--color-nile);
+}
+
+.panelDark .statement::before {
+  background: var(--color-nile-on-dark);
+}
+
+@media (max-width: 48rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

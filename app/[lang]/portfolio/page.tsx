@@ -6,6 +6,7 @@ import PageHero from "@/components/layout/PageHero";
 import PageReceptionBand from "@/components/layout/PageReceptionBand";
 import PortfolioPlatformGrid from "@/components/portfolio/PortfolioPlatformGrid";
 import ClaimsBoundaryNotice from "@/components/ui/ClaimsBoundaryNotice";
+import SpecialistReviewPanel from "@/components/review/SpecialistReviewPanel";
 import styles from "./portfolio.module.css";
 
 export const generateMetadata = pageMetadata("portfolio");
@@ -48,6 +49,9 @@ export default async function PortfolioPage({
             states={ecosystem.states}
             audienceNames={audienceNames}
           />
+          <div className={styles.reviewPanel}>
+            <SpecialistReviewPanel content={ecosystem.reviewPanel} />
+          </div>
           <div className={styles.claims}>
             <ClaimsBoundaryNotice claims={ecosystem.claims} />
           </div>

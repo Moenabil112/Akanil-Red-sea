@@ -361,6 +361,15 @@ export const frEcosystem: EcosystemContent = {
     partnersLabel: "Partenaires ou capacités recherchés",
     fileStatusLabel: "Statut du dossier de projet",
     lastReviewedLabel: "Dernière revue",
+    sourceDateLabel: "Date de source",
+    publicInfoLabel: "Ce qui est public maintenant",
+    reviewInfoLabel: "Peut être disponible après examen",
+    limitationsLabel: "Affirmations et limites",
+    prepLabel: "À préparer avant la demande",
+    snapshotLabel: "Aperçu du projet",
+    reviewPathwayLabel: "Parcours de revue spécialisée",
+    profileLinkLabel: "Voir le profil de la plateforme",
+    profileHeroEyebrow: "Plateforme du portefeuille",
     statusLabel: "Statut public",
     evidenceLabel: "État des preuves",
     regulatoryLabel: "Note réglementaire",
@@ -397,7 +406,7 @@ export const frEcosystem: EcosystemContent = {
           "Plan industriel et d'investissement préliminaire. Le choix final du site, la faisabilité détaillée et l'évaluation environnementale et sociale restent à réaliser ou à actualiser.",
         projectStatus: "public-profile-available",
         statusDetail: "Plan préliminaire",
-        lastReviewed: "Mars 2026",
+        lastReviewed: "Juillet 2026",
         indicativeFigures: [
           "Besoin en capital indicatif de 8–12 millions USD",
           "Capacité indicative de 50–80 tonnes/jour",
@@ -413,6 +422,26 @@ export const frEcosystem: EcosystemContent = {
           "Sociétés agroalimentaires et huilières",
           "Institutions de financement du développement et partenaires énergie",
           "Distributeurs, acheteurs, spécialistes de faisabilité et d'EIES",
+        ],
+        sourceDate: "Mars 2026",
+        publicInformation: [
+          "Le concept de plan industriel et d'investissement préliminaire et ses unités intégrées",
+          "Des estimations indicatives de capital, capacité, foncier et emploi, clairement préliminaires",
+          "Les emplacements potentiels à l'étude et les catégories de partenaires recherchées",
+        ],
+        reviewInformation: [
+          "Un briefing de projet plus complet et un résumé exécutif",
+          "Le modèle financier préliminaire détaillé derrière les chiffres indicatifs",
+          "L'état du site, de la faisabilité et de l'EIES une fois complété ou actualisé",
+        ],
+        limitations: [
+          "Les estimations sont des chiffres de plan préliminaire — non des résultats atteints, engagements de financement ou garanties.",
+          "Aucun site final, propriété foncière, droit de projet ou approbation gouvernementale n'est revendiqué.",
+          "La réception d'une demande d'examen n'est ni une approbation d'investissement, ni une sollicitation, ni une disponibilité de financement.",
+        ],
+        preparationRequirements: [
+          "Le profil de votre organisation et la raison de votre intérêt",
+          "La capacité ou le rôle que vous apporteriez (investissement, équipement, achat, faisabilité, EIES)",
         ],
         cta: {
           label: "Demander l'examen du projet",
@@ -456,6 +485,24 @@ export const frEcosystem: EcosystemContent = {
           "Fournisseurs de satellite et d'agritech",
           "Acheteurs, transformateurs et sociétés de logistique",
           "Conseillers agricoles, institutions de développement et investisseurs technologiques",
+        ],
+        sourceDate: "Octobre 2025",
+        publicInformation: [
+          "Le concept de plateforme hors-ligne d'abord et ses composants principaux",
+          "Le modèle d'utilisateurs cibles et les catégories de partenaires recherchées",
+        ],
+        reviewInformation: [
+          "L'état actuel du développement, du pilote et des partenariats une fois vérifié",
+          "Un briefing de projet et un résumé exécutif",
+        ],
+        limitations: [
+          "Les anciennes affirmations de pilote, de coopérative, de lettre ministérielle et de financement sont retirées en attente de vérification actuelle.",
+          "Rien ici ne confirme qu'un pilote a été lancé ni qu'une relation institutionnelle est active.",
+          "Les catégories de partenaires proposées ne sont pas des partenaires confirmés.",
+        ],
+        preparationRequirements: [
+          "Le profil de votre organisation et votre rôle dans la chaîne de valeur agricole",
+          "La capacité, le besoin ou le partenariat que vous souhaitez discuter",
         ],
         cta: {
           label: "Demander l'examen du projet",
@@ -506,6 +553,23 @@ export const frEcosystem: EcosystemContent = {
           "Spécialistes des douanes et des normes",
           "Fournisseurs de technologie et de traçabilité, industriels et acheteurs",
         ],
+        publicInformation: [
+          "Le concept repositionné de plateforme de corridors et de chaînes d'approvisionnement et ses composants",
+          "Les nœuds de l'écosystème référencés dans les scénarios de corridor et les catégories de partenaires recherchées",
+        ],
+        reviewInformation: [
+          "La définition de projet réconciliée et le stade de développement actuel une fois confirmés",
+          "Une analyse de scénarios de corridor pertinente pour un acteur qualifié",
+        ],
+        limitations: [
+          "Les nœuds de l'écosystème ne sont ni des projets détenus par Akanil, ni des partenaires, ni des accords d'exploitation.",
+          "Aucune route n'est vérifiée sur le plan opérationnel ; les scénarios exigent une revue commerciale, réglementaire et logistique actuelle.",
+          "Les anciennes affirmations de place de marché, de monnaie, de partenaires, de volumes et de rendements sont retirées en attente de preuves.",
+        ],
+        preparationRequirements: [
+          "Le profil de votre organisation et son rôle opérationnel (port, zone, logistique, finance, technologie, acheteur)",
+          "Le corridor, le nœud ou la chaîne d'approvisionnement que vous souhaitez discuter",
+        ],
         cta: {
           label: "Demander l'examen du projet",
           requestType: "port-logistics-cooperation",
@@ -536,13 +600,31 @@ export const frEcosystem: EcosystemContent = {
         stage:
           "Projet de développement technique et réglementaire. Toute activité de banque, de paiement, de conservation, d'investissement, de prêt, de comptes adossés à l'or, de financement du commerce ou de règlement demeure soumise aux licences applicables, aux approbations réglementaires et aux accords institutionnels.",
         projectStatus: "regulated-or-sensitive-project",
-        lastReviewed: "Décembre 2025",
+        lastReviewed: "Juillet 2026",
         partnersSought: [
           "Sponsor bancaire licencié et institution financière réglementée",
           "Dépositaire d'or et spécialistes conformité et LBC/FT",
           "Fournisseurs d'infrastructure bancaire et partenaires de cybersécurité",
           "Conseil réglementaire et institution de financement du commerce",
           "Investisseur technologique stratégique",
+        ],
+        sourceDate: "Décembre 2025",
+        publicInformation: [
+          "L'architecture produit envisagée et le concept Gold as a Service pour institutions réglementées",
+          "Les catégories de partenaires et de capacités recherchées",
+        ],
+        reviewInformation: [
+          "Le périmètre d'activité réglementée et la feuille de route de licence une fois définis",
+          "Un briefing technique et réglementaire pour un interlocuteur institutionnel qualifié",
+        ],
+        limitations: [
+          "IBRIZ/GAAS est un projet de développement — non une banque ni un service financier en exploitation.",
+          "Aucune activité de banque, paiement, conservation, prêt, transfert ou compte adossé à l'or n'est proposée ; toutes restent soumises aux licences et approbations réglementaires.",
+          "Les partenaires institutionnels proposés ne sont pas des partenaires confirmés.",
+        ],
+        preparationRequirements: [
+          "Le profil de votre institution et votre intérêt pour l'infrastructure réglementée",
+          "Le rôle de technologie, conformité, conservation ou parrainage que vous apporteriez",
         ],
         regulatoryNote:
           "IBRIZ / GAAS est un projet de technologie financière et d'infrastructure bancaire. Ce n'est pas une banque et il ne fournit ni comptes clients, ni paiements, ni conservation, ni prêts, ni transferts, ni comptes adossés à l'or. Toute activité de ce type demeure soumise aux licences applicables, aux approbations réglementaires et aux accords institutionnels.",
@@ -830,6 +912,31 @@ export const frEcosystem: EcosystemContent = {
       "L'IA peut assister la classification ou les contrôles de complétude mais n'approuve aucune demande.",
     ],
   },
+  reviewPanel: {
+    eyebrow: "Revue spécialisée",
+    title: "Comment une demande est examinée",
+    lead: "Chaque demande est examinée par des spécialistes autorisés selon son sujet et ses preuves. La réception ne vaut pas acceptation.",
+    stepsTitle: "Le parcours de revue",
+    steps: [
+      "Demande structurée",
+      "Contrôle d'identité et d'objet",
+      "Classification du projet ou de la plateforme",
+      "Revue spécialisée pertinente",
+      "Clarification des écarts d'information",
+      "Prochaine étape recommandée",
+    ],
+    statementsTitle: "Ce que cela signifie",
+    statements: [
+      "La réception ne vaut pas acceptation.",
+      "La revue ne vaut pas endossement.",
+      "Le financement n'est pas garanti.",
+      "Le partenariat n'est pas approuvé.",
+      "Les informations confidentielles ne sont pas partagées automatiquement.",
+      "Des informations complémentaires peuvent être demandées.",
+      "Seuls des humains autorisés déterminent la prochaine étape.",
+      "L'IA peut assister la classification ou les contrôles de complétude mais n'approuve aucune demande.",
+    ],
+  },
   states: {
     publicStatus: {
       "public-profile": "Profil public",
@@ -892,6 +999,36 @@ export const frEcosystem: EcosystemContent = {
       "Soudan du Sud",
       "Ouganda",
       "Tanzanie",
+    ],
+    bridgeTitle: "Akanil comprend les deux rives du pont",
+    bridgeLead:
+      "Akanil opère à travers le Maroc, le Soudan, la mer Rouge, l'Arabie saoudite, l'Égypte et la Corne de l'Afrique — lisant chaque rive du corridor et les reliant.",
+    bridgeGroups: [
+      {
+        title: "Au Maroc",
+        items: [
+          "Institutions et organismes publics",
+          "Industrie et exportateurs",
+          "Finance et assurance",
+          "Logistique et accès aux marchés",
+        ],
+      },
+      {
+        title: "Au Soudan",
+        items: [
+          "Décideurs et autorités sectorielles",
+          "Producteurs et exportateurs",
+          "Propriétaires d'actifs et porteurs de projets",
+        ],
+      },
+      {
+        title: "À travers la mer Rouge",
+        items: [
+          "Ports et zones économiques",
+          "Nœuds de chaînes d'approvisionnement et de logistique",
+          "Routes d'accès aux marchés",
+        ],
+      },
     ],
   },
   claims: {

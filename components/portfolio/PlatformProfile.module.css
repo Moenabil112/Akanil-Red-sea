@@ -1,0 +1,231 @@
+.profile {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--space-6) var(--section-pad);
+}
+
+.snapshot {
+  margin-block-start: var(--space-2);
+}
+
+.snapshotTitle {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-copper-text);
+}
+
+[dir="rtl"] .snapshotTitle {
+  letter-spacing: 0.03em;
+}
+
+.snapshotGrid {
+  margin: var(--space-3) 0 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.snapshotCell {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.snapshotCell dt {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-on-light-mute);
+}
+
+.snapshotCell dd {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-on-light);
+}
+
+.snapshotCell[data-status="regulated-or-sensitive-project"] dd {
+  color: var(--color-copper-text);
+}
+
+.body {
+  margin-block-start: var(--space-7);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6) clamp(2rem, 1.5rem + 3vw, 4rem);
+  align-items: start;
+}
+
+.section {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+}
+
+.sectionTitle {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-nile-text);
+}
+
+[dir="rtl"] .sectionTitle {
+  letter-spacing: 0.02em;
+}
+
+.prose {
+  font-size: var(--text-base);
+  color: var(--text-on-light-soft);
+}
+
+.bullets {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+  padding-inline-start: var(--space-4);
+  list-style: disc;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+  background: #fff;
+}
+
+.figuresNote {
+  font-size: var(--text-xs);
+  font-style: italic;
+  color: var(--text-on-light-mute);
+}
+
+.limitations {
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+}
+
+.limitations li {
+  position: relative;
+  padding-inline-start: var(--space-4);
+}
+
+.limitations li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--color-copper);
+}
+
+.regulatoryNote {
+  font-size: var(--text-xs);
+  color: var(--text-on-light-mute);
+  padding: var(--space-3);
+  border: 1px solid var(--line-on-light);
+  border-inline-start: 3px solid var(--color-copper);
+  border-radius: var(--radius-sm);
+  background: #fff;
+}
+
+.regulatoryLabel {
+  color: var(--color-copper-text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--text-xs);
+}
+
+[dir="rtl"] .regulatoryLabel {
+  letter-spacing: 0.02em;
+}
+
+.reviewWrap {
+  margin-block-start: var(--space-8);
+}
+
+.cta {
+  margin-block-start: var(--space-7);
+  padding-block: var(--space-6);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-6);
+  align-items: center;
+  border-block-start: 1px solid var(--line-on-light);
+}
+
+.ctaTitle {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-nile-text);
+  margin-block-end: var(--space-2);
+}
+
+[dir="rtl"] .ctaTitle {
+  letter-spacing: 0.02em;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding-inline: var(--space-6);
+  border-radius: var(--radius-sm);
+  background: var(--color-atlantic);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+.ctaButton:hover,
+.ctaButton:focus-visible {
+  background: #123a68;
+}
+
+@media (max-width: 64rem) {
+  .snapshotGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 48rem) {
+  .snapshotGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta {
+    grid-template-columns: 1fr;
+  }
+
+  .ctaButton {
+    width: 100%;
+  }
+}

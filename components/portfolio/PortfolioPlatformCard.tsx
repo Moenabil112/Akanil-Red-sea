@@ -131,9 +131,16 @@ export default function PortfolioPlatformCard({
       <footer className={styles.cardFoot}>
         <Link
           className={styles.cardCta}
-          href={`/${locale}/reception?type=${platform.cta.requestType}`}
+          href={`/${locale}/reception?type=${platform.cta.requestType}&platform=${platform.id}`}
         >
           {platform.cta.label}
+        </Link>
+        <Link
+          className={styles.profileLink}
+          href={`/${locale}/portfolio/${platform.id}`}
+        >
+          {labels.profileLinkLabel}
+          <span aria-hidden="true"> →</span>
         </Link>
       </footer>
     </article>

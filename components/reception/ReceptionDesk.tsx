@@ -56,6 +56,7 @@ export default function ReceptionDesk({
       parsePreselection({
         type: searchParams.get("type"),
         audience: searchParams.get("audience"),
+        platform: searchParams.get("platform"),
       }),
     [searchParams],
   );
@@ -65,6 +66,7 @@ export default function ReceptionDesk({
     emptyReceptionRequest(
       pre.requestType ?? "institutional-cooperation",
       pre.audience,
+      pre.platform,
     ),
   );
   const [errors, setErrors] = useState<ValidationErrors>({});
@@ -81,6 +83,11 @@ export default function ReceptionDesk({
       ) as Record<PlatformId, string>,
     [ecosystem],
   );
+
+  const selectedPlatform = data.platform
+    ? ecosystem.platforms.items.find((platform) => platform.id === data.platform)
+    : undefined;
+  const selectedPlatformName = selectedPlatform?.name;
 
   const typeOptions = allowedRequestTypes(data.audience, requestTypeIds);
   const schema = schemaFor(data.requestType);
@@ -131,8 +138,8 @@ export default function ReceptionDesk({
   };
 
   const prepared = useMemo(
-    () => mailtoTransport.prepare(locale, data, reception),
-    [locale, data, reception],
+    () => mailtoTransport.prepare(locale, data, reception, selectedPlatformName),
+    [locale, data, reception, selectedPlatformName],
   );
 
   const copyToClipboard = async (text: string) => {
@@ -145,7 +152,7 @@ export default function ReceptionDesk({
   };
 
   const downloadDraft = () => {
-    const draft = buildDraftFile(locale, data, reception);
+    const draft = buildDraftFile(locale, data, reception, selectedPlatformName);
     const blob = new Blob([draft.text], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -163,6 +170,9 @@ export default function ReceptionDesk({
 
     const summaryRows: [string, string, boolean?][] = [
       [labels.requestType, definition.label],
+      ...(selectedPlatformName
+        ? ([[labels.platform, selectedPlatformName]] as [string, string][])
+        : []),
       ...(data.audience
         ? ([[labels.audience, reception.audienceNames[data.audience]]] as [
             string,
@@ -175,7 +185,8 @@ export default function ReceptionDesk({
       if (
         field === "audience" ||
         field === "requestType" ||
-        field === "consent"
+        field === "consent" ||
+        (field === "platform" && data.platform)
       )
         continue;
       if (field === "evidenceAvailable") {
@@ -349,6 +360,41 @@ export default function ReceptionDesk({
         >
           {reception.form.errors.required}
         </div>
+      ) : null}
+
+      {selectedPlatform ? (
+        <aside
+          className={styles.platformContext}
+          aria-label={selectedPlatform.name}
+        >
+          <p className={styles.platformEyebrow}>
+            {ecosystem.platforms.profileHeroEyebrow}
+          </p>
+          <h2 className={styles.platformName}>{selectedPlatform.name}</h2>
+          <dl className={styles.platformFacts}>
+            <div>
+              <dt>{ecosystem.platforms.fileStatusLabel}</dt>
+              <dd>
+                {ecosystem.states.projectStatus[selectedPlatform.projectStatus]}
+                {selectedPlatform.statusDetail
+                  ? ` — ${selectedPlatform.statusDetail}`
+                  : ""}
+              </dd>
+            </div>
+            <div>
+              <dt>{ecosystem.platforms.stageLabel}</dt>
+              <dd>{selectedPlatform.stage}</dd>
+            </div>
+          </dl>
+          <h3 className={styles.platformPrepTitle}>
+            {ecosystem.platforms.prepLabel}
+          </h3>
+          <ul className={styles.platformPrep}>
+            {selectedPlatform.preparationRequirements.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </aside>
       ) : null}
 
       <fieldset className={styles.fieldset}>

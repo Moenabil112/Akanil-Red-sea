@@ -362,6 +362,15 @@ export const enEcosystem: EcosystemContent = {
     partnersLabel: "Partners or capabilities sought",
     fileStatusLabel: "Project file status",
     lastReviewedLabel: "Last reviewed",
+    sourceDateLabel: "Source date",
+    publicInfoLabel: "What is public now",
+    reviewInfoLabel: "May be available after review",
+    limitationsLabel: "Claims and limitations",
+    prepLabel: "Prepare before requesting",
+    snapshotLabel: "Project snapshot",
+    reviewPathwayLabel: "Specialist review pathway",
+    profileLinkLabel: "View the platform profile",
+    profileHeroEyebrow: "Portfolio platform",
     statusLabel: "Public status",
     evidenceLabel: "Evidence state",
     regulatoryLabel: "Regulatory note",
@@ -398,7 +407,7 @@ export const enEcosystem: EcosystemContent = {
           "Preliminary industrial and investment blueprint. Final site selection, detailed feasibility and environmental and social assessment remain to be completed or updated.",
         projectStatus: "public-profile-available",
         statusDetail: "Preliminary Blueprint",
-        lastReviewed: "March 2026",
+        lastReviewed: "July 2026",
         indicativeFigures: [
           "USD 8–12 million indicative capital requirement",
           "50–80 tonnes/day indicative capacity",
@@ -414,6 +423,26 @@ export const enEcosystem: EcosystemContent = {
           "Food and oil companies",
           "Development-finance and energy partners",
           "Distributors, buyers, feasibility and ESIA specialists",
+        ],
+        sourceDate: "March 2026",
+        publicInformation: [
+          "The preliminary industrial and investment blueprint concept and its integrated units",
+          "Indicative capital, capacity, land and employment estimates, clearly labelled preliminary",
+          "Potential locations under study and the partner categories being sought",
+        ],
+        reviewInformation: [
+          "A fuller project briefing and executive summary",
+          "The detailed preliminary financial model behind the indicative figures",
+          "Site, feasibility and ESIA status once completed or updated",
+        ],
+        limitations: [
+          "Estimates are preliminary blueprint figures — not achieved results, financing commitments or guarantees.",
+          "No final site, land ownership, project right or governmental approval is claimed.",
+          "Reception of a review request is not investment approval, solicitation or financing availability.",
+        ],
+        preparationRequirements: [
+          "Your organization profile and the reason for your interest",
+          "The capability or role you would bring (investment, equipment, offtake, feasibility, ESIA)",
         ],
         cta: {
           label: "Request Project Review",
@@ -457,6 +486,24 @@ export const enEcosystem: EcosystemContent = {
           "Satellite and agritech providers",
           "Buyers, processors and logistics companies",
           "Agricultural advisors, development institutions and technology investors",
+        ],
+        sourceDate: "October 2025",
+        publicInformation: [
+          "The offline-first platform concept and its main components",
+          "The target-user model and the partner categories being sought",
+        ],
+        reviewInformation: [
+          "The current build, pilot and partnership status once verified",
+          "A project briefing and executive summary",
+        ],
+        limitations: [
+          "Earlier pilot, cooperative, ministry-letter and funding claims are withheld pending current verification.",
+          "Nothing here confirms that a pilot launched or that any institutional relationship is active.",
+          "Proposed partner categories are not confirmed partners.",
+        ],
+        preparationRequirements: [
+          "Your organization profile and role in the agricultural value chain",
+          "The capability, need or partnership you wish to discuss",
         ],
         cta: {
           label: "Request Project Review",
@@ -507,6 +554,23 @@ export const enEcosystem: EcosystemContent = {
           "Customs and standards specialists",
           "Technology, traceability providers, manufacturers and buyers",
         ],
+        publicInformation: [
+          "The repositioned corridor and supply-chain platform concept and its components",
+          "The ecosystem nodes referenced in corridor scenarios and the partner categories sought",
+        ],
+        reviewInformation: [
+          "The reconciled project definition and current development stage once confirmed",
+          "Relevant corridor-scenario analysis for a qualified stakeholder",
+        ],
+        limitations: [
+          "Ecosystem nodes are not Akanil-owned projects, partners or operating agreements.",
+          "No route is operationally verified; scenarios require current commercial, regulatory and logistics review.",
+          "Legacy open-market, currency, partner, transaction-volume and return claims are withheld pending evidence.",
+        ],
+        preparationRequirements: [
+          "Your organization profile and operating role (port, zone, logistics, finance, technology, buyer)",
+          "The corridor, node or supply-chain interest you wish to discuss",
+        ],
         cta: {
           label: "Request Project Review",
           requestType: "port-logistics-cooperation",
@@ -537,13 +601,31 @@ export const enEcosystem: EcosystemContent = {
         stage:
           "Technical and regulatory development project. Any banking, payment, custody, investment, lending, gold-backed account, trade-finance or settlement activity remains subject to applicable licensing, regulatory approval and institutional agreements.",
         projectStatus: "regulated-or-sensitive-project",
-        lastReviewed: "December 2025",
+        lastReviewed: "July 2026",
         partnersSought: [
           "Licensed banking sponsor and regulated financial institution",
           "Gold custodian and compliance, AML/CFT specialists",
           "Banking-infrastructure and cybersecurity partners",
           "Regulatory counsel and trade-finance institution",
           "Strategic technology investor",
+        ],
+        sourceDate: "December 2025",
+        publicInformation: [
+          "The intended product architecture and Gold-as-a-Service concept for regulated institutions",
+          "The partner and capability categories being sought",
+        ],
+        reviewInformation: [
+          "The regulated activity perimeter and licensing roadmap once defined",
+          "A technical and regulatory briefing for a qualified institutional counterpart",
+        ],
+        limitations: [
+          "IBRIZ/GAAS is a development project — not a bank or an operating financial service.",
+          "No banking, payment, custody, lending, remittance or gold-backed-account activity is offered; all remain subject to licensing and regulatory approval.",
+          "Proposed institutional partners are not confirmed partners.",
+        ],
+        preparationRequirements: [
+          "Your institution profile and regulated-infrastructure interest",
+          "The technology, compliance, custody or sponsorship role you would bring",
         ],
         regulatoryNote:
           "IBRIZ / GAAS is a financial-technology and banking-infrastructure project. It is not a bank and provides no customer accounts, payments, custody, lending, remittance or gold-backed accounts. Any such activity remains subject to applicable licensing, regulatory approval and institutional agreements.",
@@ -831,6 +913,31 @@ export const enEcosystem: EcosystemContent = {
       "AI may assist classification or completeness checks but does not approve requests.",
     ],
   },
+  reviewPanel: {
+    eyebrow: "Specialist review",
+    title: "How a request is reviewed",
+    lead: "Every request is reviewed by authorized specialists according to its subject and evidence. Reception is not acceptance.",
+    stepsTitle: "The review path",
+    steps: [
+      "Structured request",
+      "Identity and purpose check",
+      "Project or platform classification",
+      "Relevant specialist review",
+      "Information-gap clarification",
+      "Recommended next step",
+    ],
+    statementsTitle: "What this means",
+    statements: [
+      "Reception is not acceptance.",
+      "Review is not endorsement.",
+      "Financing is not guaranteed.",
+      "Partnership is not approved.",
+      "Confidential information is not shared automatically.",
+      "Additional information may be requested.",
+      "Only authorized humans determine the next step.",
+      "AI may assist classification or completeness checks but does not approve requests.",
+    ],
+  },
   states: {
     publicStatus: {
       "public-profile": "Public profile",
@@ -892,6 +999,36 @@ export const enEcosystem: EcosystemContent = {
       "South Sudan",
       "Uganda",
       "Tanzania",
+    ],
+    bridgeTitle: "Akanil understands both sides of the bridge",
+    bridgeLead:
+      "Akanil operates across Morocco, Sudan, the Red Sea, Saudi Arabia, Egypt and the Horn of Africa — reading each side of the corridor and connecting them.",
+    bridgeGroups: [
+      {
+        title: "In Morocco",
+        items: [
+          "Institutions and public bodies",
+          "Industry and exporters",
+          "Finance and insurance",
+          "Logistics and market access",
+        ],
+      },
+      {
+        title: "In Sudan",
+        items: [
+          "Decision-makers and sector authorities",
+          "Producers and exporters",
+          "Asset owners and project sponsors",
+        ],
+      },
+      {
+        title: "Across the Red Sea",
+        items: [
+          "Ports and economic zones",
+          "Supply-chain and logistics nodes",
+          "Market-access routes",
+        ],
+      },
     ],
   },
   claims: {
