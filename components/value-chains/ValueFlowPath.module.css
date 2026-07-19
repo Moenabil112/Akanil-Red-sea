@@ -1,0 +1,85 @@
+.flow {
+  display: grid;
+  gap: var(--space-4);
+  counter-reset: none;
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-nile);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stageBody {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.stageTitle {
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--text-on-light);
+}
+
+.stageRole {
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+}
+
+.contribution {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-on-light-mute);
+}
+
+.contributionLabel {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-copper-text);
+}
+
+[dir="rtl"] .contributionLabel {
+  letter-spacing: 0.02em;
+}
+
+/* Decorative connector between stages; never conveys meaning alone. */
+.connector {
+  position: absolute;
+  inset-block-end: calc(-1 * var(--space-4));
+  inset-inline-start: calc(var(--space-5) + 1.125rem - 1px);
+  width: 2px;
+  height: var(--space-4);
+  background: var(--line-on-light-strong);
+}
+
+@media (max-width: 40rem) {
+  .stage {
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-3);
+  }
+}

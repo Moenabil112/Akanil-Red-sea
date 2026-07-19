@@ -5,9 +5,13 @@ import type {
   SiteContent,
 } from "@/content/types";
 import type { EcosystemContent } from "@/content/ecosystem-types";
+import type { ValueChainsContent } from "@/content/value-chains-types";
 import { arEcosystem } from "@/content/ar/ecosystem";
 import { frEcosystem } from "@/content/fr/ecosystem";
 import { enEcosystem } from "@/content/en/ecosystem";
+import { arValueChains } from "@/content/ar/value-chains";
+import { frValueChains } from "@/content/fr/value-chains";
+import { enValueChains } from "@/content/en/value-chains";
 import { ar } from "@/content/ar/site";
 import { fr } from "@/content/fr/site";
 import { en } from "@/content/en/site";
@@ -52,4 +56,14 @@ const ecosystemRecords: Record<Locale, EcosystemContent> = {
 
 export function getEcosystem(locale: Locale): EcosystemContent {
   return ecosystemRecords[locale];
+}
+
+const valueChainRecords: Record<Locale, ValueChainsContent> = {
+  ar: arValueChains,
+  fr: frValueChains,
+  en: enValueChains,
+};
+
+export function getValueChains(locale: Locale): ValueChainsContent {
+  return valueChainRecords[locale];
 }

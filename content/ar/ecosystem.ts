@@ -369,6 +369,7 @@ export const arEcosystem: EcosystemContent = {
     reviewPathwayLabel: "مسار المراجعة المتخصصة",
     profileLinkLabel: "عرض ملف المنصة",
     profileHeroEyebrow: "منصة المحفظة",
+    relatedChainsLabel: "سلاسل القيمة المرتبطة",
     statusLabel: "الحالة العامة",
     evidenceLabel: "حالة الأدلة",
     regulatoryLabel: "ملاحظة تنظيمية",
@@ -627,6 +628,8 @@ export const arEcosystem: EcosystemContent = {
         ],
         regulatoryNote:
           "إبريز/GAAS مشروع تقنية مالية وبنية مصرفية. ليس بنكاً ولا يقدّم حسابات عملاء ولا مدفوعات ولا حفظاً ولا إقراضاً ولا حوالات ولا حسابات مدعومة بالذهب. يبقى أي نشاط من هذا القبيل خاضعاً للترخيص الساري والموافقات التنظيمية والاتفاقات المؤسسية.",
+        relatedChainsNote:
+          "يرتبط إبريز/GAAS بمساري التعدين والموانئ فقط كطبقة تمكينية منظَّمة محتملة، خاضعة للترخيص والموافقة. لا يقدّم أي تمويل أو حفظ أو تسوية نشطة لأي سلسلة قيمة.",
         cta: {
           label: "طلب مراجعة المشروع",
           requestType: "technology-data-partnership",

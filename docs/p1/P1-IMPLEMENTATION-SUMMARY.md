@@ -1,9 +1,10 @@
 # P1 — Implementation Summary
 
 Branch: `feature/p1-portfolio-institutional-trust` · Base: `main` (merged P0
-`3b2b4c6`). Draft PR only — not merged, not deployed. P1 extends P0 with a
-clearer portfolio and institutional-trust experience; it does not redesign the
-P0 ecosystem architecture.
+`3b2b4c6`). Merged into `main` via PR #4 (merge commit `101ed96`); not
+deployed. P1 extends P0 with a clearer portfolio and institutional-trust
+experience; it does not redesign the P0 ecosystem architecture. P2
+(value-chain deepening) builds on this merged baseline.
 
 ## What P1 adds to P0
 

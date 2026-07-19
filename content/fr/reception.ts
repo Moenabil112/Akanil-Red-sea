@@ -150,6 +150,7 @@ export const frReception: ReceptionContent = {
     },
   },
   audienceLabel: "Parcours d'entrée",
+  chainLabel: "Chaîne de valeur concernée",
   audienceNames: {
     "moroccan-institutions": "Institutions marocaines",
     "moroccan-industry-exporters": "Industrie et exportateurs marocains",

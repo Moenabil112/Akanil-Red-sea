@@ -1,12 +1,17 @@
-import { getContent, getExperience } from "@/lib/content";
+import { getExperience, getValueChains } from "@/lib/content";
 import { pageMetadata, resolveLocale } from "@/lib/page-meta";
 import SiteChrome from "@/components/layout/SiteChrome";
 import PageHero from "@/components/layout/PageHero";
 import PageReceptionBand from "@/components/layout/PageReceptionBand";
-import ValueChains from "@/components/sections/ValueChains";
+import ValueChainOverview from "@/components/value-chains/ValueChainOverview";
 
 export const generateMetadata = pageMetadata("value-chains");
 
+/**
+ * /[lang]/value-chains — the deepened P2 value-chain experience: the six
+ * priority pathways, cross-cutting enabling layers and geographic value
+ * contribution. The homepage keeps its own concise value-chain teaser.
+ */
 export default async function ValueChainsPage({
   params,
 }: {
@@ -14,20 +19,16 @@ export default async function ValueChainsPage({
 }) {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const site = getContent(locale);
+  const content = getValueChains(locale);
   const experience = getExperience(locale);
   return (
     <SiteChrome locale={locale}>
       <PageHero
-        eyebrow={site.chains.eyebrow}
-        heading={site.chains.title}
-        lead={site.chains.lead}
+        eyebrow={content.overviewEyebrow}
+        heading={content.overviewTitle}
+        lead={content.overviewLead}
       />
-      <ValueChains
-        chains={site.chains}
-        sectionLabel={site.ui.sectionLabel}
-        number="01"
-      />
+      <ValueChainOverview locale={locale} content={content} />
       <PageReceptionBand
         locale={locale}
         experience={experience}

@@ -5,6 +5,7 @@ import type {
   PlatformId,
   RequestTypeId,
 } from "@/content/ecosystem-types";
+import type { ValueChainId } from "@/content/value-chains-types";
 import {
   audienceRequestMatrix,
   intakeSchemas,
@@ -13,6 +14,7 @@ import {
   isRequestTypeId,
   type IntakeSchema,
 } from "@/lib/ecosystem";
+import { isValueChainId } from "@/lib/value-chains";
 
 /** Approved direct channels (Phase 3). */
 export const RECEPTION_EMAIL = "akanil.consulting@proton.me";
@@ -20,7 +22,7 @@ export const RECEPTION_PHONE_E164 = "+212663177864";
 export const RECEPTION_PHONE_DISPLAY = "+212 663 177 864";
 export const RECEPTION_TEL_HREF = `tel:${RECEPTION_PHONE_E164}`;
 
-export { isAudienceId, isRequestTypeId, isPlatformId };
+export { isAudienceId, isRequestTypeId, isPlatformId, isValueChainId };
 
 /**
  * Data captured by the structured reception form (P0 §32, ADR-014).
@@ -32,6 +34,8 @@ export interface ReceptionRequest {
   audience?: AudienceId;
   /** Portfolio platform this request concerns (P1 §12), when arrived via a profile. */
   platform?: PlatformId;
+  /** Value chain this request concerns (P2), when arrived via a chain profile. */
+  chain?: ValueChainId;
   /** Free-text values keyed by intake field. */
   values: Partial<Record<IntakeFieldId, string>>;
   /** Selected evidence-availability option ids (no uploads, P0 §32). */
@@ -43,11 +47,13 @@ export function emptyReceptionRequest(
   requestType: RequestTypeId,
   audience?: AudienceId,
   platform?: PlatformId,
+  chain?: ValueChainId,
 ): ReceptionRequest {
   return {
     requestType,
     audience,
     platform,
+    chain,
     values: {},
     evidence: [],
     consent: false,
@@ -118,15 +124,18 @@ export function parsePreselection(params: {
   type?: string | null;
   audience?: string | null;
   platform?: string | null;
+  chain?: string | null;
 }): {
   requestType?: RequestTypeId;
   audience?: AudienceId;
   platform?: PlatformId;
+  chain?: ValueChainId;
 } {
   const result: {
     requestType?: RequestTypeId;
     audience?: AudienceId;
     platform?: PlatformId;
+    chain?: ValueChainId;
   } = {};
   if (params.audience && isAudienceId(params.audience)) {
     result.audience = params.audience;
@@ -136,6 +145,9 @@ export function parsePreselection(params: {
   }
   if (params.platform && isPlatformId(params.platform)) {
     result.platform = params.platform;
+  }
+  if (params.chain && isValueChainId(params.chain)) {
+    result.chain = params.chain;
   }
   if (result.audience) {
     const matrix = audienceRequestMatrix[result.audience];
@@ -176,6 +188,7 @@ export interface ReceptionTransport {
     request: ReceptionRequest,
     content: ReceptionContent,
     platformName?: string,
+    chainName?: string,
   ): PreparedRequest;
 }
 
@@ -187,6 +200,7 @@ export function buildEmailBody(
   request: ReceptionRequest,
   content: ReceptionContent,
   platformName?: string,
+  chainName?: string,
 ): string {
   const labels = content.email.fieldLabels;
   // U+2066 LRI … U+2069 PDI isolate Latin runs inside RTL text.
@@ -200,6 +214,9 @@ export function buildEmailBody(
   push(labels.requestType, content.requestTypes[request.requestType].label);
   if (request.platform && platformName) {
     push(labels.platform, platformName);
+  }
+  if (request.chain && chainName) {
+    push(content.chainLabel, chainName);
   }
   if (request.audience) {
     push(labels.audience, content.audienceNames[request.audience]);
@@ -243,12 +260,14 @@ export function buildSubject(
   request: ReceptionRequest,
   content: ReceptionContent,
   platformName?: string,
+  chainName?: string,
 ): string {
   const typeLabel = content.requestTypes[request.requestType].label;
   const organization = (request.values.organization ?? "").trim();
   const platformPart =
     request.platform && platformName ? ` · ${platformName}` : "";
-  return `${content.email.subjectPrefix} ${typeLabel}${platformPart} — ${organization}`;
+  const chainPart = request.chain && chainName ? ` · ${chainName}` : "";
+  return `${content.email.subjectPrefix} ${typeLabel}${platformPart}${chainPart} — ${organization}`;
 }
 
 /**
@@ -260,9 +279,10 @@ export function buildDraftFile(
   request: ReceptionRequest,
   content: ReceptionContent,
   platformName?: string,
+  chainName?: string,
 ): { filename: string; text: string } {
-  const subject = buildSubject(request, content, platformName);
-  const body = buildEmailBody(locale, request, content, platformName);
+  const subject = buildSubject(request, content, platformName, chainName);
+  const body = buildEmailBody(locale, request, content, platformName, chainName);
   return {
     filename: "akanil-request-draft.txt",
     text: `${subject}\n\n${body}\n`,
@@ -271,9 +291,9 @@ export function buildDraftFile(
 
 /** Default transport: a properly encoded mailto handoff. */
 export const mailtoTransport: ReceptionTransport = {
-  prepare(locale, request, content, platformName) {
-    const subject = buildSubject(request, content, platformName);
-    const body = buildEmailBody(locale, request, content, platformName);
+  prepare(locale, request, content, platformName, chainName) {
+    const subject = buildSubject(request, content, platformName, chainName);
+    const body = buildEmailBody(locale, request, content, platformName, chainName);
     const href = `mailto:${RECEPTION_EMAIL}?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`;

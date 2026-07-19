@@ -4,6 +4,7 @@ import type {
   EcosystemContent,
   PortfolioPlatformContent,
 } from "@/content/ecosystem-types";
+import type { ValueChainId } from "@/content/value-chains-types";
 import Reveal from "@/components/motion/Reveal";
 import SpecialistReviewPanel from "@/components/review/SpecialistReviewPanel";
 import styles from "./PlatformProfile.module.css";
@@ -14,6 +15,8 @@ interface PlatformProfileProps {
   labels: Omit<EcosystemContent["platforms"], "items">;
   states: EcosystemContent["states"];
   reviewPanel: EcosystemContent["reviewPanel"];
+  /** P2 Level-3 mapping: value chains this platform relates to. */
+  relatedChains: { id: ValueChainId; name: string; href: string }[];
 }
 
 /**
@@ -31,6 +34,7 @@ export default function PlatformProfile({
   labels,
   states,
   reviewPanel,
+  relatedChains,
 }: PlatformProfileProps) {
   const reviewHref = `/${locale}/reception?type=${platform.cta.requestType}&platform=${platform.id}`;
 
@@ -162,6 +166,29 @@ export default function PlatformProfile({
           ) : null}
         </Section>
       </div>
+
+      {/* 13b. Related value chains (P2 Level-3 mapping) */}
+      {relatedChains.length > 0 ? (
+        <Reveal as="section" className={`container ${styles.relatedChains}`}>
+          <h2 className={styles.relatedChainsTitle}>
+            {labels.relatedChainsLabel}
+          </h2>
+          {platform.relatedChainsNote ? (
+            <p className={styles.relatedChainsNote}>
+              {platform.relatedChainsNote}
+            </p>
+          ) : null}
+          <ul className={styles.chainLinks}>
+            {relatedChains.map((chain) => (
+              <li key={chain.id}>
+                <Link className={styles.chainLink} href={chain.href}>
+                  {chain.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      ) : null}
 
       {/* 14. Specialist review pathway */}
       <div className={`container ${styles.reviewWrap}`}>

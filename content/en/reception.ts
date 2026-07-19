@@ -149,6 +149,7 @@ export const enReception: ReceptionContent = {
     },
   },
   audienceLabel: "Entry path",
+  chainLabel: "Relevant value chain",
   audienceNames: {
     "moroccan-institutions": "Moroccan institutions",
     "moroccan-industry-exporters": "Moroccan industry and exporters",

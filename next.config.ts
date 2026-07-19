@@ -23,6 +23,15 @@ const nextConfig: NextConfig = {
     ];
     // Dedicated platform-profile slugs (P1 §6).
     const platformSlugs = ["valura", "rwafid", "trade-chain-africa", "ibriz-gaas"];
+    // Dedicated value-chain profile slugs (P2).
+    const valueChainSlugs = [
+      "oilseeds-agro-processing",
+      "food-cold-chain",
+      "feed-livestock",
+      "water-energy-agritech",
+      "mining-mineral-value",
+      "ports-logistics-corridors",
+    ];
     return [
       {
         source: "/",
@@ -38,6 +47,11 @@ const nextConfig: NextConfig = {
       ...platformSlugs.map((slug) => ({
         source: `/portfolio/${slug}`,
         destination: `/ar/portfolio/${slug}`,
+        permanent: false,
+      })),
+      ...valueChainSlugs.map((slug) => ({
+        source: `/value-chains/${slug}`,
+        destination: `/ar/value-chains/${slug}`,
         permanent: false,
       })),
     ];

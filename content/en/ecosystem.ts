@@ -371,6 +371,7 @@ export const enEcosystem: EcosystemContent = {
     reviewPathwayLabel: "Specialist review pathway",
     profileLinkLabel: "View the platform profile",
     profileHeroEyebrow: "Portfolio platform",
+    relatedChainsLabel: "Related value chains",
     statusLabel: "Public status",
     evidenceLabel: "Evidence state",
     regulatoryLabel: "Regulatory note",
@@ -629,6 +630,8 @@ export const enEcosystem: EcosystemContent = {
         ],
         regulatoryNote:
           "IBRIZ / GAAS is a financial-technology and banking-infrastructure project. It is not a bank and provides no customer accounts, payments, custody, lending, remittance or gold-backed accounts. Any such activity remains subject to applicable licensing, regulatory approval and institutional agreements.",
+        relatedChainsNote:
+          "IBRIZ/GAAS relates to the mining and ports pathways only as a potential regulated enabling layer, subject to licensing and approval. It provides no active financing, custody or settlement for any value chain.",
         cta: {
           label: "Request Project Review",
           requestType: "technology-data-partnership",
