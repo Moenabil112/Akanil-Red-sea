@@ -78,7 +78,7 @@ export const arExperience: ExperienceContent = {
       linkLabel: "استكشف سلاسل القيمة",
     },
     corridor: {
-      title: "ذكاء الممر",
+      title: "تحليل الممر الاقتصادي",
       text: "شبكة سيناريوهات مسار مفاهيمية — تُصمم لكل فرصة، وليست خطاً واحداً ثابتاً.",
       linkLabel: "استكشف الممر",
     },
@@ -124,7 +124,7 @@ export const arExperience: ExperienceContent = {
         "السودان شريك سلاسل قيمة: قدرة إنتاجية وموارد وسوق وقيمة مضافة محلياً وجسر البحر الأحمر وشرق إفريقيا.",
     },
     corridor: {
-      title: "ذكاء الممر — بوابة أكانيل الاقتصادية بين المغرب والبحر الأحمر",
+      title: "بنية سلاسل الإمداد في البحر الأحمر — بوابة أكانيل الاقتصادية بين المغرب والبحر الأحمر",
       description:
         "سيناريوهات ممر مفاهيمية بين المغرب والسودان والبحر الأحمر، بحالات مسار صريحة وانضباط في التحقق.",
     },
@@ -169,6 +169,7 @@ export const arExperience: ExperienceContent = {
     { href: "/morocco", label: "المغرب" },
     { href: "/sudan", label: "السودان" },
     { href: "/value-chains", label: "سلاسل القيمة" },
+    { href: "/portfolio", label: "منصات المحفظة" },
     { href: "/forum", label: "المنتدى" },
     { href: "/reception", label: "الاستقبال" },
   ],
@@ -176,8 +177,9 @@ export const arExperience: ExperienceContent = {
     { href: "/gateway", label: "نموذج البوابة" },
     { href: "/morocco", label: "القيمة للمغرب" },
     { href: "/sudan", label: "الشراكة مع السودان" },
-    { href: "/corridor", label: "ذكاء الممر" },
+    { href: "/corridor", label: "بنية ممر البحر الأحمر" },
     { href: "/value-chains", label: "سلاسل القيمة ذات الأولوية" },
+    { href: "/portfolio", label: "منصات المحفظة" },
     { href: "/forum", label: "المنتدى الاقتصادي" },
     { href: "/trust", label: "الثقة والبيانات والذكاء الاصطناعي" },
     { href: "/about-akanil", label: "عن أكانيل" },

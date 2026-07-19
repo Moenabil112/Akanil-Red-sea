@@ -1,0 +1,27 @@
+.section {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--section-pad);
+  border-block-start: 1px solid var(--line-on-light);
+}
+
+.moreRow {
+  margin-block-start: var(--space-6);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-atlantic);
+  border-block-end: 1px solid transparent;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.more:hover,
+.more:focus-visible {
+  border-block-end-color: var(--color-atlantic);
+}

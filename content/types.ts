@@ -159,6 +159,8 @@ export interface SiteContent {
     title: string;
     lead: string;
     facts: TitledText[];
+    /** Activation phases (P0 §31): before, during and after the Forum. */
+    phases: { title: string; items: string[] }[];
     posterAlt: string;
     posterLabel: string;
     cta: Cta;

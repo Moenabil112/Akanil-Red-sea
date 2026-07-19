@@ -31,7 +31,7 @@ export default async function ValueChainsPage({
       <PageReceptionBand
         locale={locale}
         experience={experience}
-        requestType="value-chain"
+        requestType="supply-offtake-requirement"
       />
     </SiteChrome>
   );

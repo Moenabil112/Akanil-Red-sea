@@ -1,14 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Locale, SiteContent } from "@/content/types";
+import type { EcosystemContent } from "@/content/ecosystem-types";
 import styles from "./Hero.module.css";
 
 interface HeroProps {
-  hero: SiteContent["hero"];
+  hero: EcosystemContent["hero"];
+  scope: Pick<SiteContent["hero"], "scopeLabel" | "scopeNodes">;
   locale: Locale;
 }
 
-export default function Hero({ hero, locale }: HeroProps) {
+/**
+ * 01 — ecosystem promise (P0, ADR-012). Answers what / where / value /
+ * next step within the first viewport. One visual priority: the primary
+ * CTA scrolls to the audience entry matrix; portfolio and reception are
+ * subordinate actions.
+ */
+export default function Hero({ hero, scope, locale }: HeroProps) {
   return (
     <section id="top" className={styles.hero}>
       <div className={`container ${styles.grid}`}>
@@ -27,23 +35,31 @@ export default function Hero({ hero, locale }: HeroProps) {
           <p className={styles.lead}>{hero.lead}</p>
 
           <div className={styles.actions}>
-            <Link
+            <a
               className={styles.primaryCta}
-              href={`/${locale}/reception`}
+              href="#entry"
               title={hero.primary.explanation}
             >
               {hero.primary.label}
-            </Link>
-            <a
+            </a>
+            <Link
               className={styles.secondaryCta}
-              href="#entry"
+              href={`/${locale}/portfolio`}
               title={hero.secondary.explanation}
             >
               {hero.secondary.label}
-            </a>
+            </Link>
           </div>
-
-          <p className={styles.motto}>{hero.motto}</p>
+          <p className={styles.institutionalLine}>
+            <Link
+              className={styles.institutionalCta}
+              href={`/${locale}/reception`}
+              title={hero.institutional.explanation}
+            >
+              {hero.institutional.label}
+              <span aria-hidden="true"> →</span>
+            </Link>
+          </p>
         </div>
 
         <figure className={styles.visual}>
@@ -59,9 +75,9 @@ export default function Hero({ hero, locale }: HeroProps) {
             <div className={styles.portalVeil} aria-hidden="true" />
           </div>
           <figcaption className={styles.scope}>
-            <span className={styles.scopeLabel}>{hero.scopeLabel}</span>
+            <span className={styles.scopeLabel}>{scope.scopeLabel}</span>
             <span className={styles.scopeNodes} dir="auto">
-              {hero.scopeNodes.map((node, index) => (
+              {scope.scopeNodes.map((node, index) => (
                 <span key={node} className={styles.scopeNode}>
                   {index > 0 ? (
                     <span aria-hidden="true" className={styles.scopeLink} />
@@ -72,15 +88,6 @@ export default function Hero({ hero, locale }: HeroProps) {
             </span>
           </figcaption>
         </figure>
-      </div>
-
-      <div className={`container ${styles.pillars}`}>
-        {hero.pillars.map((pillar) => (
-          <div key={pillar.title} className={styles.pillar}>
-            <h2 className={styles.pillarTitle}>{pillar.title}</h2>
-            <p className={styles.pillarText}>{pillar.text}</p>
-          </div>
-        ))}
       </div>
     </section>
   );

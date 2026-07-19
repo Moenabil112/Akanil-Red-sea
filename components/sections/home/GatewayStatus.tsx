@@ -1,9 +1,13 @@
 import type { ExperienceContent } from "@/content/types";
+import type { EcosystemContent } from "@/content/ecosystem-types";
 import Reveal from "@/components/motion/Reveal";
+import ClaimsBoundaryNotice from "@/components/ui/ClaimsBoundaryNotice";
 import styles from "./GatewayStatus.module.css";
 
 interface GatewayStatusProps {
   status: ExperienceContent["status"];
+  /** Optional claims-scope block (P0 §34) rendered under the status list. */
+  claims?: EcosystemContent["claims"];
 }
 
 /**
@@ -11,7 +15,7 @@ interface GatewayStatusProps {
  * dashboard: no percentages, no gauges, no fabricated metrics. State is
  * carried by text plus a typed marker — never by color alone.
  */
-export default function GatewayStatus({ status }: GatewayStatusProps) {
+export default function GatewayStatus({ status, claims }: GatewayStatusProps) {
   return (
     <section id="status" className={styles.section} aria-label={status.title}>
       <div className="container">
@@ -32,6 +36,11 @@ export default function GatewayStatus({ status }: GatewayStatusProps) {
             </Reveal>
           ))}
         </dl>
+        {claims ? (
+          <div className={styles.claims}>
+            <ClaimsBoundaryNotice claims={claims} onDark />
+          </div>
+        ) : null}
       </div>
     </section>
   );

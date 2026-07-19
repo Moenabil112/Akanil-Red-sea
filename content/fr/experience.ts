@@ -78,7 +78,7 @@ export const frExperience: ExperienceContent = {
       linkLabel: "Explorer les chaînes de valeur",
     },
     corridor: {
-      title: "Intelligence du corridor",
+      title: "Analyse du corridor économique",
       text: "Un réseau de scénarios d'itinéraires conceptuels — conçus par opportunité, jamais une ligne fixe.",
       linkLabel: "Explorer le corridor",
     },
@@ -124,7 +124,7 @@ export const frExperience: ExperienceContent = {
         "Le Soudan, partenaire de chaînes de valeur : capacité de production, ressources, marché, valeur ajoutée locale et pont mer Rouge–Afrique de l'Est.",
     },
     corridor: {
-      title: "Intelligence du corridor — Passerelle économique Akanil Maroc–mer Rouge",
+      title: "L'architecture des chaînes d'approvisionnement de la mer Rouge — Passerelle Akanil",
       description:
         "Scénarios conceptuels de corridor entre le Maroc, le Soudan et la mer Rouge, avec des états d'itinéraires explicites.",
     },
@@ -169,6 +169,7 @@ export const frExperience: ExperienceContent = {
     { href: "/morocco", label: "Maroc" },
     { href: "/sudan", label: "Soudan" },
     { href: "/value-chains", label: "Chaînes de valeur" },
+    { href: "/portfolio", label: "Portefeuille" },
     { href: "/forum", label: "Forum" },
     { href: "/reception", label: "Accueil" },
   ],
@@ -176,8 +177,9 @@ export const frExperience: ExperienceContent = {
     { href: "/gateway", label: "Le modèle de la Passerelle" },
     { href: "/morocco", label: "La valeur pour le Maroc" },
     { href: "/sudan", label: "Le partenariat avec le Soudan" },
-    { href: "/corridor", label: "Intelligence du corridor" },
+    { href: "/corridor", label: "Architecture du corridor mer Rouge" },
     { href: "/value-chains", label: "Chaînes de valeur prioritaires" },
+    { href: "/portfolio", label: "Plateformes du portefeuille" },
     { href: "/forum", label: "Forum Économique" },
     { href: "/trust", label: "Confiance, données et IA" },
     { href: "/about-akanil", label: "À propos d'Akanil" },

@@ -1,0 +1,42 @@
+.rules {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--section-pad);
+  border-block-start: 1px solid var(--line-on-light);
+}
+
+.rulesTitle {
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+  font-weight: 700;
+  color: var(--color-atlantic);
+}
+
+.rulesList {
+  margin-block-start: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+  max-width: 52rem;
+}
+
+.rule {
+  position: relative;
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+  padding-inline-start: var(--space-4);
+}
+
+.rule::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--color-copper);
+}
+
+.claims {
+  margin-block-start: var(--space-7);
+  max-width: 52rem;
+}

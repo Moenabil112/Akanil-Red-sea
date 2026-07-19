@@ -1,0 +1,83 @@
+.section {
+  background: var(--surface-deep);
+  color: var(--text-on-dark);
+  padding-block: var(--section-pad);
+  border-block-start: 1px solid var(--line-on-dark);
+}
+
+.principle {
+  margin-block-start: var(--space-6);
+  max-width: 40rem;
+  padding-inline-start: var(--space-4);
+  border-inline-start: 2px solid var(--color-gold);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--gold-soft);
+  white-space: pre-line;
+}
+
+.capabilities {
+  margin-block-start: var(--space-7);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.capability {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--space-5);
+  border: 1px solid var(--line-on-dark);
+  border-radius: var(--radius-md);
+  background: var(--surface-panel-dark);
+}
+
+.capabilityTitle {
+  font-size: var(--text-base);
+  font-weight: 700;
+}
+
+.capabilityText {
+  font-size: var(--text-sm);
+  color: var(--text-on-dark-soft);
+}
+
+.capabilityState {
+  margin-block-start: var(--space-2);
+  padding-block-start: var(--space-2);
+  border-block-start: 1px dashed var(--line-on-dark);
+  font-size: var(--text-xs);
+  color: var(--text-on-dark-mute);
+}
+
+.capabilityState[data-state="active-public"] {
+  color: var(--color-nile-on-dark);
+}
+
+.capabilityState[data-state="regulated"] {
+  color: #d68e63;
+}
+
+.stateLabel {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-mute);
+}
+
+[dir="rtl"] .stateLabel {
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 64rem) {
+  .capabilities {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 48rem) {
+  .capabilities {
+    grid-template-columns: 1fr;
+  }
+}

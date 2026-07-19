@@ -1,0 +1,55 @@
+.notice,
+.noticeDark {
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.noticeDark {
+  border-color: var(--line-on-dark);
+  background: var(--surface-panel-dark);
+}
+
+.title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-nile-text);
+}
+
+[dir="rtl"] .title {
+  letter-spacing: 0.02em;
+}
+
+.noticeDark .title {
+  color: var(--color-nile-on-dark);
+}
+
+.scope {
+  margin-block-start: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.item {
+  position: relative;
+  font-size: var(--text-xs);
+  color: var(--text-on-light-mute);
+  padding-inline-start: var(--space-4);
+}
+
+.noticeDark .item {
+  color: var(--text-on-dark-mute);
+}
+
+.item::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--color-sand);
+}

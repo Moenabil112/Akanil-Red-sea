@@ -1,0 +1,27 @@
+.bridge {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--section-pad);
+  border-block-start: 1px solid var(--line-on-light);
+}
+
+.bridgeTitle {
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+  font-weight: 700;
+  color: var(--color-atlantic);
+}
+
+.bridgeName {
+  margin-block-start: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-copper-text);
+}
+
+.bridgeText {
+  margin-block-start: var(--space-3);
+  max-width: 52rem;
+  font-size: var(--text-base);
+  color: var(--text-on-light-soft);
+}

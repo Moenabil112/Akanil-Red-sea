@@ -91,3 +91,7 @@
     gap: var(--space-1);
   }
 }
+
+.claims {
+  margin-block-start: var(--space-6);
+}

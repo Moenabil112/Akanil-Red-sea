@@ -78,7 +78,7 @@ export const enExperience: ExperienceContent = {
       linkLabel: "Explore the value chains",
     },
     corridor: {
-      title: "Corridor intelligence",
+      title: "Economic corridor analysis",
       text: "A network of conceptual route scenarios — designed per opportunity, never one fixed line.",
       linkLabel: "Explore the corridor",
     },
@@ -124,7 +124,7 @@ export const enExperience: ExperienceContent = {
         "Sudan as a value-chain partner: production capability, resources, market, local value addition and the Red Sea–East Africa bridge.",
     },
     corridor: {
-      title: "Corridor intelligence — Akanil Morocco–Red Sea Economic Gateway",
+      title: "The Red Sea supply-chain architecture — Akanil Morocco–Red Sea Economic Gateway",
       description:
         "Conceptual corridor scenarios between Morocco, Sudan and the Red Sea, with explicit route states and verification discipline.",
     },
@@ -169,6 +169,7 @@ export const enExperience: ExperienceContent = {
     { href: "/morocco", label: "Morocco" },
     { href: "/sudan", label: "Sudan" },
     { href: "/value-chains", label: "Value chains" },
+    { href: "/portfolio", label: "Portfolio" },
     { href: "/forum", label: "Forum" },
     { href: "/reception", label: "Reception" },
   ],
@@ -176,8 +177,9 @@ export const enExperience: ExperienceContent = {
     { href: "/gateway", label: "The Gateway model" },
     { href: "/morocco", label: "Value for Morocco" },
     { href: "/sudan", label: "Partnership with Sudan" },
-    { href: "/corridor", label: "Corridor intelligence" },
+    { href: "/corridor", label: "Red Sea corridor architecture" },
     { href: "/value-chains", label: "Priority value chains" },
+    { href: "/portfolio", label: "Portfolio platforms" },
     { href: "/forum", label: "Economic Forum" },
     { href: "/trust", label: "Trust, data and AI" },
     { href: "/about-akanil", label: "About Akanil" },

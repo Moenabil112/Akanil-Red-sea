@@ -237,7 +237,7 @@ export const en: SiteContent = {
       "Every pathway is assessed for the value it retains in Sudan and adds in Morocco. Extractive, one-way models are excluded by design.",
   },
   corridor: {
-    eyebrow: "Corridor intelligence",
+    eyebrow: "Red Sea corridor architecture",
     title: "A network of scenarios — not one fixed route.",
     lead: "The corridor is a method for choosing the best arrangement of production, processing, finance, transit and distribution for each opportunity. Routes are designed per case and re-assessed as conditions change.",
     disclaimer:
@@ -518,6 +518,41 @@ export const en: SiteContent = {
         text: "Decisions, commitments and followed progress after the event.",
       },
     ],
+    phases: [
+      {
+        title: "Before the Forum",
+        items: [
+          "Participant qualification",
+          "Institutional and company profiling",
+          "Need and capability registration",
+          "Project and asset screening",
+          "Meeting preparation",
+          "Evidence-gap review",
+        ],
+      },
+      {
+        title: "During the Forum",
+        items: [
+          "Sector sessions",
+          "B2B and B2G meetings",
+          "Project presentations",
+          "Value-chain workshops",
+          "Factory and institutional visits",
+          "Technical and financing discussions",
+        ],
+      },
+      {
+        title: "After the Forum",
+        items: [
+          "Decision records",
+          "Commitment tracking",
+          "Evidence completion",
+          "Project-review pathway",
+          "Controlled data-room opening where approved",
+          "Implementation follow-up",
+        ],
+      },
+    ],
     posterAlt:
       "Conceptual identity artwork for the Morocco–Sudan Economic Forum.",
     posterLabel: "Concept identity artwork — not documentary evidence of an event.",
@@ -628,7 +663,7 @@ export const en: SiteContent = {
     ],
     founderQuote:
       "The Gateway is designed to transform relationships and knowledge into qualified, governed and followable economic pathways.",
-    founderName: "Mohamed Nabil",
+    founderName: "Mohamed Abderrahim",
     founderRole: "Founder and CEO — Akanil",
   },
   contact: {

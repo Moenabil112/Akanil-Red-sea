@@ -1,0 +1,135 @@
+.section {
+  background: var(--surface-deep);
+  color: var(--text-on-dark);
+  padding-block: var(--section-pad);
+  border-block-start: 1px solid var(--line-on-dark);
+}
+
+.intro {
+  max-width: 46rem;
+}
+
+.numberRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.number {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--gold-soft);
+}
+
+.rule {
+  width: 2.5rem;
+  height: 1px;
+  background: var(--line-on-dark-strong);
+}
+
+.title {
+  margin-block-start: var(--space-3);
+  font-size: var(--text-h2);
+  line-height: var(--leading-heading);
+  font-weight: 800;
+  color: var(--gold-soft);
+  text-wrap: balance;
+}
+
+.lead {
+  margin-block-start: var(--space-4);
+  font-size: var(--text-lg);
+  color: var(--text-on-dark-soft);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  margin-block-start: var(--space-7);
+  align-items: start;
+}
+
+.layersTitle {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-mute);
+}
+
+[dir="rtl"] .layersTitle {
+  letter-spacing: 0.03em;
+}
+
+.layers {
+  margin-block-start: var(--space-4);
+  display: grid;
+}
+
+.layer {
+  display: flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  padding-block: var(--space-3);
+  border-block-start: 1px solid var(--line-on-dark);
+  font-size: var(--text-base);
+  color: var(--text-on-dark-soft);
+}
+
+.layerIndex {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-nile-on-dark);
+}
+
+.bridge {
+  position: sticky;
+  top: 6rem;
+  padding: var(--space-6);
+  border: 1px solid var(--line-on-dark-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-panel-dark);
+}
+
+.bridgeTitle {
+  font-size: var(--text-h3);
+  line-height: var(--leading-heading);
+  font-weight: 700;
+  color: var(--gold-soft);
+}
+
+.bridgeText {
+  margin-block-start: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--text-on-dark-soft);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-start: var(--space-5);
+  min-height: 2.75rem;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--gold-soft);
+  border-block-end: 1px solid transparent;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.link:hover,
+.link:focus-visible {
+  border-block-end-color: var(--gold-soft);
+}
+
+@media (max-width: 64rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bridge {
+    position: static;
+  }
+}

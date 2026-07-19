@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { getContent, getExperience, getReception } from "@/lib/content";
+import { getEcosystem, getReception } from "@/lib/content";
 import { pageMetadata, resolveLocale } from "@/lib/page-meta";
 import {
   RECEPTION_EMAIL,
@@ -20,9 +20,8 @@ export default async function ReceptionPage({
 }) {
   const { lang } = await params;
   const locale = resolveLocale(lang);
-  const site = getContent(locale);
-  const experience = getExperience(locale);
   const reception = getReception(locale);
+  const ecosystem = getEcosystem(locale);
 
   return (
     <SiteChrome locale={locale}>
@@ -85,8 +84,7 @@ export default async function ReceptionPage({
               <ReceptionDesk
                 locale={locale}
                 reception={reception}
-                experience={experience}
-                site={site}
+                ecosystem={ecosystem}
               />
             </Suspense>
           </div>
