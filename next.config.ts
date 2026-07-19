@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
       "about-akanil",
       "reception",
     ];
+    // Dedicated platform-profile slugs (P1 §6).
+    const platformSlugs = ["valura", "rwafid", "trade-chain-africa", "ibriz-gaas"];
     return [
       {
         source: "/",
@@ -31,6 +33,11 @@ const nextConfig: NextConfig = {
       ...contentRoutes.map((route) => ({
         source: `/${route}`,
         destination: `/ar/${route}`,
+        permanent: false,
+      })),
+      ...platformSlugs.map((slug) => ({
+        source: `/portfolio/${slug}`,
+        destination: `/ar/portfolio/${slug}`,
         permanent: false,
       })),
     ];

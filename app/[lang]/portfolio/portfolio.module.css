@@ -7,3 +7,7 @@
 .claims {
   margin-block-start: var(--space-7);
 }
+
+.reviewPanel {
+  margin-block-start: var(--space-8);
+}

@@ -2,12 +2,14 @@ import type { Locale, ReceptionContent } from "@/content/types";
 import type {
   AudienceId,
   IntakeFieldId,
+  PlatformId,
   RequestTypeId,
 } from "@/content/ecosystem-types";
 import {
   audienceRequestMatrix,
   intakeSchemas,
   isAudienceId,
+  isPlatformId,
   isRequestTypeId,
   type IntakeSchema,
 } from "@/lib/ecosystem";
@@ -18,7 +20,7 @@ export const RECEPTION_PHONE_E164 = "+212663177864";
 export const RECEPTION_PHONE_DISPLAY = "+212 663 177 864";
 export const RECEPTION_TEL_HREF = `tel:${RECEPTION_PHONE_E164}`;
 
-export { isAudienceId, isRequestTypeId };
+export { isAudienceId, isRequestTypeId, isPlatformId };
 
 /**
  * Data captured by the structured reception form (P0 §32, ADR-014).
@@ -28,6 +30,8 @@ export { isAudienceId, isRequestTypeId };
 export interface ReceptionRequest {
   requestType: RequestTypeId;
   audience?: AudienceId;
+  /** Portfolio platform this request concerns (P1 §12), when arrived via a profile. */
+  platform?: PlatformId;
   /** Free-text values keyed by intake field. */
   values: Partial<Record<IntakeFieldId, string>>;
   /** Selected evidence-availability option ids (no uploads, P0 §32). */
@@ -38,8 +42,16 @@ export interface ReceptionRequest {
 export function emptyReceptionRequest(
   requestType: RequestTypeId,
   audience?: AudienceId,
+  platform?: PlatformId,
 ): ReceptionRequest {
-  return { requestType, audience, values: {}, evidence: [], consent: false };
+  return {
+    requestType,
+    audience,
+    platform,
+    values: {},
+    evidence: [],
+    consent: false,
+  };
 }
 
 /** The intake schema for the current request type. */
@@ -105,13 +117,25 @@ export function validateReceptionRequest(
 export function parsePreselection(params: {
   type?: string | null;
   audience?: string | null;
-}): { requestType?: RequestTypeId; audience?: AudienceId } {
-  const result: { requestType?: RequestTypeId; audience?: AudienceId } = {};
+  platform?: string | null;
+}): {
+  requestType?: RequestTypeId;
+  audience?: AudienceId;
+  platform?: PlatformId;
+} {
+  const result: {
+    requestType?: RequestTypeId;
+    audience?: AudienceId;
+    platform?: PlatformId;
+  } = {};
   if (params.audience && isAudienceId(params.audience)) {
     result.audience = params.audience;
   }
   if (params.type && isRequestTypeId(params.type)) {
     result.requestType = params.type;
+  }
+  if (params.platform && isPlatformId(params.platform)) {
+    result.platform = params.platform;
   }
   if (result.audience) {
     const matrix = audienceRequestMatrix[result.audience];
@@ -151,6 +175,7 @@ export interface ReceptionTransport {
     locale: Locale,
     request: ReceptionRequest,
     content: ReceptionContent,
+    platformName?: string,
   ): PreparedRequest;
 }
 
@@ -161,6 +186,7 @@ export function buildEmailBody(
   locale: Locale,
   request: ReceptionRequest,
   content: ReceptionContent,
+  platformName?: string,
 ): string {
   const labels = content.email.fieldLabels;
   // U+2066 LRI … U+2069 PDI isolate Latin runs inside RTL text.
@@ -172,6 +198,9 @@ export function buildEmailBody(
   };
 
   push(labels.requestType, content.requestTypes[request.requestType].label);
+  if (request.platform && platformName) {
+    push(labels.platform, platformName);
+  }
   if (request.audience) {
     push(labels.audience, content.audienceNames[request.audience]);
   }
@@ -186,6 +215,8 @@ export function buildEmailBody(
       field === "summary"
     )
       continue;
+    // Profile-derived platform is already listed above; skip the manual select.
+    if (field === "platform" && request.platform) continue;
     if (field === "evidenceAvailable") {
       if (request.evidence.length > 0) {
         const evidenceLabels = request.evidence
@@ -211,10 +242,13 @@ export function buildEmailBody(
 export function buildSubject(
   request: ReceptionRequest,
   content: ReceptionContent,
+  platformName?: string,
 ): string {
   const typeLabel = content.requestTypes[request.requestType].label;
   const organization = (request.values.organization ?? "").trim();
-  return `${content.email.subjectPrefix} ${typeLabel} — ${organization}`;
+  const platformPart =
+    request.platform && platformName ? ` · ${platformName}` : "";
+  return `${content.email.subjectPrefix} ${typeLabel}${platformPart} — ${organization}`;
 }
 
 /**
@@ -225,9 +259,10 @@ export function buildDraftFile(
   locale: Locale,
   request: ReceptionRequest,
   content: ReceptionContent,
+  platformName?: string,
 ): { filename: string; text: string } {
-  const subject = buildSubject(request, content);
-  const body = buildEmailBody(locale, request, content);
+  const subject = buildSubject(request, content, platformName);
+  const body = buildEmailBody(locale, request, content, platformName);
   return {
     filename: "akanil-request-draft.txt",
     text: `${subject}\n\n${body}\n`,
@@ -236,9 +271,9 @@ export function buildDraftFile(
 
 /** Default transport: a properly encoded mailto handoff. */
 export const mailtoTransport: ReceptionTransport = {
-  prepare(locale, request, content) {
-    const subject = buildSubject(request, content);
-    const body = buildEmailBody(locale, request, content);
+  prepare(locale, request, content, platformName) {
+    const subject = buildSubject(request, content, platformName);
+    const body = buildEmailBody(locale, request, content, platformName);
     const href = `mailto:${RECEPTION_EMAIL}?subject=${encodeURIComponent(
       subject,
     )}&body=${encodeURIComponent(body)}`;

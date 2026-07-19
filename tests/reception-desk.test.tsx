@@ -61,6 +61,30 @@ describe("ReceptionDesk (P0 dynamic schemas)", () => {
     expect(audience.value).toBe("moroccan-industry-exporters");
   });
 
+  it("recognizes a platform query and shows the platform-context panel (P1)", () => {
+    setup("type=project-investment-review&platform=valura");
+    const valura = enEcosystem.platforms.items.find((p) => p.id === "valura")!;
+    // Panel shows the project name and its current stage.
+    expect(screen.getAllByText(valura.name).length).toBeGreaterThan(0);
+    expect(screen.getByText(valura.stage)).toBeTruthy();
+    const select = screen.getByLabelText(/Request type/) as HTMLSelectElement;
+    expect(select.value).toBe("project-investment-review");
+  });
+
+  it("carries the platform into the prepared email on review", () => {
+    setup("type=project-investment-review&platform=valura");
+    const valura = enEcosystem.platforms.items.find((p) => p.id === "valura")!;
+    fillBaseFields();
+    fireEvent.change(screen.getByLabelText(/Project or asset name/), {
+      target: { value: "Northern hub" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /Review the request/ }));
+    const openLink = screen.getByRole("link", {
+      name: enReception.review.openEmailButton,
+    }) as HTMLAnchorElement;
+    expect(openLink.href).toContain(encodeURIComponent(valura.name));
+  });
+
   it("falls back safely for unknown or disallowed preselection values", () => {
     setup("type=nonsense&audience=evil");
     const select = screen.getByLabelText(/Request type/) as HTMLSelectElement;

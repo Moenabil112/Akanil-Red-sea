@@ -51,6 +51,10 @@ export function isRequestTypeId(value: string): value is RequestTypeId {
   return (requestTypeIds as string[]).includes(value);
 }
 
+export function isPlatformId(value: string): value is PlatformId {
+  return (platformIds as string[]).includes(value);
+}
+
 /** Audience → allowed request types (first entry after default ordering). */
 export const audienceRequestMatrix: Record<
   AudienceId,

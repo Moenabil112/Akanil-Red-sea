@@ -4,6 +4,7 @@ import SiteChrome from "@/components/layout/SiteChrome";
 import PageHero from "@/components/layout/PageHero";
 import PageReceptionBand from "@/components/layout/PageReceptionBand";
 import About from "@/components/sections/About";
+import SpecialistReviewPanel from "@/components/review/SpecialistReviewPanel";
 import styles from "./about.module.css";
 
 export const generateMetadata = pageMetadata("about-akanil");
@@ -63,16 +64,50 @@ export default async function AboutPage({
           </div>
         </div>
       </section>
+      <section className={styles.bridge} aria-label={institution.bridgeTitle}>
+        <div className="container">
+          <h2 className={styles.bridgeTitle}>{institution.bridgeTitle}</h2>
+          <p className={styles.bridgeText}>{institution.bridgeLead}</p>
+          <div className={styles.bridgeGroups}>
+            {institution.bridgeGroups.map((group) => (
+              <div key={group.title} className={styles.bridgeGroup}>
+                <h3 className={styles.bridgeGroupTitle}>{group.title}</h3>
+                <ul className={styles.bridgeList}>
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <figure className={styles.founder}>
+            <blockquote className={styles.founderQuote}>
+              {ecosystem.founder.bridgeText}
+            </blockquote>
+            <figcaption className={styles.founderName}>
+              {ecosystem.founder.name}
+            </figcaption>
+          </figure>
+        </div>
+      </section>
       <section
-        className={styles.bridge}
-        aria-label={ecosystem.founder.bridgeTitle}
+        className={styles.review}
+        aria-label={ecosystem.reviewPanel.title}
       >
         <div className="container">
-          <h2 className={styles.bridgeTitle}>
-            {ecosystem.founder.bridgeTitle}
-          </h2>
-          <p className={styles.bridgeName}>{ecosystem.founder.name}</p>
-          <p className={styles.bridgeText}>{ecosystem.founder.bridgeText}</p>
+          <SpecialistReviewPanel content={ecosystem.reviewPanel} onDark />
+          <div className={styles.disciplines}>
+            <h3 className={styles.disciplinesTitle}>
+              {ecosystem.review.disciplinesTitle}
+            </h3>
+            <ul className={styles.disciplineList}>
+              {ecosystem.review.disciplines.map((discipline) => (
+                <li key={discipline} className={styles.discipline}>
+                  {discipline}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
       <PageReceptionBand locale={locale} experience={experience} />
