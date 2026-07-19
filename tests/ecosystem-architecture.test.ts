@@ -241,15 +241,29 @@ describe("request architecture", () => {
 /* ---------------- Portfolio platforms (P0 §6–10, §26–27, §40) ---------------- */
 
 describe("portfolio platforms", () => {
-  it("gives every platform a resolvable status and evidence state", () => {
+  it("retains exactly four primary platforms in every locale", () => {
+    for (const [, record] of records) {
+      expect(record.platforms.items).toHaveLength(4);
+      expect(record.platforms.items.map((p) => p.id)).toEqual(platformIds);
+    }
+  });
+
+  it("gives every platform a resolvable simplified status and a last-reviewed date", () => {
+    const valid = new Set([
+      "public-profile-available",
+      "additional-information-after-review",
+      "update-required-before-publication",
+      "regulated-or-sensitive-project",
+    ]);
     for (const [, record] of records) {
       for (const platform of record.platforms.items) {
+        expect(valid.has(platform.projectStatus)).toBe(true);
         expect(
-          record.states.publicStatus[platform.publicStatus].length,
+          record.states.projectStatus[platform.projectStatus].length,
         ).toBeGreaterThan(5);
-        expect(
-          record.states.evidenceState[platform.evidenceState].length,
-        ).toBeGreaterThan(5);
+        expect(platform.lastReviewed.length).toBeGreaterThan(3);
+        expect(platform.stage.length).toBeGreaterThan(20);
+        expect(platform.partnersSought.length).toBeGreaterThanOrEqual(3);
         expect(requestTypeIds).toContain(platform.cta.requestType);
         expect(platform.capabilities.length).toBeGreaterThanOrEqual(3);
         expect(platform.geographicScope.length).toBeGreaterThanOrEqual(1);
@@ -257,14 +271,154 @@ describe("portfolio platforms", () => {
     }
   });
 
-  it("carries the mandatory IBRIZ/GAAS regulatory note in every locale", () => {
+  it("maps each platform to its approved simplified public status", () => {
+    const expected: Record<string, string> = {
+      valura: "public-profile-available",
+      rwafid: "update-required-before-publication",
+      "trade-chain-africa": "update-required-before-publication",
+      "ibriz-gaas": "regulated-or-sensitive-project",
+    };
+    for (const [, record] of records) {
+      for (const platform of record.platforms.items) {
+        expect(platform.projectStatus).toBe(expected[platform.id]);
+      }
+    }
+  });
+
+  it("presents VALURA as an agro-industrial complex, not an economic-zone platform", () => {
+    for (const [locale, record] of records) {
+      const valura = record.platforms.items.find((p) => p.id === "valura")!;
+      // Category speaks of agricultural processing / agro-industry.
+      expect(valura.category.toLowerCase()).toMatch(
+        /agro|agricultural processing|transformation agricole|تصنيع الزراعي|الصناعات التحويلية الزراعية/,
+      );
+      // No established economic-zone framing anywhere in the record.
+      const text = JSON.stringify(valura).toLowerCase();
+      expect(text, `${locale} VALURA`).not.toContain("valura economic zone");
+      expect(text).not.toMatch(
+        /economic-zone development|développement de zones économiques|تطوير المناطق الاقتصادية/,
+      );
+    }
+  });
+
+  it("shows no fixed VALURA site and only labelled preliminary figures", () => {
+    for (const [, record] of records) {
+      const valura = record.platforms.items.find((p) => p.id === "valura")!;
+      // Locations are potential/under study, not established sites.
+      expect(valura.geographicScope.join(" ").toLowerCase()).toMatch(
+        /potential|under study|قيد الدراسة|محتمل|à l'étude|potentiel/,
+      );
+      // Figures carry a preliminary label and exclude IRR / payback / revenue.
+      expect(valura.figuresNote).toBeTruthy();
+      expect(valura.figuresNote!.toLowerCase()).toMatch(
+        /preliminary|préliminaire|أولية/,
+      );
+      const figures = (valura.indicativeFigures ?? []).join(" ").toLowerCase();
+      expect(figures).not.toMatch(/irr|payback|revenue|amortissement|عائد/);
+    }
+  });
+
+  it("withholds RWAFID Q1 2026 pilot and partnership claims as current facts", () => {
+    const banned = [
+      "q1 2026",
+      "100-farmer",
+      "100 farmers",
+      "5,000 farmers",
+      "5000 farmers",
+      "ministry of agriculture",
+      "letter of intent",
+      "beta launch",
+      "sehedin",
+      "usd 1.5 million",
+      "1.5 million",
+    ];
+    for (const [locale, record] of records) {
+      const rwafid = record.platforms.items.find((p) => p.id === "rwafid")!;
+      const text = JSON.stringify(rwafid).toLowerCase();
+      for (const phrase of banned) {
+        expect(text, `${locale} RWAFID contains "${phrase}"`).not.toContain(
+          phrase,
+        );
+      }
+      expect(rwafid.projectStatus).toBe("update-required-before-publication");
+    }
+  });
+
+  it("keeps Trade-Chain Africa free of legacy partner, currency and return claims", () => {
+    const banned = [
+      "nilly",
+      "attijariwafa",
+      "african development bank",
+      "qnb",
+      "dhl",
+      "msc",
+      "royal air maroc",
+      "suada",
+      "animus",
+      "series a",
+      "25 million",
+      "15-25x",
+      "15–25x",
+      "africa's leading",
+      "africa’s leading",
+      "blockchain settlement",
+      "marketplace",
+    ];
+    for (const [locale, record] of records) {
+      const tca = record.platforms.items.find(
+        (p) => p.id === "trade-chain-africa",
+      )!;
+      const text = JSON.stringify(tca).toLowerCase();
+      for (const phrase of banned) {
+        expect(
+          text,
+          `${locale} Trade-Chain Africa contains "${phrase}"`,
+        ).not.toContain(phrase);
+      }
+    }
+  });
+
+  it("carries the mandatory IBRIZ/GAAS regulatory note and never a bank claim", () => {
+    // Word-boundary regexes for affirmative bank claims. "licensed banking
+    // sponsor" (a partner sought) and "not a bank" (a negation) are legit,
+    // so \b avoids matching them.
+    const banned = [
+      /licensed bank\b/,
+      /operating bank\b/,
+      /gold-backed bank\b/,
+      /world'?s first/,
+      /banque licenciée/,
+      /بنك مرخص/,
+    ];
     for (const [locale, record] of records) {
       const ibriz = record.platforms.items.find((p) => p.id === "ibriz-gaas")!;
       expect(
         ibriz.regulatoryNote?.length,
         `${locale} IBRIZ regulatory note`,
       ).toBeGreaterThan(60);
-      expect(ibriz.publicStatus).toBe("regulated-development");
+      expect(ibriz.projectStatus).toBe("regulated-or-sensitive-project");
+      const text = JSON.stringify(ibriz).toLowerCase();
+      for (const pattern of banned) {
+        expect(pattern.test(text), `${locale} IBRIZ matches ${pattern}`).toBe(
+          false,
+        );
+      }
+    }
+  });
+
+  it("gives every platform a Request Project Review action", () => {
+    const expected: Record<string, string> = {
+      en: "request project review",
+      fr: "demander l'examen du projet",
+      ar: "طلب مراجعة المشروع",
+    };
+    for (const [locale, record] of records) {
+      for (const platform of record.platforms.items) {
+        expect(
+          platform.cta.label.toLowerCase(),
+          `${locale} ${platform.id} CTA`,
+        ).toBe(expected[locale]);
+      }
     }
   });
 
@@ -291,22 +445,63 @@ describe("portfolio platforms", () => {
     }
   });
 
-  it("never exposes consumer banking calls to action for IBRIZ", () => {
-    const banned = [
-      "open an account",
-      "ouvrir un compte",
-      "افتح حساب",
-      "deposit",
-      "dépôt garanti",
-    ];
+  it("distinguishes platforms from nodes in every locale", () => {
+    for (const [, record] of records) {
+      expect(record.platforms.nodeDistinction.length).toBeGreaterThan(40);
+    }
+  });
+
+  it("states that a project-review request guarantees nothing (§7)", () => {
+    const markers: Record<string, RegExp> = {
+      en: /guarantee|confidential documents|specialist team/i,
+      fr: /garanti|documents confidentiels|équipe spécialisée/i,
+      ar: /يضمن|وثائق سرية|فريق متخصص/,
+    };
     for (const [locale, record] of records) {
-      const ibriz = record.platforms.items.find((p) => p.id === "ibriz-gaas")!;
-      const text = JSON.stringify(ibriz).toLowerCase();
-      for (const phrase of banned) {
-        expect(text, `${locale} IBRIZ contains "${phrase}"`).not.toContain(
-          phrase.toLowerCase(),
-        );
-      }
+      const note = record.platforms.reviewRequestNote;
+      expect(note.length, `${locale} review note`).toBeGreaterThan(40);
+      expect(note, `${locale} review note`).toMatch(markers[locale]!);
+    }
+  });
+});
+
+/* ---------------- Institutional identity (P1 reconciliation §2, §8) ---------------- */
+
+describe("institutional identity", () => {
+  it("publishes the Moroccan and Sudan registration facts in every locale", () => {
+    for (const [, record] of records) {
+      const text = JSON.stringify(record.institution);
+      expect(text).toContain("2014");
+      expect(text).toContain("10015");
+      expect(text).toContain("2017");
+      expect(text).toContain("121");
+    }
+  });
+
+  it("lists the nine regional representatives", () => {
+    for (const [, record] of records) {
+      expect(record.institution.representatives).toHaveLength(9);
+    }
+  });
+
+  it("describes the network as agents or representatives, not legal branches", () => {
+    const markers: Record<string, RegExp> = {
+      en: /agent|representative/i,
+      fr: /agent|représentant/i,
+      ar: /وكلاء|ممثلين/,
+    };
+    const forbidden: Record<string, RegExp> = {
+      en: /legal branch|subsidiar|incorporated office/i,
+      fr: /succursale légale|filiale|bureau constitué/i,
+      ar: /فروع قانونية|شركات تابعة/,
+    };
+    for (const [locale, record] of records) {
+      const note = record.institution.networkNote;
+      expect(note, `${locale} network note`).toMatch(markers[locale]!);
+      // The note only mentions the forbidden terms to negate them, so the
+      // representatives list itself must not carry branch/subsidiary labels.
+      const list = record.institution.representatives.join(" ");
+      expect(list).not.toMatch(forbidden[locale]!);
     }
   });
 });

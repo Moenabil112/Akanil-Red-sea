@@ -5,7 +5,6 @@ import type {
   EcosystemContent,
   PortfolioPlatformContent,
 } from "@/content/ecosystem-types";
-import PublicStatusControl from "@/components/ui/PublicStatusControl";
 import styles from "./Portfolio.module.css";
 
 interface PortfolioPlatformCardProps {
@@ -17,11 +16,13 @@ interface PortfolioPlatformCardProps {
 }
 
 /**
- * Portfolio platform card (P0 §6, §26, ADR-013). Shows the mandated
- * fields — category, purpose, problem solved, Akanil role, geographies,
- * audiences, public status, evidence state — plus the regulatory note
- * where required (IBRIZ/GAAS, ADR-016). CTA routes to reception with the
- * platform's controlled request type; never a consumer or investment CTA.
+ * Portfolio platform card (P1 reconciliation §6). Concise project card:
+ * type, core value, geographic scope, main components, current stage,
+ * clearly-labelled preliminary figures where safe, partners sought, the
+ * simplified four-state project-file status with a last-reviewed date,
+ * the regulatory note where required (IBRIZ/GAAS), and a Request Project
+ * Review action routing through the no-backend reception model. Status is
+ * carried by text, never colour alone.
  */
 export default function PortfolioPlatformCard({
   locale,
@@ -40,10 +41,6 @@ export default function PortfolioPlatformCard({
       <p className={styles.cardPurpose}>{platform.purpose}</p>
 
       <dl className={styles.cardFacts}>
-        <div className={styles.fact}>
-          <dt className={styles.factTerm}>{labels.problemLabel}</dt>
-          <dd className={styles.factValue}>{platform.problemSolved}</dd>
-        </div>
         <div className={styles.fact}>
           <dt className={styles.factTerm}>{labels.roleLabel}</dt>
           <dd className={styles.factValue}>{platform.operatingRole}</dd>
@@ -76,20 +73,37 @@ export default function PortfolioPlatformCard({
         </ul>
       </div>
 
-      <PublicStatusControl
-        entries={[
-          {
-            term: labels.statusLabel,
-            value: states.publicStatus[platform.publicStatus],
-            tone: "status",
-          },
-          {
-            term: labels.evidenceLabel,
-            value: states.evidenceState[platform.evidenceState],
-            tone: "evidence",
-          },
-        ]}
-      />
+      <div className={styles.stage}>
+        <span className={styles.factTerm}>{labels.stageLabel}</span>
+        <p className={styles.stageText}>{platform.stage}</p>
+      </div>
+
+      {platform.indicativeFigures ? (
+        <div className={styles.figures}>
+          <span className={styles.factTerm}>{labels.figuresLabel}</span>
+          <ul className={styles.figureList}>
+            {platform.indicativeFigures.map((figure) => (
+              <li key={figure} className={styles.figure}>
+                {figure}
+              </li>
+            ))}
+          </ul>
+          {platform.figuresNote ? (
+            <p className={styles.figuresNote}>{platform.figuresNote}</p>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className={styles.partners}>
+        <span className={styles.factTerm}>{labels.partnersLabel}</span>
+        <ul className={styles.partnerList}>
+          {platform.partnersSought.map((partner) => (
+            <li key={partner} className={styles.partner}>
+              {partner}
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {platform.regulatoryNote ? (
         <p className={styles.regulatoryNote}>
@@ -99,6 +113,20 @@ export default function PortfolioPlatformCard({
           {platform.regulatoryNote}
         </p>
       ) : null}
+
+      <dl className={styles.statusRow} data-status={platform.projectStatus}>
+        <div className={styles.statusCell}>
+          <dt className={styles.factTerm}>{labels.fileStatusLabel}</dt>
+          <dd className={styles.statusValue}>
+            {states.projectStatus[platform.projectStatus]}
+            {platform.statusDetail ? ` — ${platform.statusDetail}` : ""}
+          </dd>
+        </div>
+        <div className={styles.statusCell}>
+          <dt className={styles.factTerm}>{labels.lastReviewedLabel}</dt>
+          <dd className={styles.statusValue}>{platform.lastReviewed}</dd>
+        </div>
+      </dl>
 
       <footer className={styles.cardFoot}>
         <Link

@@ -37,9 +37,9 @@ export const requestTypeIds: RequestTypeId[] = [
 ];
 
 export const platformIds: PlatformId[] = [
-  "trade-chain-africa",
   "valura",
   "rwafid",
+  "trade-chain-africa",
   "ibriz-gaas",
 ];
 

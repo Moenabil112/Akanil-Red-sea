@@ -345,28 +345,134 @@ export const enEcosystem: EcosystemContent = {
   platforms: {
     eyebrow: "Portfolio platforms",
     title: "Strategic platforms operated within the ecosystem.",
-    lead: "Akanil manages a controlled portfolio of platforms that structure trade corridors, economic zones, supply chains and regulated technology infrastructure.",
-    categoryLabel: "Category",
-    purposeLabel: "Purpose",
+    lead: "Akanil develops a controlled portfolio of four platforms across agro-industrial processing, digital agriculture, trade corridors and regulated financial-technology infrastructure.",
+    nodeDistinction:
+      "These four platforms are Akanil's portfolio products. The ports, cities and production regions shown elsewhere are ecosystem nodes — locations and roles, not Akanil-owned projects, partners or licensed operations.",
+    reviewRequestNote:
+      "Requesting a project review does not guarantee access, financing or partnership, and confidential documents are never shared automatically. Every request is reviewed by the specialist team, which determines the appropriate next step.",
+    categoryLabel: "Project type",
+    purposeLabel: "Core value",
     problemLabel: "Problem addressed",
     roleLabel: "Akanil's role",
-    scopeLabel: "Main geographies",
+    scopeLabel: "Geographic scope",
     audiencesLabel: "Relevant audiences",
-    capabilitiesLabel: "Capabilities",
+    capabilitiesLabel: "Main components",
+    stageLabel: "Current stage",
+    figuresLabel: "Key indicative figures",
+    partnersLabel: "Partners or capabilities sought",
+    fileStatusLabel: "Project file status",
+    lastReviewedLabel: "Last reviewed",
     statusLabel: "Public status",
     evidenceLabel: "Evidence state",
     regulatoryLabel: "Regulatory note",
     items: [
       {
-        id: "trade-chain-africa",
-        name: "Trade-Chain Africa",
-        category: "Ports, logistics and trade corridors",
+        id: "valura",
+        name: "VALURA — Value-Added Agro-Industrial Complex",
+        category: "Integrated agricultural processing and value-addition complex",
         purpose:
-          "Trade-corridor structuring and stakeholder coordination platform.",
+          "Transforming Sudanese crops and agricultural raw materials into processed, packaged and exportable higher-value products.",
         problemSolved:
-          "African production reaches Red Sea and international markets through fragmented, undocumented routes with unclear standards and logistics requirements.",
+          "Agricultural output is exported as raw commodities, so value that could be created through processing, extraction, sorting, sterilization, packaging, storage and by-product reuse leaves before it is captured.",
         operatingRole:
-          "Akanil structures corridor scenarios, coordinates qualified stakeholders and documents route, standards and logistics requirements.",
+          "Akanil develops the preliminary industrial and investment blueprint and structures the integrated complex, its components and its financing pathway.",
+        geographicScope: [
+          "Potential locations under study: Kassala, Gedaref, Gezira (Sudan)",
+        ],
+        targetStakeholders: [
+          "sudanese-producers-asset-owners",
+          "moroccan-finance-investment",
+          "sudanese-decision-makers",
+        ],
+        capabilities: [
+          "Sesame, groundnut and watermelon-seed oil processing",
+          "Medicinal and wild-herb oil extraction",
+          "Optical and AI-assisted sorting",
+          "Automated packaging lines",
+          "Vegetable and fruit sterilization",
+          "Solar-powered cold storage",
+          "Hybrid energy, waste reduction and by-product reuse",
+          "Potential supply integration with RWAFID",
+        ],
+        stage:
+          "Preliminary industrial and investment blueprint. Final site selection, detailed feasibility and environmental and social assessment remain to be completed or updated.",
+        projectStatus: "public-profile-available",
+        statusDetail: "Preliminary Blueprint",
+        lastReviewed: "March 2026",
+        indicativeFigures: [
+          "USD 8–12 million indicative capital requirement",
+          "50–80 tonnes/day indicative capacity",
+          "50–80 feddans indicative land requirement",
+          "250+ direct jobs target",
+          "500+ indirect jobs target",
+        ],
+        figuresNote:
+          "Preliminary estimates from VALURA Blueprint V1.0 — March 2026. Estimates, not achieved results or guarantees.",
+        partnersSought: [
+          "Industrial investors",
+          "Processing, sorting and packaging technology providers",
+          "Food and oil companies",
+          "Development-finance and energy partners",
+          "Distributors, buyers, feasibility and ESIA specialists",
+        ],
+        cta: {
+          label: "Request Project Review",
+          requestType: "project-investment-review",
+        },
+      },
+      {
+        id: "rwafid",
+        name: "RWAFID — روافد",
+        category: "Digital Agriculture and Supply-Chain Platform",
+        purpose:
+          "An offline-first digital agriculture platform combining farm records, monitoring, advisory, input access, finance, market access and logistics for African farmers and supply chains.",
+        problemSolved:
+          "Smallholder and medium-scale farmers and agricultural supply chains lack connected records, monitoring, advisory, finance, buyers and logistics — especially where connectivity is limited.",
+        operatingRole:
+          "Akanil develops the platform concept and its target-user model, and is verifying pilot execution, institutional support and operating partnerships before publication.",
+        geographicScope: [
+          "Sudan and East African agricultural regions (operating geography under verification)",
+        ],
+        targetStakeholders: [
+          "sudanese-producers-asset-owners",
+          "moroccan-industry-exporters",
+          "sudanese-decision-makers",
+        ],
+        capabilities: [
+          "Digital farm records and GPS field mapping",
+          "NDVI and satellite crop monitoring with early-warning alerts",
+          "AI-assisted and human agricultural advisory",
+          "Agricultural-input access and financial-service integration",
+          "Buyer and processor access",
+          "Logistics and shipment visibility",
+          "Offline-first operation with later synchronization",
+        ],
+        stage:
+          "Digital agriculture platform undergoing current-status verification for pilot execution, institutional support and operating partnerships.",
+        projectStatus: "update-required-before-publication",
+        lastReviewed: "July 2026",
+        partnersSought: [
+          "Farmer cooperatives and agricultural-input suppliers",
+          "Banks and agricultural-finance institutions",
+          "Satellite and agritech providers",
+          "Buyers, processors and logistics companies",
+          "Agricultural advisors, development institutions and technology investors",
+        ],
+        cta: {
+          label: "Request Project Review",
+          requestType: "technology-data-partnership",
+        },
+      },
+      {
+        id: "trade-chain-africa",
+        name: "Trade-Chain Africa — Ports, Trade Corridors and Supply-Chain Platform",
+        category: "Ports, trade corridors and supply-chain platform",
+        purpose:
+          "Structuring the movement of products and value between African production regions, ports, economic zones, manufacturers, buyers, finance and international markets.",
+        problemSolved:
+          "African production reaches Red Sea and international markets through fragmented, undocumented routes with unclear standards, logistics and stakeholder coordination.",
+        operatingRole:
+          "Akanil repositions and reconciles the earlier project file into a Red Sea corridor and supply-chain architecture, structuring routes, node relationships and qualified stakeholder coordination.",
         geographicScope: [
           "King Abdullah Economic City and King Abdullah Port",
           "Ain Sokhna",
@@ -382,122 +488,67 @@ export const enEcosystem: EcosystemContent = {
           "technology-logistics-knowledge-partners",
         ],
         capabilities: [
-          "Structure trade routes and compare corridor scenarios",
-          "Connect production regions with ports",
-          "Organize aggregation and shipment requirements",
-          "Identify cold-chain and storage needs",
-          "Map customs, inspection and standards requirements",
-          "Connect economic zones, industries and markets",
-          "Support documented logistics and trade decisions",
+          "Corridor and route analysis",
+          "Port and economic-zone mapping",
+          "Producer-to-port supply-chain design",
+          "Storage and cold-chain requirements",
+          "Customs and standards preparation",
+          "Shipment and document visibility",
+          "Qualified stakeholder coordination",
         ],
-        publicStatus: "structured-project",
-        evidenceState: "controlled-evidence-available",
+        stage:
+          "Strategic repositioning and project-file reconciliation with the Akanil Red Sea ecosystem architecture.",
+        projectStatus: "update-required-before-publication",
+        lastReviewed: "July 2026",
+        partnersSought: [
+          "Port and terminal operators and economic zones",
+          "Logistics, cold-chain, shipping and storage providers",
+          "Trade-finance and insurance institutions",
+          "Customs and standards specialists",
+          "Technology, traceability providers, manufacturers and buyers",
+        ],
         cta: {
-          label: "Discuss corridor cooperation",
+          label: "Request Project Review",
           requestType: "port-logistics-cooperation",
         },
       },
       {
-        id: "valura",
-        name: "Valura Project",
-        category: "Economic-zone and value-addition development",
-        purpose:
-          "Akanil's model for developing production regions into connected economic nodes.",
-        problemSolved:
-          "Production regions export raw output without aggregation, testing, processing, utilities or market linkage — value leaves before it is created.",
-        operatingRole:
-          "Akanil structures zone-development projects combining aggregation, sorting, testing, storage, primary processing, manufacturing, utilities, water and energy, logistics, digital infrastructure, industrial services and market linkage.",
-        geographicScope: [
-          "Northern State, Sudan",
-          "Kassala State",
-          "Gedaref State",
-        ],
-        targetStakeholders: [
-          "sudanese-producers-asset-owners",
-          "moroccan-finance-investment",
-          "sudanese-decision-makers",
-        ],
-        capabilities: [
-          "Aggregation, sorting and testing",
-          "Storage and primary processing",
-          "Manufacturing and industrial services",
-          "Utilities, water and energy",
-          "Logistics and digital infrastructure",
-          "Market linkage",
-        ],
-        publicStatus: "structured-project",
-        evidenceState: "controlled-evidence-available",
-        regulatoryNote:
-          "No economic zone is presented as formally established, licensed or government-approved; sites remain structured development projects under institutional review with site validation required.",
-        cta: {
-          label: "Request a project review",
-          requestType: "project-investment-review",
-        },
-      },
-      {
-        id: "rwafid",
-        name: "RWAFID — روافد",
-        category: "Agricultural crops, feed and livestock supply chains",
-        purpose:
-          "Supply-chain structuring, qualification and market-access platform.",
-        problemSolved:
-          "Crops, feed and livestock move as undocumented raw flows, losing value that could be created at source, in economic zones, at Red Sea nodes, in Saudi Arabia, in Egypt or in Morocco.",
-        operatingRole:
-          "Akanil structures and qualifies agricultural and livestock chains — grains, sesame, groundnuts, oilseeds, fodder, feed concentrates and inputs; live animals with veterinary, traceability, quarantine, transport, cold-chain, slaughter and by-product requirements.",
-        geographicScope: [
-          "Sudanese production regions",
-          "Red Sea industrial nodes",
-          "Saudi Arabia and Egypt",
-          "Morocco",
-        ],
-        targetStakeholders: [
-          "sudanese-producers-asset-owners",
-          "moroccan-industry-exporters",
-          "sudanese-decision-makers",
-        ],
-        capabilities: [
-          "Crop and feed chain structuring",
-          "Livestock chains with veterinary and quarantine requirements",
-          "Traceability and cold-chain planning",
-          "Value creation at source, zone, node or destination",
-          "Standards, packaging and market-access preparation",
-        ],
-        publicStatus: "structured-project",
-        evidenceState: "controlled-evidence-available",
-        cta: {
-          label: "Structure a supply requirement",
-          requestType: "supply-offtake-requirement",
-        },
-      },
-      {
         id: "ibriz-gaas",
-        name: "IBRIZ and GAAS",
-        category: "Financial-technology and banking infrastructure",
+        name: "IBRIZ / GAAS — Digital Gold and Banking Infrastructure Project",
+        category: "Regulated financial-technology and banking-infrastructure project",
         purpose:
-          "IBRIZ — digital gold and banking infrastructure project. GAAS — Gold as a Service for regulated financial institutions.",
+          "Developing regulated pathways for gold-related institutional services, trade finance, transaction traceability, bank integration and Gold as a Service capabilities for regulated institutions.",
         problemSolved:
-          "Regulated institutions lack compliant, traceable infrastructure for gold-supported digital value and asset-backed representation.",
+          "Regulated institutions lack compliant, traceable infrastructure for gold-related institutional services, trade finance and development-fund transparency.",
         operatingRole:
-          "Akanil develops the intended product architecture: gold-supported digital account infrastructure, asset-backed value representation, transaction traceability, compliance-oriented infrastructure, banking integration modules and GAAS capabilities for banks and regulated institutions.",
+          "Akanil develops the intended product architecture as a technical and regulatory development project, not an operating financial service.",
         geographicScope: ["Regulated institutional deployments"],
         targetStakeholders: [
           "technology-logistics-knowledge-partners",
           "moroccan-finance-investment",
         ],
         capabilities: [
-          "Gold-supported digital account infrastructure",
-          "Asset-backed value representation",
-          "Transaction traceability",
-          "Compliance-oriented infrastructure",
-          "Banking integration modules",
-          "GAAS for regulated institutions",
+          "Gold-related institutional services",
+          "Trade finance and agricultural-export finance",
+          "Transaction traceability and development-fund transparency",
+          "Bank integration modules",
+          "Gold as a Service capabilities for regulated institutions",
         ],
-        publicStatus: "regulated-development",
-        evidenceState: "evidence-restricted",
+        stage:
+          "Technical and regulatory development project. Any banking, payment, custody, investment, lending, gold-backed account, trade-finance or settlement activity remains subject to applicable licensing, regulatory approval and institutional agreements.",
+        projectStatus: "regulated-or-sensitive-project",
+        lastReviewed: "December 2025",
+        partnersSought: [
+          "Licensed banking sponsor and regulated financial institution",
+          "Gold custodian and compliance, AML/CFT specialists",
+          "Banking-infrastructure and cybersecurity partners",
+          "Regulatory counsel and trade-finance institution",
+          "Strategic technology investor",
+        ],
         regulatoryNote:
-          "IBRIZ and GAAS are presented as financial-technology and banking-infrastructure projects. Any regulated banking, payment, custody, investment or gold-backed account activity remains subject to applicable licensing, regulatory approval and institutional deployment agreements.",
+          "IBRIZ / GAAS is a financial-technology and banking-infrastructure project. It is not a bank and provides no customer accounts, payments, custody, lending, remittance or gold-backed accounts. Any such activity remains subject to applicable licensing, regulatory approval and institutional agreements.",
         cta: {
-          label: "Discuss regulated infrastructure",
+          label: "Request Project Review",
           requestType: "technology-data-partnership",
         },
       },
@@ -806,6 +857,42 @@ export const enEcosystem: EcosystemContent = {
       planned: "Planned",
       regulated: "Subject to regulation",
     },
+    projectStatus: {
+      "public-profile-available": "Public profile available",
+      "additional-information-after-review":
+        "Additional information available after review",
+      "update-required-before-publication": "Update required before publication",
+      "regulated-or-sensitive-project": "Regulated or sensitive project",
+    },
+  },
+  institution: {
+    eyebrow: "Why Akanil",
+    heading: "A legally established Moroccan operator with a Sudan branch.",
+    lead: "Akanil combines legal presence, regional reach and specialist review across the Morocco–Sudan–Red Sea bridge.",
+    facts: [
+      { label: "Moroccan company founded", value: "2014" },
+      {
+        label: "Established through",
+        value: "Regional Investment Center, Casablanca",
+      },
+      { label: "Moroccan Commercial Register", value: "No. 10015" },
+      { label: "Registered Sudan branch since", value: "2017" },
+      { label: "Sudan Commercial Register", value: "No. 121" },
+    ],
+    networkTitle: "Regional representation",
+    networkNote:
+      "Akanil works through agents and regional representatives — local coordination points, not legal branches, subsidiaries or incorporated offices. Mandates differ by country.",
+    representatives: [
+      "Saudi Arabia",
+      "Egypt",
+      "Ethiopia",
+      "Somalia",
+      "Kenya",
+      "Eritrea",
+      "South Sudan",
+      "Uganda",
+      "Tanzania",
+    ],
   },
   claims: {
     title: "Public scope of this website",
@@ -829,7 +916,7 @@ export const enEcosystem: EcosystemContent = {
     description:
       "The controlled portfolio of platforms operated within the ecosystem: Trade-Chain Africa, Valura, RWAFID, and IBRIZ/GAAS.",
     heading: "Portfolio platforms",
-    lead: "Strategic platforms operated, developed or structured within the ecosystem — each with an explicit public status and evidence state.",
+    lead: "Four platforms developed or structured within the ecosystem — each with a clear stage, a project-file status and a last-reviewed date. Preliminary estimates are not achieved results, and proposed partners are not confirmed partners.",
   },
   corridorPage: {
     heading: "The Red Sea supply-chain architecture",

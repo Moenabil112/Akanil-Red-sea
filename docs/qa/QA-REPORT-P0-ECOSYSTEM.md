@@ -3,13 +3,21 @@
 Date: 2026-07-19 · Branch: `feature/p0-red-sea-ecosystem-architecture`
 Status: draft PR only — not merged, not deployed.
 
+> **Reconciliation pass (2026-07-19).** After the initial P0 build, the four
+> platform definitions and Akanil's institutional identity were reconciled
+> with `AKANIL_P1_Portfolio_and_Institutional_Trust_Context_V1.0.md`. Gates
+> re-run: typecheck 0 errors · **100/100 tests** · build **36 static pages** ·
+> lint clean · axe WCAG 2.2 AA **0 violations across 24 checks** (now including
+> the Arabic About institution block and the Arabic portfolio page). Language
+> switching still preserves `/portfolio`.
+
 ## Quality gates (directive §41)
 
 | Gate | Result |
 | --- | --- |
 | `npm ci` | dependency tree installs clean (Next 15.5, React 19.1) |
 | `npm run typecheck` | 0 errors |
-| `npm test` | 9 files, **89/89 tests passing** |
+| `npm test` | 9 files, **100/100 tests passing** |
 | `npm run build` | ✓ compiled; **36 static pages** (12 routes × 3 locales, all SSG) |
 | `npm run lint` | 0 warnings, 0 errors |
 
@@ -43,16 +51,22 @@ polite live region; no file inputs anywhere.
 ## Screenshots (`docs/qa/screenshots-p0/`)
 
 home-en · home-fr · home-ar · home-ar-phone (mobile) · portfolio-en (all four
-platform cards incl. IBRIZ/GAAS regulatory note) · morocco-en · sudan-en ·
-corridor-en · forum-en (activation phases) · reception-en (general) ·
-reception-industry-en (Moroccan industry market-expansion) ·
-reception-asset-ar (Sudanese asset submission) · reception-finance-en
-(financial project review with disclaimer) · reception-review-ar (Arabic
-review-before-email).
+reconciled platform cards, simplified statuses, last-reviewed dates and
+Request Project Review CTAs) · portfolio-ar (Arabic portfolio) · morocco-en ·
+sudan-en · corridor-en · forum-en (activation phases) · about-en / about-ar
+(institution facts + regional representatives + founder bridge) ·
+reception-en (general) · reception-industry-en (Moroccan industry
+market-expansion) · reception-asset-ar (Sudanese asset submission) ·
+reception-finance-en (financial project review with disclaimer) ·
+reception-review-ar (Arabic review-before-email).
 
 The homepage screenshots cover Why the Red Sea, the ecosystem value flow,
 the seven audience entry paths, the node map section, the technology layer
-and the specialized review process in sequence.
+and the specialized review process in sequence. The portfolio screenshots
+show VALURA (Public Profile Available — Preliminary Blueprint), RWAFID and
+Trade-Chain Africa (Update Required Before Publication) and IBRIZ/GAAS
+(Regulated or Sensitive Project) with the platform/node distinction note and
+the review-request disclaimer.
 
 ## Claims intentionally omitted
 

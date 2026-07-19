@@ -35,6 +35,17 @@ export type CapabilityState =
   | "planned"
   | "regulated";
 
+/**
+ * Simplified visitor-facing portfolio status (P1 reconciliation §5).
+ * The public experience uses only these four; the richer PublicStatus /
+ * EvidenceState vocabulary remains internal to nodes and documentation.
+ */
+export type ProjectStatusId =
+  | "public-profile-available"
+  | "additional-information-after-review"
+  | "update-required-before-publication"
+  | "regulated-or-sensitive-project";
+
 /* ---------------- Audience and request taxonomy (ADR-014) ---------------- */
 
 export type AudienceId =
@@ -104,8 +115,20 @@ export interface PortfolioPlatformContent {
   geographicScope: string[];
   targetStakeholders: AudienceId[];
   capabilities: string[];
-  publicStatus: PublicStatus;
-  evidenceState: EvidenceState;
+  /** Current-stage wording (P1 reconciliation §6). */
+  stage: string;
+  /** Simplified visitor-facing project status shown on the card (§5). */
+  projectStatus: ProjectStatusId;
+  /** Optional short qualifier appended to the status (e.g. "Preliminary Blueprint"). */
+  statusDetail?: string;
+  /** Localized last-reviewed date string (§5). */
+  lastReviewed: string;
+  /** Partners or capabilities sought (§6). */
+  partnersSought: string[];
+  /** Clearly-labelled preliminary indicative figures, where safe to show (§6). */
+  indicativeFigures?: string[];
+  /** Source and date qualifier for the indicative figures. */
+  figuresNote?: string;
   regulatoryNote?: string;
   cta: {
     label: string;
@@ -242,6 +265,10 @@ export interface EcosystemContent {
     eyebrow: string;
     title: string;
     lead: string;
+    /** Concise note distinguishing the four platforms from ecosystem nodes (§4). */
+    nodeDistinction: string;
+    /** What a Request Project Review does and does not mean (§7). */
+    reviewRequestNote: string;
     categoryLabel: string;
     purposeLabel: string;
     problemLabel: string;
@@ -249,6 +276,12 @@ export interface EcosystemContent {
     scopeLabel: string;
     audiencesLabel: string;
     capabilitiesLabel: string;
+    stageLabel: string;
+    figuresLabel: string;
+    partnersLabel: string;
+    fileStatusLabel: string;
+    lastReviewedLabel: string;
+    /** Used by the node map for node status/evidence display. */
     statusLabel: string;
     evidenceLabel: string;
     regulatoryLabel: string;
@@ -287,6 +320,16 @@ export interface EcosystemContent {
     publicStatus: Record<PublicStatus, string>;
     evidenceState: Record<EvidenceState, string>;
     capabilityState: Record<CapabilityState, string>;
+    projectStatus: Record<ProjectStatusId, string>;
+  };
+  institution: {
+    eyebrow: string;
+    heading: string;
+    lead: string;
+    facts: { label: string; value: string }[];
+    networkTitle: string;
+    networkNote: string;
+    representatives: string[];
   };
   claims: {
     title: string;

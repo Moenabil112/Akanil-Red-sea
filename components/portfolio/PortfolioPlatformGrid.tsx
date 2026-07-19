@@ -20,18 +20,26 @@ export default function PortfolioPlatformGrid({
 }: PortfolioPlatformGridProps) {
   const { items, ...labels } = platforms;
   return (
-    <div className={styles.grid}>
-      {items.map((platform, index) => (
-        <Reveal key={platform.id} delay={index * 60}>
-          <PortfolioPlatformCard
-            locale={locale}
-            platform={platform}
-            labels={labels}
-            states={states}
-            audienceNames={audienceNames}
-          />
-        </Reveal>
-      ))}
-    </div>
+    <>
+      <Reveal>
+        <p className={styles.nodeDistinction}>{platforms.nodeDistinction}</p>
+      </Reveal>
+      <div className={styles.grid}>
+        {items.map((platform, index) => (
+          <Reveal key={platform.id} delay={index * 60}>
+            <PortfolioPlatformCard
+              locale={locale}
+              platform={platform}
+              labels={labels}
+              states={states}
+              audienceNames={audienceNames}
+            />
+          </Reveal>
+        ))}
+      </div>
+      <Reveal>
+        <p className={styles.reviewRequestNote}>{platforms.reviewRequestNote}</p>
+      </Reveal>
+    </>
   );
 }
