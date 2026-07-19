@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { getEcosystem, getReception } from "@/lib/content";
+import { getEcosystem, getReception, getValueChains } from "@/lib/content";
 import { pageMetadata, resolveLocale } from "@/lib/page-meta";
 import {
   RECEPTION_EMAIL,
@@ -22,6 +22,7 @@ export default async function ReceptionPage({
   const locale = resolveLocale(lang);
   const reception = getReception(locale);
   const ecosystem = getEcosystem(locale);
+  const valueChains = getValueChains(locale);
 
   return (
     <SiteChrome locale={locale}>
@@ -85,6 +86,7 @@ export default async function ReceptionPage({
                 locale={locale}
                 reception={reception}
                 ecosystem={ecosystem}
+                valueChains={valueChains}
               />
             </Suspense>
           </div>

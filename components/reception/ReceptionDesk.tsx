@@ -10,6 +10,7 @@ import type {
   PlatformId,
   RequestTypeId,
 } from "@/content/ecosystem-types";
+import type { ValueChainsContent } from "@/content/value-chains-types";
 import { audienceIds, requestTypeIds } from "@/lib/ecosystem";
 import {
   RECEPTION_EMAIL,
@@ -36,6 +37,7 @@ interface ReceptionDeskProps {
   locale: Locale;
   reception: ReceptionContent;
   ecosystem: EcosystemContent;
+  valueChains: ValueChainsContent;
 }
 
 /**
@@ -49,6 +51,7 @@ export default function ReceptionDesk({
   locale,
   reception,
   ecosystem,
+  valueChains,
 }: ReceptionDeskProps) {
   const searchParams = useSearchParams();
   const pre = useMemo(
@@ -57,6 +60,7 @@ export default function ReceptionDesk({
         type: searchParams.get("type"),
         audience: searchParams.get("audience"),
         platform: searchParams.get("platform"),
+        chain: searchParams.get("chain"),
       }),
     [searchParams],
   );
@@ -67,6 +71,7 @@ export default function ReceptionDesk({
       pre.requestType ?? "institutional-cooperation",
       pre.audience,
       pre.platform,
+      pre.chain,
     ),
   );
   const [errors, setErrors] = useState<ValidationErrors>({});
@@ -88,6 +93,11 @@ export default function ReceptionDesk({
     ? ecosystem.platforms.items.find((platform) => platform.id === data.platform)
     : undefined;
   const selectedPlatformName = selectedPlatform?.name;
+
+  const selectedChain = data.chain
+    ? valueChains.items.find((chain) => chain.id === data.chain)
+    : undefined;
+  const selectedChainName = selectedChain?.shortName;
 
   const typeOptions = allowedRequestTypes(data.audience, requestTypeIds);
   const schema = schemaFor(data.requestType);
@@ -138,8 +148,15 @@ export default function ReceptionDesk({
   };
 
   const prepared = useMemo(
-    () => mailtoTransport.prepare(locale, data, reception, selectedPlatformName),
-    [locale, data, reception, selectedPlatformName],
+    () =>
+      mailtoTransport.prepare(
+        locale,
+        data,
+        reception,
+        selectedPlatformName,
+        selectedChainName,
+      ),
+    [locale, data, reception, selectedPlatformName, selectedChainName],
   );
 
   const copyToClipboard = async (text: string) => {
@@ -152,7 +169,13 @@ export default function ReceptionDesk({
   };
 
   const downloadDraft = () => {
-    const draft = buildDraftFile(locale, data, reception, selectedPlatformName);
+    const draft = buildDraftFile(
+      locale,
+      data,
+      reception,
+      selectedPlatformName,
+      selectedChainName,
+    );
     const blob = new Blob([draft.text], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -172,6 +195,9 @@ export default function ReceptionDesk({
       [labels.requestType, definition.label],
       ...(selectedPlatformName
         ? ([[labels.platform, selectedPlatformName]] as [string, string][])
+        : []),
+      ...(selectedChainName
+        ? ([[reception.chainLabel, selectedChainName]] as [string, string][])
         : []),
       ...(data.audience
         ? ([[labels.audience, reception.audienceNames[data.audience]]] as [
@@ -391,6 +417,30 @@ export default function ReceptionDesk({
           </h3>
           <ul className={styles.platformPrep}>
             {selectedPlatform.preparationRequirements.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </aside>
+      ) : null}
+
+      {selectedChain ? (
+        <aside
+          className={styles.platformContext}
+          aria-label={selectedChain.shortName}
+        >
+          <p className={styles.platformEyebrow}>
+            {valueChains.profileHeroEyebrow}
+          </p>
+          <h2 className={styles.platformName}>{selectedChain.name}</h2>
+          <dl className={styles.platformFacts}>
+            <div>
+              <dt>{valueChains.scenarioStatusLabel}</dt>
+              <dd>{valueChains.scenarioStatus[selectedChain.scenarioStatus]}</dd>
+            </div>
+          </dl>
+          <h3 className={styles.platformPrepTitle}>{valueChains.prepLabel}</h3>
+          <ul className={styles.platformPrep}>
+            {selectedChain.preparationRequirements.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>

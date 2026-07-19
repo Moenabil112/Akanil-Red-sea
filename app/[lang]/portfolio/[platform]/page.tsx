@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getEcosystem } from "@/lib/content";
+import { getEcosystem, getExperience, getValueChains } from "@/lib/content";
 import { platformIds, isPlatformId } from "@/lib/ecosystem";
+import { chainsForPlatform } from "@/lib/value-chains";
 import { resolveLocale } from "@/lib/page-meta";
 import type { PlatformId } from "@/content/ecosystem-types";
 import SiteChrome from "@/components/layout/SiteChrome";
 import PageHero from "@/components/layout/PageHero";
 import PageReceptionBand from "@/components/layout/PageReceptionBand";
 import PlatformProfile from "@/components/portfolio/PlatformProfile";
-import { getExperience } from "@/lib/content";
 
 interface ProfileParams {
   lang: string;
@@ -68,8 +68,18 @@ export default async function PlatformProfilePage({
   const locale = resolveLocale(lang);
   const ecosystem = getEcosystem(locale);
   const experience = getExperience(locale);
+  const valueChains = getValueChains(locale);
   const id = platform as PlatformId;
   const record = ecosystem.platforms.items.find((p) => p.id === id)!;
+
+  const relatedChains = chainsForPlatform(id).map((chainId) => {
+    const chain = valueChains.items.find((c) => c.id === chainId)!;
+    return {
+      id: chainId,
+      name: chain.shortName,
+      href: `/${locale}/value-chains/${chainId}`,
+    };
+  });
 
   return (
     <SiteChrome locale={locale}>
@@ -84,6 +94,7 @@ export default async function PlatformProfilePage({
         labels={ecosystem.platforms}
         states={ecosystem.states}
         reviewPanel={ecosystem.reviewPanel}
+        relatedChains={relatedChains}
       />
       <PageReceptionBand
         locale={locale}

@@ -309,6 +309,8 @@ export interface ReceptionContent {
     }
   >;
   audienceLabel: string;
+  /** Label for the value-chain context carried into a chain-aware request (P2). */
+  chainLabel: string;
   audienceNames: Record<EcoAudienceId, string>;
   fieldLabels: Record<EcoIntakeFieldId, string>;
   fieldHints: Partial<Record<EcoIntakeFieldId, string>>;

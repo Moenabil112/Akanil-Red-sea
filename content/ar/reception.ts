@@ -137,6 +137,7 @@ export const arReception: ReceptionContent = {
     },
   },
   audienceLabel: "مسار الدخول",
+  chainLabel: "سلسلة القيمة المعنية",
   audienceNames: {
     "moroccan-institutions": "المؤسسات المغربية",
     "moroccan-industry-exporters": "الصناعة والمصدّرون المغاربة",

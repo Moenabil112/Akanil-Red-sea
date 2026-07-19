@@ -145,6 +145,10 @@ export interface PortfolioPlatformContent {
   limitations: string[];
   /** Project-specific preparation for a review request. */
   preparationRequirements: string[];
+  /* ---- P2 Level-3 platform↔chain mapping (P2) ---- */
+  /** Optional caveat for the related-chains block (e.g. IBRIZ/GAAS: potential
+   *  regulated enabling layer only, never active financing). */
+  relatedChainsNote?: string;
 }
 
 /* ---------------- Geographical nodes (ADR-017) ---------------- */
@@ -302,6 +306,8 @@ export interface EcosystemContent {
     reviewPathwayLabel: string;
     profileLinkLabel: string;
     profileHeroEyebrow: string;
+    /** P2 Level-3 related-value-chains block label. */
+    relatedChainsLabel: string;
     /** Used by the node map for node status/evidence display. */
     statusLabel: string;
     evidenceLabel: string;

@@ -1,7 +1,8 @@
 # QA Report — P1 Portfolio and Institutional Trust
 
 Date: 2026-07-19 · Branch: `feature/p1-portfolio-institutional-trust`
-Base: `main` (merged P0 `3b2b4c6`). Draft PR only — not merged, not deployed.
+Base: `main` (merged P0 `3b2b4c6`). Merged into `main` via PR #4 (merge
+commit `101ed96`); not deployed.
 
 ## Quality gates
 

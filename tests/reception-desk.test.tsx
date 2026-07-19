@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import ReceptionDesk from "@/components/reception/ReceptionDesk";
 import { enReception } from "@/content/en/reception";
 import { enEcosystem } from "@/content/en/ecosystem";
+import { enValueChains } from "@/content/en/value-chains";
 
 let searchParams = new URLSearchParams("");
 
@@ -17,6 +18,7 @@ function setup(query = "") {
       locale="en"
       reception={enReception}
       ecosystem={enEcosystem}
+      valueChains={enValueChains}
     />,
   );
 }
@@ -83,6 +85,44 @@ describe("ReceptionDesk (P0 dynamic schemas)", () => {
       name: enReception.review.openEmailButton,
     }) as HTMLAnchorElement;
     expect(openLink.href).toContain(encodeURIComponent(valura.name));
+  });
+
+  it("recognizes a chain query and shows the chain-context panel (P2)", () => {
+    setup("type=supply-offtake-requirement&chain=oilseeds-agro-processing");
+    const chain = enValueChains.items.find(
+      (c) => c.id === "oilseeds-agro-processing",
+    )!;
+    expect(screen.getAllByText(chain.name).length).toBeGreaterThan(0);
+    expect(
+      screen.getByText(
+        enValueChains.scenarioStatus[chain.scenarioStatus],
+      ),
+    ).toBeTruthy();
+    const select = screen.getByLabelText(/Request type/) as HTMLSelectElement;
+    expect(select.value).toBe("supply-offtake-requirement");
+  });
+
+  it("carries the chain into the prepared email on review (P2)", () => {
+    setup("type=supply-offtake-requirement&chain=oilseeds-agro-processing");
+    const chain = enValueChains.items.find(
+      (c) => c.id === "oilseeds-agro-processing",
+    )!;
+    fillBaseFields();
+    fireEvent.change(screen.getByLabelText(/Asset or product type/), {
+      target: { value: "Sesame seed" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: /Review the request/ }));
+    const openLink = screen.getByRole("link", {
+      name: enReception.review.openEmailButton,
+    }) as HTMLAnchorElement;
+    expect(openLink.href).toContain(encodeURIComponent(chain.shortName));
+  });
+
+  it("ignores an invalid chain id (fails safe)", () => {
+    setup("type=supply-offtake-requirement&chain=not-a-chain");
+    expect(
+      screen.queryByText(enValueChains.profileHeroEyebrow),
+    ).toBeNull();
   });
 
   it("falls back safely for unknown or disallowed preselection values", () => {

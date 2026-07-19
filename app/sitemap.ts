@@ -2,10 +2,12 @@ import type { MetadataRoute } from "next";
 import { locales } from "@/lib/i18n";
 import { pageRoutes } from "@/lib/routes";
 import { platformIds } from "@/lib/ecosystem";
+import { valueChainIds } from "@/lib/value-chains";
 
 /**
  * Sitemap for the trilingual routes, including the four dedicated
- * platform profiles (P1 §15). The production domain is never guessed:
+ * platform profiles (P1 §15) and the six value-chain profiles (P2). The
+ * production domain is never guessed:
  * when NEXT_PUBLIC_SITE_URL is unset, root-relative paths are emitted.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -25,6 +27,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     for (const platform of platformIds) {
       entries.push({
         url: url(`/${locale}/portfolio/${platform}`),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      });
+    }
+    for (const chain of valueChainIds) {
+      entries.push({
+        url: url(`/${locale}/value-chains/${chain}`),
         changeFrequency: "monthly",
         priority: 0.8,
       });

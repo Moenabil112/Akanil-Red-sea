@@ -1,0 +1,160 @@
+.intro {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--space-6) var(--space-8);
+}
+
+.scenarioNote {
+  font-size: var(--text-sm);
+  color: var(--text-on-light-mute);
+  padding: var(--space-4);
+  border: 1px solid var(--line-on-light);
+  border-inline-start: 3px solid var(--color-copper);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  max-width: 90ch;
+}
+
+.grid {
+  margin-block-start: var(--space-6);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.card {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  height: 100%;
+  padding: var(--space-5);
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-md);
+  background: #fff;
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: var(--color-nile);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  .card:focus-within {
+    transform: none;
+  }
+}
+
+.cardCategory {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-copper-text);
+}
+
+[dir="rtl"] .cardCategory {
+  letter-spacing: 0.02em;
+}
+
+.cardTitle {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: var(--leading-heading);
+  color: var(--text-on-light);
+}
+
+.cardLink {
+  color: inherit;
+}
+
+/* Full-card click target without wrapping the whole article in a link. */
+.cardLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.card {
+  position: relative;
+}
+
+.cardLink:focus-visible {
+  outline: 2px solid var(--color-nile);
+  outline-offset: 3px;
+}
+
+.cardSummary {
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+}
+
+.cardStatus {
+  margin-block-start: var(--space-1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-on-light);
+}
+
+.cardStatus[data-status="regulated-or-sensitive-elements"] {
+  color: var(--color-copper-text);
+}
+
+.cardStatusLabel {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-on-light-mute);
+}
+
+[dir="rtl"] .cardStatusLabel {
+  letter-spacing: 0.02em;
+}
+
+.cardCta {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--color-nile-text);
+}
+
+.cardCta::after {
+  content: " →";
+}
+
+[dir="rtl"] .cardCta::after {
+  content: " ←";
+}
+
+.geographic {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--space-8);
+  border-block-start: 1px solid var(--line-on-light);
+}
+
+.enabling {
+  background: var(--surface-deep);
+  color: var(--text-on-dark);
+}
+
+@media (max-width: 64rem) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
