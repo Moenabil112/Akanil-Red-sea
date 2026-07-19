@@ -25,6 +25,8 @@ export default function TechnologyOperatingLayer({
   return (
     <section id="technology" className={styles.section}>
       <div className="container">
+        {/* Legacy anchor (ADR-011): the operating journey lived here. */}
+        <div id="operating" className={styles.anchor} aria-hidden="true" />
         <SectionIntro
           number={number}
           eyebrow={technology.eyebrow}

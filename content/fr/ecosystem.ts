@@ -821,7 +821,7 @@ export const frEcosystem: EcosystemContent = {
     name: "Mohamed Abderrahim",
     bridgeTitle: "Un pont bâti depuis les deux rives",
     bridgeText:
-      "L'expérience professionnelle et institutionnelle du fondateur couvre à la fois les écosystèmes d'exportation marocain et soudanais, fondant le rôle de la Passerelle comme opérateur qui structure le pont entre l'Afrique de l'Est, la mer Rouge, l'Arabie saoudite et le Maroc.",
+      "L'expérience professionnelle et institutionnelle du fondateur couvre à la fois les écosystèmes d'exportation marocain et soudanais, fondant le rôle d'Akanil comme fondateur et opérateur exécutif de l'écosystème — l'opérateur qui structure le pont entre l'Afrique de l'Est, la mer Rouge, l'Arabie saoudite et le Maroc.",
   },
   portfolioPage: {
     title: "Plateformes du portefeuille — Passerelle économique Akanil Maroc–mer Rouge",

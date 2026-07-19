@@ -822,7 +822,7 @@ export const enEcosystem: EcosystemContent = {
     name: "Mohamed Abderrahim",
     bridgeTitle: "A bridge built from both shores",
     bridgeText:
-      "The founder's professional and institutional experience spans both the Moroccan and Sudanese export ecosystems, grounding the Gateway's role as the operator that structures the bridge between East Africa, the Red Sea, Saudi Arabia and Morocco.",
+      "The founder's professional and institutional experience spans both the Moroccan and Sudanese export ecosystems, grounding Akanil's role as founder and executive operator of the ecosystem — the operator that structures the bridge between East Africa, the Red Sea, Saudi Arabia and Morocco.",
   },
   portfolioPage: {
     title: "Portfolio platforms — Akanil Morocco–Red Sea Economic Gateway",

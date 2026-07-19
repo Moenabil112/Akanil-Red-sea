@@ -22,6 +22,8 @@ export default function EcosystemValueFlow({
   return (
     <section id="value-flow" className={styles.section}>
       <div className="container">
+        {/* Legacy anchor (ADR-011): the value-chain summary lived here. */}
+        <div id="chains" className={styles.anchor} aria-hidden="true" />
         <Reveal className={styles.intro}>
           <p className={styles.numberRow}>
             <span className={styles.number}>

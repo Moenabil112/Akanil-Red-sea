@@ -4,3 +4,8 @@
   padding-block: var(--section-pad);
   border-block-start: 1px solid var(--line-on-dark);
 }
+
+.anchor {
+  position: relative;
+  inset-block-start: -5.5rem;
+}

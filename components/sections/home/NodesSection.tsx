@@ -22,6 +22,8 @@ export default function NodesSection({
   return (
     <section id="nodes" className={styles.section}>
       <div className="container">
+        {/* Legacy anchor (ADR-011): the corridor summary lived here. */}
+        <div id="corridor" className={styles.anchor} aria-hidden="true" />
         <SectionIntro
           number={number}
           eyebrow={ecosystem.nodes.eyebrow}
