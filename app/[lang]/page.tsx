@@ -1,14 +1,24 @@
 import { isLocale, defaultLocale } from "@/lib/i18n";
-import { getContent, getExperience, getReception } from "@/lib/content";
+import {
+  getContent,
+  getEcosystem,
+  getExperience,
+  getReception,
+} from "@/lib/content";
 import type { Locale } from "@/content/types";
+import type { PlatformId } from "@/content/ecosystem-types";
 import SiteChrome from "@/components/layout/SiteChrome";
 import Hero from "@/components/sections/Hero";
+import WhyRedSea from "@/components/sections/home/WhyRedSea";
+import EcosystemValueFlow from "@/components/sections/home/EcosystemValueFlow";
+import AudienceEntryMatrix from "@/components/sections/home/AudienceEntryMatrix";
+import PortfolioSection from "@/components/sections/home/PortfolioSection";
+import NodesSection from "@/components/sections/home/NodesSection";
+import TechnologyOperatingLayer from "@/components/sections/home/TechnologyOperatingLayer";
+import SpecialistReviewProcess from "@/components/sections/home/SpecialistReviewProcess";
 import GatewayStatus from "@/components/sections/home/GatewayStatus";
-import AudienceEntry from "@/components/sections/home/AudienceEntry";
 import {
   ValueSummary,
-  JourneySummary,
-  ChainsCorridorSummary,
   ForumSummary,
   TrustAboutSummary,
   ReceptionCta,
@@ -19,10 +29,12 @@ interface PageProps {
 }
 
 /**
- * Phase 1 homepage — the clarity journey:
- * hero → status → audience entry → value → journey → chains/corridor
- * → forum → trust/about → reception. Detailed content lives on the
- * dedicated routes (Phase 4); legacy anchors are preserved.
+ * P0 homepage — the ecosystem architecture order (directive §24):
+ * 01 hero · 02 why the Red Sea · 03 value flow · 04 audience matrix ·
+ * 05 portfolio · 06–07 value for Morocco / Sudan · 08 Red Sea nodes ·
+ * 09 technology · 10 Forum · 11 specialized review · 12 reception ·
+ * 13 public scope and status · 14 trust and Akanil identity.
+ * The limitation matrix never precedes the value proposition.
  */
 export default async function Page({ params }: PageProps) {
   const { lang } = await params;
@@ -30,27 +42,58 @@ export default async function Page({ params }: PageProps) {
   const site = getContent(locale);
   const experience = getExperience(locale);
   const reception = getReception(locale);
+  const ecosystem = getEcosystem(locale);
+
+  const platformNames = Object.fromEntries(
+    ecosystem.platforms.items.map((platform) => [platform.id, platform.name]),
+  ) as Record<PlatformId, string>;
 
   return (
     <SiteChrome locale={locale}>
-      <Hero hero={site.hero} locale={locale} />
-      <GatewayStatus status={experience.status} />
-      <AudienceEntry
+      <Hero
+        hero={ecosystem.hero}
+        scope={{
+          scopeLabel: site.hero.scopeLabel,
+          scopeNodes: site.hero.scopeNodes,
+        }}
         locale={locale}
-        audiences={experience.audiences}
+      />
+      <WhyRedSea
+        locale={locale}
+        content={ecosystem.whyRedSea}
         sectionLabel={site.ui.sectionLabel}
-        requestTypeLabels={reception.requestTypes}
+      />
+      <EcosystemValueFlow
+        content={ecosystem.valueFlow}
+        sectionLabel={site.ui.sectionLabel}
+      />
+      <AudienceEntryMatrix
+        locale={locale}
+        audiences={ecosystem.audiences}
+        platformNames={platformNames}
+        requestTypes={reception.requestTypes}
+        sectionLabel={site.ui.sectionLabel}
+      />
+      <PortfolioSection
+        locale={locale}
+        ecosystem={ecosystem}
+        sectionLabel={site.ui.sectionLabel}
       />
       <ValueSummary locale={locale} experience={experience} site={site} />
-      <JourneySummary locale={locale} experience={experience} site={site} />
-      <ChainsCorridorSummary
-        locale={locale}
-        experience={experience}
-        site={site}
+      <NodesSection ecosystem={ecosystem} sectionLabel={site.ui.sectionLabel} />
+      <TechnologyOperatingLayer
+        technology={ecosystem.technology}
+        states={ecosystem.states}
+        sectionLabel={site.ui.sectionLabel}
       />
       <ForumSummary locale={locale} experience={experience} site={site} />
-      <TrustAboutSummary locale={locale} experience={experience} site={site} />
+      <SpecialistReviewProcess
+        review={ecosystem.review}
+        sectionLabel={site.ui.sectionLabel}
+      />
       <ReceptionCta locale={locale} experience={experience} />
+      <GatewayStatus status={experience.status} claims={ecosystem.claims} />
+      <TrustAboutSummary locale={locale} experience={experience} site={site} />
     </SiteChrome>
   );
 }

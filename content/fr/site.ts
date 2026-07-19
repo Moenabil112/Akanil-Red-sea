@@ -237,7 +237,7 @@ export const fr: SiteContent = {
       "Chaque parcours est évalué selon la valeur qu'il retient au Soudan et qu'il ajoute au Maroc. Les modèles extractifs à sens unique sont exclus par conception.",
   },
   corridor: {
-    eyebrow: "Intelligence du corridor",
+    eyebrow: "Architecture du corridor mer Rouge",
     title: "Un réseau de scénarios — et non une route fixe unique.",
     lead: "Le corridor est une méthode pour choisir, opportunité par opportunité, le meilleur agencement de production, transformation, finance, transit et distribution. Chaque itinéraire est conçu par cas et réévalué lorsque les conditions changent.",
     disclaimer:
@@ -519,6 +519,41 @@ export const fr: SiteContent = {
         text: "Décisions, engagements et progression suivie après l'événement.",
       },
     ],
+    phases: [
+      {
+        title: "Avant le Forum",
+        items: [
+          "Qualification des participants",
+          "Profilage des institutions et des entreprises",
+          "Enregistrement des besoins et des capacités",
+          "Présélection des projets et des actifs",
+          "Préparation des réunions",
+          "Revue des lacunes de preuve",
+        ],
+      },
+      {
+        title: "Pendant le Forum",
+        items: [
+          "Sessions sectorielles",
+          "Réunions B2B et B2G",
+          "Présentations de projets",
+          "Ateliers de chaînes de valeur",
+          "Visites d'usines et d'institutions",
+          "Discussions techniques et de financement",
+        ],
+      },
+      {
+        title: "Après le Forum",
+        items: [
+          "Comptes rendus de décisions",
+          "Suivi des engagements",
+          "Complétion des preuves",
+          "Parcours de revue des projets",
+          "Ouverture de data rooms contrôlées lorsque approuvée",
+          "Suivi de mise en œuvre",
+        ],
+      },
+    ],
     posterAlt:
       "Illustration conceptuelle d'identité du Forum Économique Maroc–Soudan.",
     posterLabel:
@@ -630,7 +665,7 @@ export const fr: SiteContent = {
     ],
     founderQuote:
       "La Passerelle est conçue pour transformer les relations et la connaissance en parcours économiques qualifiés, gouvernés et suivis.",
-    founderName: "Mohamed Nabil",
+    founderName: "Mohamed Abderrahim",
     founderRole: "Fondateur et CEO — Akanil",
   },
   contact: {

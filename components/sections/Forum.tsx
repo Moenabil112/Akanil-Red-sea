@@ -53,6 +53,32 @@ export default function Forum({ forum, sectionLabel, number = "08" }: ForumProps
           </a>
         </div>
       </div>
+
+      {/* Activation model (P0 §31): before / during / after the Forum. */}
+      <div className={`container ${styles.phases}`}>
+        {forum.phases.map((phase, index) => (
+          <Reveal
+            as="article"
+            key={phase.title}
+            delay={index * 80}
+            className={styles.phase}
+          >
+            <h3 className={styles.phaseTitle}>
+              <span className={styles.phaseIndex} aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              {phase.title}
+            </h3>
+            <ul className={styles.phaseItems}>
+              {phase.items.map((item) => (
+                <li key={item} className={styles.phaseItem}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        ))}
+      </div>
     </section>
   );
 }

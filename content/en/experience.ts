@@ -50,89 +50,6 @@ export const enExperience: ExperienceContent = {
       },
     ],
   },
-  audiences: {
-    eyebrow: "Entry paths",
-    title: "Choose your institutional entry path.",
-    lead: "Identify yourself and go straight to the reception desk with the right request type — without reading the whole site.",
-    statesLegend: {
-      approved: "Approved",
-      live: "Live",
-      active: "Active",
-      controlled: "Controlled",
-      conceptual: "Conceptual",
-      future: "Future",
-    },
-    paths: [
-      {
-        id: "moroccan-institution",
-        name: "Moroccan institution",
-        forWho: "Public institutions, economic-development organizations, and professional and institutional bodies.",
-        purposes: [
-          "Request an institutional briefing",
-          "Explore a cooperation framework",
-          "Understand the Gateway's Moroccan institutional function",
-        ],
-        requestTypes: ["briefing", "meeting"],
-        defaultRequestType: "briefing",
-        ctaLabel: "Request an institutional briefing",
-      },
-      {
-        id: "moroccan-company",
-        name: "Moroccan company",
-        forWho: "Manufacturers, exporters, industrial groups, technology providers, and logistics and service companies.",
-        purposes: [
-          "Present industrial or service capability",
-          "Discuss company qualification",
-          "Explore a priority value chain",
-          "Respond to qualified Sudanese demand",
-        ],
-        requestTypes: ["qualification", "capability", "value-chain"],
-        defaultRequestType: "qualification",
-        ctaLabel: "Discuss company qualification",
-      },
-      {
-        id: "sudanese-organization",
-        name: "Sudanese organization or decision-maker",
-        forWho: "Companies, economic institutions, qualified business decision-makers and productive-sector stakeholders.",
-        purposes: [
-          "Present a documented need",
-          "Present a capability",
-          "Discuss a qualified opportunity",
-          "Request a controlled institutional discussion",
-        ],
-        requestTypes: ["need-opportunity", "capability", "meeting"],
-        defaultRequestType: "need-opportunity",
-        ctaLabel: "Present a need or capability",
-      },
-      {
-        id: "financial-partner",
-        name: "Financial or investment partner",
-        forWho: "Banks, insurers, investors, financial advisers and structured-finance stakeholders.",
-        purposes: [
-          "Request a Gateway briefing",
-          "Examine documented value-chain models",
-          "Discuss a qualified financing requirement",
-        ],
-        requestTypes: ["briefing", "value-chain", "meeting"],
-        defaultRequestType: "briefing",
-        ctaLabel: "Request a Gateway briefing",
-        note: "No investment opportunity is automatically active or approved; every file is subject to human review.",
-      },
-      {
-        id: "sector-partner",
-        name: "Industrial, logistics, technology or knowledge partner",
-        forWho: "Industrial operators, logistics providers, technology companies, training institutions and research partners.",
-        purposes: [
-          "Present a relevant capability",
-          "Explore a defined cooperation role",
-          "Discuss a priority value chain",
-        ],
-        requestTypes: ["capability", "value-chain", "meeting"],
-        defaultRequestType: "capability",
-        ctaLabel: "Present a capability",
-      },
-    ],
-  },
   summaries: {
     value: {
       title: "What the Gateway provides",
@@ -161,7 +78,7 @@ export const enExperience: ExperienceContent = {
       linkLabel: "Explore the value chains",
     },
     corridor: {
-      title: "Corridor intelligence",
+      title: "Economic corridor analysis",
       text: "A network of conceptual route scenarios — designed per opportunity, never one fixed line.",
       linkLabel: "Explore the corridor",
     },
@@ -207,7 +124,7 @@ export const enExperience: ExperienceContent = {
         "Sudan as a value-chain partner: production capability, resources, market, local value addition and the Red Sea–East Africa bridge.",
     },
     corridor: {
-      title: "Corridor intelligence — Akanil Morocco–Red Sea Economic Gateway",
+      title: "The Red Sea supply-chain architecture — Akanil Morocco–Red Sea Economic Gateway",
       description:
         "Conceptual corridor scenarios between Morocco, Sudan and the Red Sea, with explicit route states and verification discipline.",
     },
@@ -225,6 +142,11 @@ export const enExperience: ExperienceContent = {
       title: "Trust, data and AI — Akanil Morocco–Red Sea Economic Gateway",
       description:
         "How information is governed: purpose, consent, classification, least privilege, source attribution, human review and auditability.",
+    },
+    portfolio: {
+      title: "Portfolio platforms — Akanil Morocco–Red Sea Economic Gateway",
+      description:
+        "The platforms operating under the Gateway: Trade-Chain Africa, Valura, RWAFID and IBRIZ/GAAS, each with an explicit public status and evidence state.",
     },
     "about-akanil": {
       title: "About Akanil — founder and executive operator of the Gateway",
@@ -247,6 +169,7 @@ export const enExperience: ExperienceContent = {
     { href: "/morocco", label: "Morocco" },
     { href: "/sudan", label: "Sudan" },
     { href: "/value-chains", label: "Value chains" },
+    { href: "/portfolio", label: "Portfolio" },
     { href: "/forum", label: "Forum" },
     { href: "/reception", label: "Reception" },
   ],
@@ -254,8 +177,9 @@ export const enExperience: ExperienceContent = {
     { href: "/gateway", label: "The Gateway model" },
     { href: "/morocco", label: "Value for Morocco" },
     { href: "/sudan", label: "Partnership with Sudan" },
-    { href: "/corridor", label: "Corridor intelligence" },
+    { href: "/corridor", label: "Red Sea corridor architecture" },
     { href: "/value-chains", label: "Priority value chains" },
+    { href: "/portfolio", label: "Portfolio platforms" },
     { href: "/forum", label: "Economic Forum" },
     { href: "/trust", label: "Trust, data and AI" },
     { href: "/about-akanil", label: "About Akanil" },

@@ -50,89 +50,6 @@ export const arExperience: ExperienceContent = {
       },
     ],
   },
-  audiences: {
-    eyebrow: "مسارات الدخول",
-    title: "اختر مسار دخولك المؤسسي.",
-    lead: "حدّد صفتك وانتقل مباشرة إلى مكتب الاستقبال بنوع الطلب المناسب — دون الحاجة إلى قراءة الموقع كاملاً.",
-    statesLegend: {
-      approved: "معتمد",
-      live: "مفعّل",
-      active: "نشط",
-      controlled: "محكوم",
-      conceptual: "مفاهيمي",
-      future: "مستقبلي",
-    },
-    paths: [
-      {
-        id: "moroccan-institution",
-        name: "مؤسسة مغربية",
-        forWho: "المؤسسات العمومية، وهيئات التنمية الاقتصادية، والهيئات المهنية والمؤسسية.",
-        purposes: [
-          "طلب إحاطة مؤسسية",
-          "استكشاف إطار للتعاون",
-          "فهم الوظيفة المؤسسية المغربية للبوابة",
-        ],
-        requestTypes: ["briefing", "meeting"],
-        defaultRequestType: "briefing",
-        ctaLabel: "اطلب إحاطة مؤسسية",
-      },
-      {
-        id: "moroccan-company",
-        name: "شركة مغربية",
-        forWho: "المصنّعون والمصدّرون والمجموعات الصناعية ومزوّدو التكنولوجيا وشركات اللوجستيك والخدمات.",
-        purposes: [
-          "عرض قدرة صناعية أو خدمية",
-          "مناقشة تأهيل الشركة",
-          "استكشاف سلسلة قيمة ذات أولوية",
-          "الاستجابة لطلب سوداني مؤهل",
-        ],
-        requestTypes: ["qualification", "capability", "value-chain"],
-        defaultRequestType: "qualification",
-        ctaLabel: "ناقش تأهيل شركتك",
-      },
-      {
-        id: "sudanese-organization",
-        name: "جهة أو صاحب قرار سوداني",
-        forWho: "الشركات والمؤسسات الاقتصادية وأصحاب القرار المؤهلون وفاعلو القطاعات الإنتاجية.",
-        purposes: [
-          "عرض احتياج موثق",
-          "عرض قدرة",
-          "مناقشة فرصة مؤهلة",
-          "طلب نقاش مؤسسي محكوم",
-        ],
-        requestTypes: ["need-opportunity", "capability", "meeting"],
-        defaultRequestType: "need-opportunity",
-        ctaLabel: "اعرض احتياجاً أو قدرة",
-      },
-      {
-        id: "financial-partner",
-        name: "شريك مالي أو استثماري",
-        forWho: "البنوك وشركات التأمين والمستثمرون والمستشارون الماليون وفاعلو التمويل المهيكل.",
-        purposes: [
-          "طلب إحاطة عن البوابة",
-          "الاطلاع على نماذج سلاسل قيمة موثقة",
-          "مناقشة متطلب تمويلي مؤهل",
-        ],
-        requestTypes: ["briefing", "value-chain", "meeting"],
-        defaultRequestType: "briefing",
-        ctaLabel: "اطلب إحاطة عن البوابة",
-        note: "لا توجد فرصة استثمارية مفعّلة أو معتمدة تلقائياً؛ كل ملف يخضع للمراجعة البشرية.",
-      },
-      {
-        id: "sector-partner",
-        name: "شريك صناعي أو لوجستي أو تقني أو معرفي",
-        forWho: "المشغّلون الصناعيون ومزوّدو اللوجستيك وشركات التكنولوجيا ومؤسسات التكوين وشركاء البحث.",
-        purposes: [
-          "عرض قدرة ذات صلة",
-          "استكشاف دور تعاون محدد",
-          "مناقشة سلسلة قيمة ذات أولوية",
-        ],
-        requestTypes: ["capability", "value-chain", "meeting"],
-        defaultRequestType: "capability",
-        ctaLabel: "اعرض قدرتك",
-      },
-    ],
-  },
   summaries: {
     value: {
       title: "ما الذي تقدمه البوابة",
@@ -161,7 +78,7 @@ export const arExperience: ExperienceContent = {
       linkLabel: "استكشف سلاسل القيمة",
     },
     corridor: {
-      title: "ذكاء الممر",
+      title: "تحليل الممر الاقتصادي",
       text: "شبكة سيناريوهات مسار مفاهيمية — تُصمم لكل فرصة، وليست خطاً واحداً ثابتاً.",
       linkLabel: "استكشف الممر",
     },
@@ -207,7 +124,7 @@ export const arExperience: ExperienceContent = {
         "السودان شريك سلاسل قيمة: قدرة إنتاجية وموارد وسوق وقيمة مضافة محلياً وجسر البحر الأحمر وشرق إفريقيا.",
     },
     corridor: {
-      title: "ذكاء الممر — بوابة أكانيل الاقتصادية بين المغرب والبحر الأحمر",
+      title: "بنية سلاسل الإمداد في البحر الأحمر — بوابة أكانيل الاقتصادية بين المغرب والبحر الأحمر",
       description:
         "سيناريوهات ممر مفاهيمية بين المغرب والسودان والبحر الأحمر، بحالات مسار صريحة وانضباط في التحقق.",
     },
@@ -225,6 +142,11 @@ export const arExperience: ExperienceContent = {
       title: "الثقة والبيانات والذكاء الاصطناعي — بوابة أكانيل الاقتصادية",
       description:
         "كيف تُحكم المعلومات: الغرض والموافقة والتصنيف وأقل صلاحية وإسناد المصدر والمراجعة البشرية وقابلية التدقيق.",
+    },
+    portfolio: {
+      title: "منصات المحفظة — بوابة أكانيل الاقتصادية بين المغرب والبحر الأحمر",
+      description:
+        "المنصات العاملة تحت مظلة البوابة: ترايد-تشين أفريقيا، وفالورا، وروافد، وإبريز/GAAS، ولكل منها حالة عرض عامة وحالة إثبات معلنتان.",
     },
     "about-akanil": {
       title: "عن أكانيل — المؤسس والمشغل التنفيذي للبوابة",
@@ -247,6 +169,7 @@ export const arExperience: ExperienceContent = {
     { href: "/morocco", label: "المغرب" },
     { href: "/sudan", label: "السودان" },
     { href: "/value-chains", label: "سلاسل القيمة" },
+    { href: "/portfolio", label: "منصات المحفظة" },
     { href: "/forum", label: "المنتدى" },
     { href: "/reception", label: "الاستقبال" },
   ],
@@ -254,8 +177,9 @@ export const arExperience: ExperienceContent = {
     { href: "/gateway", label: "نموذج البوابة" },
     { href: "/morocco", label: "القيمة للمغرب" },
     { href: "/sudan", label: "الشراكة مع السودان" },
-    { href: "/corridor", label: "ذكاء الممر" },
+    { href: "/corridor", label: "بنية ممر البحر الأحمر" },
     { href: "/value-chains", label: "سلاسل القيمة ذات الأولوية" },
+    { href: "/portfolio", label: "منصات المحفظة" },
     { href: "/forum", label: "المنتدى الاقتصادي" },
     { href: "/trust", label: "الثقة والبيانات والذكاء الاصطناعي" },
     { href: "/about-akanil", label: "عن أكانيل" },

@@ -1,0 +1,9 @@
+.section {
+  background: var(--surface-light);
+  color: var(--text-on-light);
+  padding-block: var(--space-6) var(--section-pad);
+}
+
+.claims {
+  margin-block-start: var(--space-7);
+}

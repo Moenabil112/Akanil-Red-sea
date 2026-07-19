@@ -50,89 +50,6 @@ export const frExperience: ExperienceContent = {
       },
     ],
   },
-  audiences: {
-    eyebrow: "Parcours d'entrée",
-    title: "Choisissez votre parcours d'entrée institutionnel.",
-    lead: "Identifiez-vous et accédez directement au bureau d'accueil avec le bon type de demande — sans lire tout le site.",
-    statesLegend: {
-      approved: "Approuvé",
-      live: "En ligne",
-      active: "Actif",
-      controlled: "Contrôlé",
-      conceptual: "Conceptuel",
-      future: "Futur",
-    },
-    paths: [
-      {
-        id: "moroccan-institution",
-        name: "Institution marocaine",
-        forWho: "Institutions publiques, organismes de développement économique, corps professionnels et institutionnels.",
-        purposes: [
-          "Demander un briefing institutionnel",
-          "Explorer un cadre de coopération",
-          "Comprendre la fonction institutionnelle marocaine de la Passerelle",
-        ],
-        requestTypes: ["briefing", "meeting"],
-        defaultRequestType: "briefing",
-        ctaLabel: "Demander un briefing institutionnel",
-      },
-      {
-        id: "moroccan-company",
-        name: "Entreprise marocaine",
-        forWho: "Fabricants, exportateurs, groupes industriels, fournisseurs de technologie, sociétés de logistique et de services.",
-        purposes: [
-          "Présenter une capacité industrielle ou de service",
-          "Discuter la qualification de l'entreprise",
-          "Explorer une chaîne de valeur prioritaire",
-          "Répondre à une demande soudanaise qualifiée",
-        ],
-        requestTypes: ["qualification", "capability", "value-chain"],
-        defaultRequestType: "qualification",
-        ctaLabel: "Discuter la qualification",
-      },
-      {
-        id: "sudanese-organization",
-        name: "Organisation ou décideur soudanais",
-        forWho: "Entreprises, institutions économiques, décideurs qualifiés et acteurs des secteurs productifs.",
-        purposes: [
-          "Présenter un besoin documenté",
-          "Présenter une capacité",
-          "Discuter une opportunité qualifiée",
-          "Demander une discussion institutionnelle contrôlée",
-        ],
-        requestTypes: ["need-opportunity", "capability", "meeting"],
-        defaultRequestType: "need-opportunity",
-        ctaLabel: "Présenter un besoin ou une capacité",
-      },
-      {
-        id: "financial-partner",
-        name: "Partenaire financier ou d'investissement",
-        forWho: "Banques, assureurs, investisseurs, conseillers financiers et acteurs de la finance structurée.",
-        purposes: [
-          "Demander un briefing sur la Passerelle",
-          "Examiner des modèles documentés de chaînes de valeur",
-          "Discuter un besoin de financement qualifié",
-        ],
-        requestTypes: ["briefing", "value-chain", "meeting"],
-        defaultRequestType: "briefing",
-        ctaLabel: "Demander un briefing",
-        note: "Aucune opportunité d'investissement n'est automatiquement active ou approuvée ; chaque dossier reste soumis à revue humaine.",
-      },
-      {
-        id: "sector-partner",
-        name: "Partenaire industriel, logistique, technologique ou de savoir",
-        forWho: "Opérateurs industriels, prestataires logistiques, sociétés technologiques, institutions de formation et partenaires de recherche.",
-        purposes: [
-          "Présenter une capacité pertinente",
-          "Explorer un rôle de coopération défini",
-          "Discuter une chaîne de valeur prioritaire",
-        ],
-        requestTypes: ["capability", "value-chain", "meeting"],
-        defaultRequestType: "capability",
-        ctaLabel: "Présenter une capacité",
-      },
-    ],
-  },
   summaries: {
     value: {
       title: "Ce que la Passerelle apporte",
@@ -161,7 +78,7 @@ export const frExperience: ExperienceContent = {
       linkLabel: "Explorer les chaînes de valeur",
     },
     corridor: {
-      title: "Intelligence du corridor",
+      title: "Analyse du corridor économique",
       text: "Un réseau de scénarios d'itinéraires conceptuels — conçus par opportunité, jamais une ligne fixe.",
       linkLabel: "Explorer le corridor",
     },
@@ -207,7 +124,7 @@ export const frExperience: ExperienceContent = {
         "Le Soudan, partenaire de chaînes de valeur : capacité de production, ressources, marché, valeur ajoutée locale et pont mer Rouge–Afrique de l'Est.",
     },
     corridor: {
-      title: "Intelligence du corridor — Passerelle économique Akanil Maroc–mer Rouge",
+      title: "L'architecture des chaînes d'approvisionnement de la mer Rouge — Passerelle Akanil",
       description:
         "Scénarios conceptuels de corridor entre le Maroc, le Soudan et la mer Rouge, avec des états d'itinéraires explicites.",
     },
@@ -225,6 +142,11 @@ export const frExperience: ExperienceContent = {
       title: "Confiance, données et IA — Passerelle économique Akanil Maroc–mer Rouge",
       description:
         "Comment l'information est gouvernée : finalité, consentement, classification, moindre privilège, attribution de source, revue humaine et auditabilité.",
+    },
+    portfolio: {
+      title: "Plateformes du portefeuille — Passerelle économique Akanil Maroc–mer Rouge",
+      description:
+        "Les plateformes opérant sous la Passerelle : Trade-Chain Africa, Valura, RWAFID et IBRIZ/GAAS, chacune avec un statut public et un état de preuve explicites.",
     },
     "about-akanil": {
       title: "À propos d'Akanil — fondateur et opérateur exécutif de la Passerelle",
@@ -247,6 +169,7 @@ export const frExperience: ExperienceContent = {
     { href: "/morocco", label: "Maroc" },
     { href: "/sudan", label: "Soudan" },
     { href: "/value-chains", label: "Chaînes de valeur" },
+    { href: "/portfolio", label: "Portefeuille" },
     { href: "/forum", label: "Forum" },
     { href: "/reception", label: "Accueil" },
   ],
@@ -254,8 +177,9 @@ export const frExperience: ExperienceContent = {
     { href: "/gateway", label: "Le modèle de la Passerelle" },
     { href: "/morocco", label: "La valeur pour le Maroc" },
     { href: "/sudan", label: "Le partenariat avec le Soudan" },
-    { href: "/corridor", label: "Intelligence du corridor" },
+    { href: "/corridor", label: "Architecture du corridor mer Rouge" },
     { href: "/value-chains", label: "Chaînes de valeur prioritaires" },
+    { href: "/portfolio", label: "Plateformes du portefeuille" },
     { href: "/forum", label: "Forum Économique" },
     { href: "/trust", label: "Confiance, données et IA" },
     { href: "/about-akanil", label: "À propos d'Akanil" },

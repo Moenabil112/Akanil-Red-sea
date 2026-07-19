@@ -159,6 +159,8 @@ export interface SiteContent {
     title: string;
     lead: string;
     facts: TitledText[];
+    /** Activation phases (P0 §31): before, during and after the Forum. */
+    phases: { title: string; items: string[] }[];
     posterAlt: string;
     posterLabel: string;
     cta: Cta;
@@ -213,6 +215,7 @@ export interface SiteContent {
 
 export type PageRoute =
   | "gateway"
+  | "portfolio"
   | "morocco"
   | "sudan"
   | "corridor"
@@ -230,32 +233,20 @@ export type StatusKind =
   | "conceptual"
   | "future";
 
-export type AudienceId =
-  | "moroccan-institution"
-  | "moroccan-company"
-  | "sudanese-organization"
-  | "financial-partner"
-  | "sector-partner";
-
-export type RequestTypeId =
-  | "briefing"
-  | "qualification"
-  | "value-chain"
-  | "meeting"
-  | "capability"
-  | "need-opportunity"
-  | "forum";
-
-export interface AudiencePathContent {
-  id: AudienceId;
-  name: string;
-  forWho: string;
-  purposes: string[];
-  requestTypes: RequestTypeId[];
-  defaultRequestType: RequestTypeId;
-  ctaLabel: string;
-  note?: string;
-}
+/**
+ * P0: the audience and request taxonomy is defined once in
+ * ecosystem-types.ts (ADR-014) and re-exported here for callers.
+ */
+export type {
+  AudienceId,
+  RequestTypeId,
+  IntakeFieldId,
+} from "./ecosystem-types";
+import type {
+  AudienceId as EcoAudienceId,
+  RequestTypeId as EcoRequestTypeId,
+  IntakeFieldId as EcoIntakeFieldId,
+} from "./ecosystem-types";
 
 export interface SummaryBlock {
   title: string;
@@ -268,13 +259,6 @@ export interface ExperienceContent {
     eyebrow: string;
     title: string;
     items: { label: string; state: string; kind: StatusKind; note: string }[];
-  };
-  audiences: {
-    eyebrow: string;
-    title: string;
-    lead: string;
-    statesLegend: Record<StatusKind, string>;
-    paths: AudiencePathContent[];
   };
   summaries: {
     value: SummaryBlock & { morocco: SummaryBlock; sudan: SummaryBlock };
@@ -314,24 +298,25 @@ export interface ReceptionContent {
   phoneChannelLabel: string;
   phoneNote: string;
   noJsNote: string;
-  requestTypes: Record<RequestTypeId, { label: string; description: string }>;
+  requestTypes: Record<
+    EcoRequestTypeId,
+    {
+      label: string;
+      description: string;
+      expectedReviewOutput: string[];
+      preparationRequirements: string[];
+      disclaimer?: string;
+    }
+  >;
   audienceLabel: string;
+  audienceNames: Record<EcoAudienceId, string>;
+  fieldLabels: Record<EcoIntakeFieldId, string>;
+  fieldHints: Partial<Record<EcoIntakeFieldId, string>>;
+  evidenceOptions: { id: string; label: string }[];
+  expectedReviewLabel: string;
+  preparationLabel: string;
   form: {
     legend: string;
-    requestType: string;
-    organization: string;
-    country: string;
-    sector: string;
-    contactName: string;
-    role: string;
-    email: string;
-    summary: string;
-    summaryHint: string;
-    phone: string;
-    website: string;
-    preferredLanguage: string;
-    valueChain: string;
-    valueChainNone: string;
     optionalLegend: string;
     consentLabel: string;
     consentText: string;
@@ -353,6 +338,12 @@ export interface ReceptionContent {
     steps: string[];
     openEmailButton: string;
     editButton: string;
+    copySubjectButton: string;
+    copyBodyButton: string;
+    downloadDraftButton: string;
+    copiedAnnouncement: string;
+    downloadedAnnouncement: string;
+    missingOptionalNote: string;
   };
   afterOpen: {
     title: string;
@@ -367,22 +358,7 @@ export interface ReceptionContent {
   email: {
     subjectPrefix: string;
     intro: string;
-    fieldLabels: Record<
-      | "requestType"
-      | "audience"
-      | "organization"
-      | "country"
-      | "sector"
-      | "contactName"
-      | "role"
-      | "email"
-      | "phone"
-      | "website"
-      | "preferredLanguage"
-      | "valueChain"
-      | "summary",
-      string
-    >;
+    fieldLabels: Record<EcoIntakeFieldId, string>;
     outro: string;
   };
 }

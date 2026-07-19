@@ -4,6 +4,10 @@ import type {
   ReceptionContent,
   SiteContent,
 } from "@/content/types";
+import type { EcosystemContent } from "@/content/ecosystem-types";
+import { arEcosystem } from "@/content/ar/ecosystem";
+import { frEcosystem } from "@/content/fr/ecosystem";
+import { enEcosystem } from "@/content/en/ecosystem";
 import { ar } from "@/content/ar/site";
 import { fr } from "@/content/fr/site";
 import { en } from "@/content/en/site";
@@ -38,4 +42,14 @@ export function getExperience(locale: Locale): ExperienceContent {
 
 export function getReception(locale: Locale): ReceptionContent {
   return receptionRecords[locale];
+}
+
+const ecosystemRecords: Record<Locale, EcosystemContent> = {
+  ar: arEcosystem,
+  fr: frEcosystem,
+  en: enEcosystem,
+};
+
+export function getEcosystem(locale: Locale): EcosystemContent {
+  return ecosystemRecords[locale];
 }

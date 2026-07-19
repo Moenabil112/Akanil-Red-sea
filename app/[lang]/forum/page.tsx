@@ -27,7 +27,7 @@ export default async function ForumPage({
       <PageReceptionBand
         locale={locale}
         experience={experience}
-        requestType="forum"
+        requestType="forum-qualification"
       />
     </SiteChrome>
   );

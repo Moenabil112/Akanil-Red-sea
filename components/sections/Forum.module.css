@@ -108,3 +108,62 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Activation phases (P0 §31) */
+.phases {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin-block-start: clamp(3rem, 2rem + 3vw, 4.5rem);
+}
+
+.phase {
+  padding: var(--space-5);
+  border: 1px solid var(--line-on-light);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.phaseTitle {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-atlantic);
+}
+
+.phaseIndex {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-copper-text);
+}
+
+.phaseItems {
+  margin-block-start: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.phaseItem {
+  position: relative;
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+  padding-inline-start: var(--space-4);
+}
+
+.phaseItem::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.55em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--color-copper);
+}
+
+@media (max-width: 64rem) {
+  .phases {
+    grid-template-columns: 1fr;
+  }
+}

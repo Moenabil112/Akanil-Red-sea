@@ -1,0 +1,938 @@
+import type { EcosystemContent } from "../ecosystem-types";
+
+/**
+ * English — P0 Red Sea ecosystem record. Independently authored;
+ * evidence-led wording per ADR-015 (no partner, licensing or
+ * investment-readiness claims without evidence).
+ */
+export const enEcosystem: EcosystemContent = {
+  hero: {
+    eyebrow: "Economic and technology ecosystem",
+    titleLines: [
+      { text: "Structuring African production,", emphasis: false },
+      { text: "Red Sea supply chains", emphasis: true },
+      { text: "and Moroccan market access.", emphasis: false },
+    ],
+    lead: "Akanil operates an economic and technology ecosystem connecting production and assets in Sudan and the Horn of Africa with Red Sea ports, economic zones, finance, technology and Morocco's manufacturing and export capabilities.",
+    primary: {
+      label: "Find your ecosystem entry point",
+      explanation: "Moves to the audience entry paths below.",
+    },
+    secondary: {
+      label: "Explore the portfolio platforms",
+      explanation: "Opens the portfolio of platforms operated within the ecosystem.",
+    },
+    institutional: {
+      label: "Start a structured request",
+      explanation:
+        "Opens the reception desk; every request is reviewed by a specialized team.",
+    },
+  },
+  whyRedSea: {
+    title: "Why the Red Sea?",
+    lead: "The Red Sea is not merely a shipping route. It is the economic space where African production, ports, economic zones, industry, finance and international market access meet.",
+    layersTitle: "The layers that meet on the Red Sea",
+    layers: [
+      "Production and natural resources in Sudan and the Horn of Africa",
+      "Agricultural, livestock, mining and industrial assets",
+      "Ports and logistics nodes",
+      "Economic and industrial zones",
+      "Saudi and Egyptian manufacturing, investment and distribution capabilities",
+      "Moroccan manufacturing, processing, standards and quality capabilities",
+      "Trade finance, insurance and investment institutions",
+      "International market-access routes through Morocco and Red Sea ports",
+      "Technology, data, traceability and operational intelligence",
+    ],
+    bridgeTitle: "Akanil's distinctive role",
+    bridgeText:
+      "Akanil understands and structures the triangular bridge linking East Africa, the Red Sea and Saudi Arabia, then connects that bridge with Morocco's industrial, logistics, financial and export capabilities.",
+    linkLabel: "Read the Red Sea corridor architecture",
+  },
+  valueFlow: {
+    title: "How the ecosystem creates value",
+    lead: "One governed chain, from African production and assets to regional and international markets.",
+    steps: [
+      "African production and assets",
+      "Qualification and evidence",
+      "Aggregation and primary processing",
+      "Economic zones and industrial nodes",
+      "Red Sea ports and trade corridors",
+      "Manufacturing, standards and finance",
+      "Morocco as a transformation and market-access platform",
+      "Regional and international markets",
+    ],
+    moroccoPlatformTitle: "Morocco as a platform — not merely an end market",
+    moroccoPlatformRoles: [
+      "Industrial transformation",
+      "Processing",
+      "Packaging",
+      "Standards and quality",
+      "Trade finance",
+      "Insurance",
+      "Logistics",
+      "Distribution",
+      "Export preparation",
+      "Access to regional and international markets",
+    ],
+    marketAccessNote:
+      "Any access to European, North American, Latin American or West African markets remains subject to applicable rules of origin, customs requirements, product standards, regulatory approvals and the level of transformation performed.",
+  },
+  audiences: {
+    eyebrow: "Ecosystem entry",
+    title: "Choose your role in the ecosystem.",
+    lead: "Seven institutional entry paths. Each routes to the reception desk with the right request type; every request is reviewed by a specialized team.",
+    whoLabel: "Who this includes",
+    valueLabel: "What the Gateway provides",
+    platformsLabel: "Relevant platforms",
+    preparationLabel: "Prepare before requesting",
+    reviewOutputLabel: "Expected review output",
+    paths: [
+      {
+        id: "moroccan-institutions",
+        title: "Moroccan institutions",
+        whoItIncludes: [
+          "Institutions responsible for South–South cooperation",
+          "Foreign-affairs and African-cooperation stakeholders",
+          "Public and semi-public economic institutions",
+          "Export and professional associations",
+          "African and Islamic development institutions",
+          "Investment and development agencies",
+          "Training and research institutions",
+        ],
+        strategicNeed:
+          "A structured, evidence-led instrument for economic cooperation with Sudan, the Red Sea and the Horn of Africa.",
+        gatewayValue: [
+          "Structured cooperation frameworks",
+          "Qualified economic files",
+          "Documented sector demand",
+          "Investment and trade-chain visibility",
+          "Controlled access to relevant stakeholders",
+          "Programme and project review",
+          "Measurable follow-up",
+        ],
+        relevantPlatforms: ["trade-chain-africa", "valura"],
+        allowedRequestTypes: ["institutional-cooperation", "forum-qualification"],
+        defaultRequestType: "institutional-cooperation",
+        preparationRequirements: [
+          "Institutional identity and mandate",
+          "Cooperation subject and intended scope",
+        ],
+        expectedReviewOutput:
+          "Preliminary institutional briefing and cooperation-scope clarification, with any mandate or evidence gaps identified.",
+        ctaLabel: "Open institutional cooperation",
+      },
+      {
+        id: "moroccan-industry-exporters",
+        title: "Moroccan industry and exporters",
+        whoItIncludes: [
+          "Renewable-energy and agricultural-input companies",
+          "Mining, food-processing, canning and packaging companies",
+          "Cosmetics, technology, telecommunications and e-commerce companies",
+          "Logistics and cold-chain companies",
+          "Livestock and feed importers",
+          "Manufacturers seeking African raw or semi-processed inputs",
+          "Exporters seeking entry into Sudan and the Horn of Africa",
+        ],
+        strategicNeed:
+          "Market-entry structuring and qualified stakeholder access — not open matchmaking.",
+        gatewayValue: [
+          "New market-entry pathways",
+          "Qualified demand",
+          "Structured supplier and asset files",
+          "Access to Sudanese and Horn of Africa production",
+          "Industrial partnership opportunities",
+          "Red Sea logistics scenarios",
+          "Documented institutional follow-up",
+        ],
+        relevantPlatforms: ["rwafid", "trade-chain-africa", "valura"],
+        allowedRequestTypes: [
+          "market-expansion",
+          "supply-offtake-requirement",
+          "industrial-partnership",
+          "forum-qualification",
+        ],
+        defaultRequestType: "market-expansion",
+        preparationRequirements: [
+          "Company profile and sector",
+          "Target market or supply requirement",
+        ],
+        expectedReviewOutput:
+          "Preliminary market-entry relevance review with required stakeholder categories and the recommended qualification step.",
+        ctaLabel: "Structure market entry",
+      },
+      {
+        id: "moroccan-finance-investment",
+        title: "Moroccan finance and investment",
+        whoItIncludes: [
+          "Development and commercial banks",
+          "Insurers and trade-finance providers",
+          "Investment funds and guarantee institutions",
+          "Financial advisers and Islamic-finance stakeholders",
+        ],
+        strategicNeed:
+          "Controlled project review and financing-requirement structuring across the corridor.",
+        gatewayValue: [
+          "Controlled project pipeline visibility",
+          "Project and asset screening",
+          "Sector and corridor analysis",
+          "Structured financing requirements",
+          "Due-diligence pathway",
+          "Risk and evidence-gap identification",
+          "Access to qualified project sponsors",
+        ],
+        relevantPlatforms: ["valura", "ibriz-gaas", "trade-chain-africa"],
+        allowedRequestTypes: [
+          "project-investment-review",
+          "institutional-cooperation",
+          "forum-qualification",
+        ],
+        defaultRequestType: "project-investment-review",
+        preparationRequirements: [
+          "Institution profile and review focus",
+          "Sector or project category of interest",
+        ],
+        expectedReviewOutput:
+          "Preliminary project-fit review, controlled evidence requirements and the project review pathway.",
+        ctaLabel: "Request a project review",
+        note: "Appearance on this website does not make a project bankable, and no financing availability is stated or implied.",
+      },
+      {
+        id: "sudanese-decision-makers",
+        title: "Sudanese decision-makers",
+        whoItIncludes: [
+          "Economic institutions and sector authorities",
+          "Professional bodies",
+          "Trade and investment decision-makers",
+          "Export and production organizations",
+        ],
+        strategicNeed:
+          "Structured cooperation with Moroccan institutions, industry, finance and technology.",
+        gatewayValue: [
+          "Structured cooperation with Moroccan institutions and industries",
+          "Project and sector representation",
+          "Industrialization pathways",
+          "Standards and market-access planning",
+          "Investment and technology coordination",
+          "Documented decisions and follow-up",
+        ],
+        relevantPlatforms: ["valura", "rwafid", "trade-chain-africa"],
+        allowedRequestTypes: [
+          "institutional-cooperation",
+          "industrial-partnership",
+          "forum-qualification",
+        ],
+        defaultRequestType: "institutional-cooperation",
+        preparationRequirements: [
+          "Institutional identity and authority",
+          "Cooperation subject or sector focus",
+        ],
+        expectedReviewOutput:
+          "Preliminary institutional briefing and a defined cooperation pathway with evidence requirements.",
+        ctaLabel: "Open institutional cooperation",
+        note: "Akanil does not represent the Sudanese government.",
+      },
+      {
+        id: "sudanese-producers-asset-owners",
+        title: "Sudanese producers, exporters and asset owners",
+        whoItIncludes: [
+          "Agricultural and feed exporters",
+          "Mining companies and livestock owners",
+          "Agricultural landowners and factory owners",
+          "Storage and processing asset owners",
+          "Project sponsors",
+        ],
+        strategicNeed:
+          "Structuring assets, products and projects into qualified files that can reach manufacturing, finance and markets.",
+        gatewayValue: [
+          "Access to Moroccan buyers and manufacturers",
+          "Industrial-processing pathways and product upgrading",
+          "Standards and packaging requirements",
+          "Financing and insurance discussions",
+          "Supply-chain and port scenarios",
+          "International market-access assessment through Morocco",
+          "Project and asset qualification",
+        ],
+        relevantPlatforms: ["rwafid", "valura", "trade-chain-africa"],
+        allowedRequestTypes: [
+          "submit-project-asset",
+          "supply-offtake-requirement",
+          "industrial-partnership",
+          "forum-qualification",
+        ],
+        defaultRequestType: "submit-project-asset",
+        preparationRequirements: [
+          "Asset, product or project identification",
+          "Available evidence (profile, documents, studies)",
+        ],
+        expectedReviewOutput:
+          "Preliminary classification, evidence-completeness review and a decision on whether a controlled project review may proceed.",
+        ctaLabel: "Submit a project or asset",
+        note: "A raw product does not automatically qualify for Moroccan origin or preferential export treatment.",
+      },
+      {
+        id: "red-sea-ports-economic-zones",
+        title: "Red Sea ports and economic zones",
+        whoItIncludes: [
+          "Port authorities and terminal operators",
+          "Economic-zone and logistics-zone developers",
+          "Shipping and storage stakeholders",
+          "Industrial-zone operators",
+          "Regional investors",
+        ],
+        strategicNeed:
+          "Visibility of African production flows and structured corridor development roles.",
+        gatewayValue: [
+          "African production-flow visibility",
+          "Potential cargo and supply-chain structuring",
+          "Project and zone linkage",
+          "Industry and processing demand",
+          "Morocco–Red Sea corridor development",
+          "Stakeholder coordination",
+          "Technology and traceability architecture",
+        ],
+        relevantPlatforms: ["trade-chain-africa", "valura"],
+        allowedRequestTypes: [
+          "port-logistics-cooperation",
+          "institutional-cooperation",
+        ],
+        defaultRequestType: "port-logistics-cooperation",
+        preparationRequirements: [
+          "Organization profile and operating role",
+          "Corridor or zone interest",
+        ],
+        expectedReviewOutput:
+          "Preliminary corridor-role assessment with logistics-data requirements and the relevant platform pathway.",
+        ctaLabel: "Open corridor cooperation",
+        note: "No operational agreement is implied by this cooperation pathway.",
+      },
+      {
+        id: "technology-logistics-knowledge-partners",
+        title: "Technology, logistics and knowledge partners",
+        whoItIncludes: [
+          "Technology companies and telecommunications operators",
+          "AI, data-infrastructure and traceability providers",
+          "Logistics and cold-chain operators",
+          "Research institutions and universities",
+          "Training, standards and testing organizations",
+        ],
+        strategicNeed:
+          "Defined roles in the ecosystem's technology, logistics and knowledge layers.",
+        gatewayValue: [
+          "Defined ecosystem roles",
+          "Portfolio and value-chain use cases",
+          "Deployment opportunities subject to qualification",
+          "Technical requirements",
+          "Industrial and logistics integration",
+          "Controlled cooperation pathways",
+        ],
+        relevantPlatforms: ["ibriz-gaas", "trade-chain-africa", "rwafid"],
+        allowedRequestTypes: [
+          "technology-data-partnership",
+          "industrial-partnership",
+          "port-logistics-cooperation",
+        ],
+        defaultRequestType: "technology-data-partnership",
+        preparationRequirements: [
+          "Capability profile and reference use cases",
+          "Intended ecosystem role",
+        ],
+        expectedReviewOutput:
+          "Preliminary technical-role assessment with integration, evidence and data-governance considerations.",
+        ctaLabel: "Present a technology capability",
+      },
+    ],
+  },
+  platforms: {
+    eyebrow: "Portfolio platforms",
+    title: "Strategic platforms operated within the ecosystem.",
+    lead: "Akanil develops a controlled portfolio of four platforms across agro-industrial processing, digital agriculture, trade corridors and regulated financial-technology infrastructure.",
+    nodeDistinction:
+      "These four platforms are Akanil's portfolio products. The ports, cities and production regions shown elsewhere are ecosystem nodes — locations and roles, not Akanil-owned projects, partners or licensed operations.",
+    reviewRequestNote:
+      "Requesting a project review does not guarantee access, financing or partnership, and confidential documents are never shared automatically. Every request is reviewed by the specialist team, which determines the appropriate next step.",
+    categoryLabel: "Project type",
+    purposeLabel: "Core value",
+    problemLabel: "Problem addressed",
+    roleLabel: "Akanil's role",
+    scopeLabel: "Geographic scope",
+    audiencesLabel: "Relevant audiences",
+    capabilitiesLabel: "Main components",
+    stageLabel: "Current stage",
+    figuresLabel: "Key indicative figures",
+    partnersLabel: "Partners or capabilities sought",
+    fileStatusLabel: "Project file status",
+    lastReviewedLabel: "Last reviewed",
+    statusLabel: "Public status",
+    evidenceLabel: "Evidence state",
+    regulatoryLabel: "Regulatory note",
+    items: [
+      {
+        id: "valura",
+        name: "VALURA — Value-Added Agro-Industrial Complex",
+        category: "Integrated agricultural processing and value-addition complex",
+        purpose:
+          "Transforming Sudanese crops and agricultural raw materials into processed, packaged and exportable higher-value products.",
+        problemSolved:
+          "Agricultural output is exported as raw commodities, so value that could be created through processing, extraction, sorting, sterilization, packaging, storage and by-product reuse leaves before it is captured.",
+        operatingRole:
+          "Akanil develops the preliminary industrial and investment blueprint and structures the integrated complex, its components and its financing pathway.",
+        geographicScope: [
+          "Potential locations under study: Kassala, Gedaref, Gezira (Sudan)",
+        ],
+        targetStakeholders: [
+          "sudanese-producers-asset-owners",
+          "moroccan-finance-investment",
+          "sudanese-decision-makers",
+        ],
+        capabilities: [
+          "Sesame, groundnut and watermelon-seed oil processing",
+          "Medicinal and wild-herb oil extraction",
+          "Optical and AI-assisted sorting",
+          "Automated packaging lines",
+          "Vegetable and fruit sterilization",
+          "Solar-powered cold storage",
+          "Hybrid energy, waste reduction and by-product reuse",
+          "Potential supply integration with RWAFID",
+        ],
+        stage:
+          "Preliminary industrial and investment blueprint. Final site selection, detailed feasibility and environmental and social assessment remain to be completed or updated.",
+        projectStatus: "public-profile-available",
+        statusDetail: "Preliminary Blueprint",
+        lastReviewed: "March 2026",
+        indicativeFigures: [
+          "USD 8–12 million indicative capital requirement",
+          "50–80 tonnes/day indicative capacity",
+          "50–80 feddans indicative land requirement",
+          "250+ direct jobs target",
+          "500+ indirect jobs target",
+        ],
+        figuresNote:
+          "Preliminary estimates from VALURA Blueprint V1.0 — March 2026. Estimates, not achieved results or guarantees.",
+        partnersSought: [
+          "Industrial investors",
+          "Processing, sorting and packaging technology providers",
+          "Food and oil companies",
+          "Development-finance and energy partners",
+          "Distributors, buyers, feasibility and ESIA specialists",
+        ],
+        cta: {
+          label: "Request Project Review",
+          requestType: "project-investment-review",
+        },
+      },
+      {
+        id: "rwafid",
+        name: "RWAFID — روافد",
+        category: "Digital Agriculture and Supply-Chain Platform",
+        purpose:
+          "An offline-first digital agriculture platform combining farm records, monitoring, advisory, input access, finance, market access and logistics for African farmers and supply chains.",
+        problemSolved:
+          "Smallholder and medium-scale farmers and agricultural supply chains lack connected records, monitoring, advisory, finance, buyers and logistics — especially where connectivity is limited.",
+        operatingRole:
+          "Akanil develops the platform concept and its target-user model, and is verifying pilot execution, institutional support and operating partnerships before publication.",
+        geographicScope: [
+          "Sudan and East African agricultural regions (operating geography under verification)",
+        ],
+        targetStakeholders: [
+          "sudanese-producers-asset-owners",
+          "moroccan-industry-exporters",
+          "sudanese-decision-makers",
+        ],
+        capabilities: [
+          "Digital farm records and GPS field mapping",
+          "NDVI and satellite crop monitoring with early-warning alerts",
+          "AI-assisted and human agricultural advisory",
+          "Agricultural-input access and financial-service integration",
+          "Buyer and processor access",
+          "Logistics and shipment visibility",
+          "Offline-first operation with later synchronization",
+        ],
+        stage:
+          "Digital agriculture platform undergoing current-status verification for pilot execution, institutional support and operating partnerships.",
+        projectStatus: "update-required-before-publication",
+        lastReviewed: "July 2026",
+        partnersSought: [
+          "Farmer cooperatives and agricultural-input suppliers",
+          "Banks and agricultural-finance institutions",
+          "Satellite and agritech providers",
+          "Buyers, processors and logistics companies",
+          "Agricultural advisors, development institutions and technology investors",
+        ],
+        cta: {
+          label: "Request Project Review",
+          requestType: "technology-data-partnership",
+        },
+      },
+      {
+        id: "trade-chain-africa",
+        name: "Trade-Chain Africa — Ports, Trade Corridors and Supply-Chain Platform",
+        category: "Ports, trade corridors and supply-chain platform",
+        purpose:
+          "Structuring the movement of products and value between African production regions, ports, economic zones, manufacturers, buyers, finance and international markets.",
+        problemSolved:
+          "African production reaches Red Sea and international markets through fragmented, undocumented routes with unclear standards, logistics and stakeholder coordination.",
+        operatingRole:
+          "Akanil repositions and reconciles the earlier project file into a Red Sea corridor and supply-chain architecture, structuring routes, node relationships and qualified stakeholder coordination.",
+        geographicScope: [
+          "King Abdullah Economic City and King Abdullah Port",
+          "Ain Sokhna",
+          "Aswan economic and logistics node",
+          "Port Sudan",
+          "Bosaso",
+          "Asmara–Massawa economic and logistics corridor",
+          "Tanger Med as a Moroccan manufacturing and market-access node",
+        ],
+        targetStakeholders: [
+          "red-sea-ports-economic-zones",
+          "moroccan-industry-exporters",
+          "technology-logistics-knowledge-partners",
+        ],
+        capabilities: [
+          "Corridor and route analysis",
+          "Port and economic-zone mapping",
+          "Producer-to-port supply-chain design",
+          "Storage and cold-chain requirements",
+          "Customs and standards preparation",
+          "Shipment and document visibility",
+          "Qualified stakeholder coordination",
+        ],
+        stage:
+          "Strategic repositioning and project-file reconciliation with the Akanil Red Sea ecosystem architecture.",
+        projectStatus: "update-required-before-publication",
+        lastReviewed: "July 2026",
+        partnersSought: [
+          "Port and terminal operators and economic zones",
+          "Logistics, cold-chain, shipping and storage providers",
+          "Trade-finance and insurance institutions",
+          "Customs and standards specialists",
+          "Technology, traceability providers, manufacturers and buyers",
+        ],
+        cta: {
+          label: "Request Project Review",
+          requestType: "port-logistics-cooperation",
+        },
+      },
+      {
+        id: "ibriz-gaas",
+        name: "IBRIZ / GAAS — Digital Gold and Banking Infrastructure Project",
+        category: "Regulated financial-technology and banking-infrastructure project",
+        purpose:
+          "Developing regulated pathways for gold-related institutional services, trade finance, transaction traceability, bank integration and Gold as a Service capabilities for regulated institutions.",
+        problemSolved:
+          "Regulated institutions lack compliant, traceable infrastructure for gold-related institutional services, trade finance and development-fund transparency.",
+        operatingRole:
+          "Akanil develops the intended product architecture as a technical and regulatory development project, not an operating financial service.",
+        geographicScope: ["Regulated institutional deployments"],
+        targetStakeholders: [
+          "technology-logistics-knowledge-partners",
+          "moroccan-finance-investment",
+        ],
+        capabilities: [
+          "Gold-related institutional services",
+          "Trade finance and agricultural-export finance",
+          "Transaction traceability and development-fund transparency",
+          "Bank integration modules",
+          "Gold as a Service capabilities for regulated institutions",
+        ],
+        stage:
+          "Technical and regulatory development project. Any banking, payment, custody, investment, lending, gold-backed account, trade-finance or settlement activity remains subject to applicable licensing, regulatory approval and institutional agreements.",
+        projectStatus: "regulated-or-sensitive-project",
+        lastReviewed: "December 2025",
+        partnersSought: [
+          "Licensed banking sponsor and regulated financial institution",
+          "Gold custodian and compliance, AML/CFT specialists",
+          "Banking-infrastructure and cybersecurity partners",
+          "Regulatory counsel and trade-finance institution",
+          "Strategic technology investor",
+        ],
+        regulatoryNote:
+          "IBRIZ / GAAS is a financial-technology and banking-infrastructure project. It is not a bank and provides no customer accounts, payments, custody, lending, remittance or gold-backed accounts. Any such activity remains subject to applicable licensing, regulatory approval and institutional agreements.",
+        cta: {
+          label: "Request Project Review",
+          requestType: "technology-data-partnership",
+        },
+      },
+    ],
+  },
+  nodes: {
+    eyebrow: "Red Sea nodes",
+    title: "Ecosystem and corridor architecture.",
+    lead: "A schematic architecture of the ports, production regions, economic zones and market-access nodes the ecosystem connects — not a legal or technical route map.",
+    mapLabel: "Schematic ecosystem and corridor architecture diagram",
+    disclaimer:
+      "Schematic architecture only. No route, volume, travel time, cost or capacity is presented as verified; every scenario requires current commercial, logistical and regulatory verification.",
+    kindLabels: {
+      port: "Port",
+      "economic-zone": "Economic zone",
+      "industrial-node": "Industrial node",
+      "production-region": "Production region",
+      "logistics-node": "Logistics node",
+      "market-access-node": "Market-access node",
+      "financial-node": "Financial node",
+    },
+    listTitle: "Ecosystem nodes",
+    selectPrompt: "Select a node to read its role in the architecture.",
+    items: [
+      {
+        id: "tanger-med",
+        name: "Tanger Med",
+        country: "Morocco",
+        kind: "port",
+        role: "Moroccan port and connected industrial-logistics ecosystem",
+        platformIds: ["trade-chain-africa"],
+        publicSummary:
+          "Morocco's flagship port complex and its connected industrial and logistics ecosystem, referenced as a market-access node for corridor scenarios.",
+        evidenceState: "public-summary-available",
+        publicStatus: "public-profile",
+      },
+      {
+        id: "morocco-industry",
+        name: "Moroccan manufacturing and processing",
+        country: "Morocco",
+        kind: "industrial-node",
+        role: "Industrial transformation and processing capabilities",
+        platformIds: ["rwafid", "trade-chain-africa"],
+        publicSummary:
+          "Manufacturing, processing, packaging and contract-production capabilities that transform qualified African inputs into higher-value products.",
+        evidenceState: "public-summary-available",
+        publicStatus: "public-profile",
+      },
+      {
+        id: "morocco-finance",
+        name: "Moroccan finance and insurance",
+        country: "Morocco",
+        kind: "financial-node",
+        role: "Trade finance, insurance and investment functions",
+        platformIds: ["trade-chain-africa", "ibriz-gaas"],
+        publicSummary:
+          "Banking, insurance and advisory functions that structure payment, coverage and financing around documented counterparts.",
+        evidenceState: "public-summary-available",
+        publicStatus: "public-profile",
+      },
+      {
+        id: "morocco-market-access",
+        name: "Moroccan standards and export functions",
+        country: "Morocco",
+        kind: "market-access-node",
+        role: "Standards, quality and market-access preparation",
+        platformIds: ["trade-chain-africa", "rwafid"],
+        publicSummary:
+          "Standards, quality, certification and export-preparation functions toward regional and international markets, subject to rules of origin, customs requirements and the level of transformation performed.",
+        evidenceState: "public-summary-available",
+        publicStatus: "public-profile",
+      },
+      {
+        id: "kaec",
+        name: "King Abdullah Economic City",
+        country: "Saudi Arabia",
+        kind: "economic-zone",
+        role: "Saudi economic-city and industrial node",
+        platformIds: ["trade-chain-africa"],
+        publicSummary:
+          "A Saudi economic city referenced in corridor scenarios for manufacturing, investment and distribution functions.",
+        evidenceState: "evidence-not-yet-published",
+        publicStatus: "institutional-review",
+      },
+      {
+        id: "king-abdullah-port",
+        name: "King Abdullah Port",
+        country: "Saudi Arabia",
+        kind: "port",
+        role: "Saudi Red Sea port node",
+        platformIds: ["trade-chain-africa"],
+        publicSummary:
+          "A Saudi Red Sea port referenced in corridor scenarios connecting African production with Gulf markets.",
+        evidenceState: "evidence-not-yet-published",
+        publicStatus: "institutional-review",
+      },
+      {
+        id: "ain-sokhna",
+        name: "Ain Sokhna",
+        country: "Egypt",
+        kind: "port",
+        role: "Egyptian port and economic-industrial node",
+        platformIds: ["trade-chain-africa"],
+        publicSummary:
+          "An Egyptian Red Sea port and economic-industrial node referenced for transit, storage and processing scenarios.",
+        evidenceState: "evidence-not-yet-published",
+        publicStatus: "institutional-review",
+      },
+      {
+        id: "aswan",
+        name: "Aswan",
+        country: "Egypt",
+        kind: "logistics-node",
+        role: "Inland economic, production and logistics node",
+        platformIds: ["trade-chain-africa"],
+        publicSummary:
+          "An inland Egyptian node for economic, production and logistics functions on the Nile corridor — not a seaport.",
+        evidenceState: "evidence-not-yet-published",
+        publicStatus: "institutional-review",
+      },
+      {
+        id: "port-sudan",
+        name: "Port Sudan",
+        country: "Sudan",
+        kind: "port",
+        role: "Sudan's principal Red Sea port",
+        platformIds: ["trade-chain-africa", "rwafid"],
+        publicSummary:
+          "Sudan's principal Red Sea gateway for corridor scenarios connecting production regions with regional and international markets.",
+        evidenceState: "controlled-evidence-available",
+        publicStatus: "structured-project",
+      },
+      {
+        id: "northern-state",
+        name: "Northern State",
+        country: "Sudan",
+        kind: "production-region",
+        role: "Agricultural and economic production zones",
+        platformIds: ["valura", "rwafid"],
+        publicSummary:
+          "Agricultural and economic production zones addressed by the Valura zone-development model.",
+        evidenceState: "controlled-evidence-available",
+        publicStatus: "structured-project",
+      },
+      {
+        id: "kassala",
+        name: "Kassala",
+        country: "Sudan",
+        kind: "production-region",
+        role: "Agricultural and livestock production zones",
+        platformIds: ["valura", "rwafid"],
+        publicSummary:
+          "Eastern production zones for crops and livestock, connected to Red Sea logistics through corridor scenarios.",
+        evidenceState: "controlled-evidence-available",
+        publicStatus: "structured-project",
+      },
+      {
+        id: "gedaref",
+        name: "Gedaref",
+        country: "Sudan",
+        kind: "production-region",
+        role: "Grain and oilseed production zones",
+        platformIds: ["valura", "rwafid"],
+        publicSummary:
+          "One of Sudan's principal grain and oilseed regions, addressed by aggregation, processing and market-linkage scenarios.",
+        evidenceState: "controlled-evidence-available",
+        publicStatus: "structured-project",
+      },
+      {
+        id: "asmara-massawa",
+        name: "Asmara–Massawa Economic and Logistics Corridor",
+        country: "Eritrea",
+        kind: "logistics-node",
+        role: "Inland-to-coast economic and logistics corridor",
+        platformIds: ["trade-chain-africa"],
+        publicSummary:
+          "The corridor linking inland Asmara with the coast at Massawa, referenced as a Horn of Africa logistics scenario pending controlled documentation.",
+        evidenceState: "evidence-not-yet-published",
+        publicStatus: "institutional-review",
+      },
+      {
+        id: "bosaso",
+        name: "Bosaso Port",
+        country: "Puntland, Somalia",
+        kind: "port",
+        role: "Horn of Africa port node",
+        platformIds: ["trade-chain-africa"],
+        publicSummary:
+          "A Horn of Africa port referenced in corridor scenarios for livestock and trade flows toward the Gulf.",
+        evidenceState: "evidence-not-yet-published",
+        publicStatus: "institutional-review",
+      },
+    ],
+  },
+  technology: {
+    eyebrow: "Technology and operating intelligence",
+    title: "Technology organizes evidence. Specialists decide.",
+    lead: "The ecosystem is designed around evidence, traceability and human-reviewed intelligence — technology is an operating layer, not decoration.",
+    principle:
+      "Technology organizes evidence and proposes analysis. Authorized specialists review and decide.",
+    stateLabel: "State",
+    capabilities: [
+      {
+        title: "Public window and email reception",
+        text: "This trilingual website and the structured email reception desk.",
+        state: "active-public",
+      },
+      {
+        title: "Specialist request review",
+        text: "Classification and review of institutional requests by the multidisciplinary team.",
+        state: "manual-specialist-review",
+      },
+      {
+        title: "Stakeholder registries",
+        text: "Structured records of organizations, roles and consents.",
+        state: "planned",
+      },
+      {
+        title: "Project and asset records with evidence assessment",
+        text: "Project passports, source attribution and evidence-completeness assessment.",
+        state: "planned",
+      },
+      {
+        title: "Supply-chain traceability and route-scenario analysis",
+        text: "Trade-chain analysis linking production, nodes, ports and markets.",
+        state: "prototype",
+      },
+      {
+        title: "Meeting, decision and commitment records",
+        text: "Documented meetings, decisions, commitments and follow-up tracking.",
+        state: "planned",
+      },
+      {
+        title: "Controlled data rooms",
+        text: "Classified document access for authorized counterparts in later phases.",
+        state: "planned",
+      },
+      {
+        title: "Human-reviewed AI assistance",
+        text: "AI-assisted classification and completeness checks under specialist review.",
+        state: "manual-specialist-review",
+      },
+      {
+        title: "Regulated banking infrastructure (IBRIZ / GAAS)",
+        text: "Gold-related institutional technology subject to licensing and regulatory approval.",
+        state: "regulated",
+      },
+    ],
+  },
+  review: {
+    eyebrow: "Specialized review",
+    title: "Every request is reviewed by a specialized team.",
+    lead: "Institutional requests are reviewed by an authorized multidisciplinary team according to the subject, sector and evidence provided. Not every discipline reviews every request.",
+    disciplinesTitle: "Review disciplines",
+    disciplines: [
+      "Institutional and business development",
+      "International trade",
+      "Supply chains and logistics",
+      "Legal and compliance",
+      "Finance and investment",
+      "Agriculture and livestock",
+      "Mining and industry",
+      "Technology and data",
+      "Project and evidence management",
+    ],
+    routingTitle: "How a request moves",
+    routing: [
+      "Reception",
+      "Audience and request classification",
+      "Minimum-information check",
+      "Relevant specialist review",
+      "Evidence-gap identification",
+      "Recommended next step",
+    ],
+    guarantees: [
+      "Reception does not equal acceptance.",
+      "Review does not equal endorsement.",
+      "Additional information may be requested.",
+      "Only authorized humans determine the next step.",
+      "AI may assist classification or completeness checks but does not approve requests.",
+    ],
+  },
+  states: {
+    publicStatus: {
+      "public-profile": "Public profile",
+      "structured-project": "Structured development project",
+      "controlled-review-available": "Controlled review available",
+      "institutional-review": "Under institutional review",
+      "technical-development": "Under technical development",
+      "regulated-development": "Regulated development",
+      "not-publicly-active": "Not publicly active",
+    },
+    evidenceState: {
+      "public-summary-available": "Public summary available",
+      "controlled-evidence-available": "Controlled evidence review",
+      "due-diligence-summary-available": "Controlled due-diligence review available",
+      "evidence-update-required": "Evidence update required",
+      "evidence-restricted": "Evidence restricted",
+      "evidence-not-yet-published": "Evidence not yet published",
+    },
+    capabilityState: {
+      "active-public": "Active — public",
+      "active-controlled": "Active — controlled",
+      "manual-specialist-review": "Manual specialist review",
+      prototype: "Prototype",
+      planned: "Planned",
+      regulated: "Subject to regulation",
+    },
+    projectStatus: {
+      "public-profile-available": "Public profile available",
+      "additional-information-after-review":
+        "Additional information available after review",
+      "update-required-before-publication": "Update required before publication",
+      "regulated-or-sensitive-project": "Regulated or sensitive project",
+    },
+  },
+  institution: {
+    eyebrow: "Why Akanil",
+    heading: "A legally established Moroccan operator with a Sudan branch.",
+    lead: "Akanil combines legal presence, regional reach and specialist review across the Morocco–Sudan–Red Sea bridge.",
+    facts: [
+      { label: "Moroccan company founded", value: "2014" },
+      {
+        label: "Established through",
+        value: "Regional Investment Center, Casablanca",
+      },
+      { label: "Moroccan Commercial Register", value: "No. 10015" },
+      { label: "Registered Sudan branch since", value: "2017" },
+      { label: "Sudan Commercial Register", value: "No. 121" },
+    ],
+    networkTitle: "Regional representation",
+    networkNote:
+      "Akanil works through agents and regional representatives — local coordination points, not legal branches, subsidiaries or incorporated offices. Mandates differ by country.",
+    representatives: [
+      "Saudi Arabia",
+      "Egypt",
+      "Ethiopia",
+      "Somalia",
+      "Kenya",
+      "Eritrea",
+      "South Sudan",
+      "Uganda",
+      "Tanzania",
+    ],
+  },
+  claims: {
+    title: "Public scope of this website",
+    scope: [
+      "Roles described here are ecosystem and project-development roles; they do not imply partnerships with named institutions, ports or zones.",
+      "No route is operationally verified merely because it appears in a diagram.",
+      "No project is investment-ready or bankable merely because it is published; project review is controlled and evidence-led.",
+      "No licence, governmental approval or economic-zone establishment is claimed without documentary evidence.",
+      "Regulated financial products are not offered; IBRIZ and GAAS remain subject to licensing and regulatory approval.",
+      "Akanil does not independently approve investment, financing, licences, standards compliance or governmental decisions.",
+    ],
+  },
+  founder: {
+    name: "Mohamed Abderrahim",
+    bridgeTitle: "A bridge built from both shores",
+    bridgeText:
+      "The founder's professional and institutional experience spans both the Moroccan and Sudanese export ecosystems, grounding Akanil's role as founder and executive operator of the ecosystem — the operator that structures the bridge between East Africa, the Red Sea, Saudi Arabia and Morocco.",
+  },
+  portfolioPage: {
+    title: "Portfolio platforms — Akanil Morocco–Red Sea Economic Gateway",
+    description:
+      "The controlled portfolio of platforms operated within the ecosystem: Trade-Chain Africa, Valura, RWAFID, and IBRIZ/GAAS.",
+    heading: "Portfolio platforms",
+    lead: "Four platforms developed or structured within the ecosystem — each with a clear stage, a project-file status and a last-reviewed date. Preliminary estimates are not achieved results, and proposed partners are not confirmed partners.",
+  },
+  corridorPage: {
+    heading: "The Red Sea supply-chain architecture",
+    lead: "Production and asset regions, ports, economic and industrial nodes, Morocco's transformation role and scenario-based route design — under explicit evidence and verification rules.",
+    scenariosTitle: "Scenario-based route design",
+    rulesTitle: "Evidence and verification rules",
+    rules: [
+      "Every route scenario carries an explicit textual state; nothing is verified by appearance.",
+      "Regulatory, customs and logistics dependencies are assessed per scenario.",
+      "No travel time, volume, cost or capacity figure is published without current evidence.",
+      "Geographic direction is preserved in all languages; the diagram is schematic.",
+    ],
+  },
+  ui: {
+    navPortfolio: "Portfolio",
+    footerPortfolio: "Portfolio platforms",
+    learnMoreWhyRedSea: "Why the Red Sea?",
+  },
+};

@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       "sudan",
       "corridor",
       "value-chains",
+      "portfolio",
       "forum",
       "trust",
       "about-akanil",

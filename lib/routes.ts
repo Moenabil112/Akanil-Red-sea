@@ -1,13 +1,14 @@
 import type { Locale, PageRoute } from "@/content/types";
 import { locales, isLocale } from "./i18n";
 
-/** Canonical content routes below /[lang] (Phase 4 architecture). */
+/** Canonical content routes below /[lang] (Phase 4 + P0 portfolio). */
 export const pageRoutes: PageRoute[] = [
   "gateway",
   "morocco",
   "sudan",
   "corridor",
   "value-chains",
+  "portfolio",
   "forum",
   "trust",
   "about-akanil",

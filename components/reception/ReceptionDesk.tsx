@@ -2,25 +2,32 @@
 
 import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import type { Locale, ReceptionContent } from "@/content/types";
 import type {
   AudienceId,
-  ExperienceContent,
-  Locale,
-  ReceptionContent,
+  EcosystemContent,
+  IntakeFieldId,
+  PlatformId,
   RequestTypeId,
-  SiteContent,
-} from "@/content/types";
+} from "@/content/ecosystem-types";
+import { audienceIds, requestTypeIds } from "@/lib/ecosystem";
 import {
   RECEPTION_EMAIL,
   RECEPTION_PHONE_DISPLAY,
   RECEPTION_TEL_HREF,
+  allowedRequestTypes,
+  buildDraftFile,
+  emptyReceptionRequest,
   mailtoTransport,
   parsePreselection,
-  requestTypeIds,
+  schemaFor,
   validateReceptionRequest,
+  visibleFields,
   type ReceptionRequest,
   type ValidationErrors,
 } from "@/lib/reception";
+import RequestContextPanel from "./RequestContextPanel";
+import DynamicRequestFields from "./DynamicRequestFields";
 import styles from "./ReceptionDesk.module.css";
 
 type Step = "form" | "review" | "opened";
@@ -28,37 +35,20 @@ type Step = "form" | "review" | "opened";
 interface ReceptionDeskProps {
   locale: Locale;
   reception: ReceptionContent;
-  experience: ExperienceContent;
-  site: SiteContent;
+  ecosystem: EcosystemContent;
 }
 
-const emptyRequest = (requestType: RequestTypeId): ReceptionRequest => ({
-  requestType,
-  organization: "",
-  country: "",
-  sector: "",
-  contactName: "",
-  role: "",
-  email: "",
-  summary: "",
-  consent: false,
-  phone: "",
-  website: "",
-  preferredLanguage: "",
-  valueChain: "",
-});
-
 /**
- * Digital Reception Lite (Phase 3, ADR-009).
- * Deliberately limited: the data lives only in this component's state,
- * is never persisted anywhere, and leaves the page only when the visitor
- * explicitly opens the prepared email in their own email application.
+ * Digital Reception Lite (P0 §32–33, ADR-009/014). Zero-backend by
+ * design: values live only in component state, no storage, cookies,
+ * analytics or uploads exist, and information leaves the page only when
+ * the visitor explicitly opens, copies or downloads the prepared
+ * request. Fields are driven by the request-type intake schemas.
  */
 export default function ReceptionDesk({
   locale,
   reception,
-  experience,
-  site,
+  ecosystem,
 }: ReceptionDeskProps) {
   const searchParams = useSearchParams();
   const pre = useMemo(
@@ -71,35 +61,61 @@ export default function ReceptionDesk({
   );
 
   const [step, setStep] = useState<Step>("form");
-  const [audience] = useState<AudienceId | undefined>(pre.audience);
-  const [data, setData] = useState<ReceptionRequest>(() => ({
-    ...emptyRequest(pre.requestType ?? "briefing"),
-    audience: pre.audience,
-  }));
+  const [data, setData] = useState<ReceptionRequest>(() =>
+    emptyReceptionRequest(
+      pre.requestType ?? "institutional-cooperation",
+      pre.audience,
+    ),
+  );
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [announcement, setAnnouncement] = useState("");
   const errorSummaryRef = useRef<HTMLDivElement>(null);
 
-  const audiencePath = audience
-    ? experience.audiences.paths.find((p) => p.id === audience)
-    : undefined;
+  const platformNames = useMemo(
+    () =>
+      Object.fromEntries(
+        ecosystem.platforms.items.map((platform) => [
+          platform.id,
+          platform.name,
+        ]),
+      ) as Record<PlatformId, string>,
+    [ecosystem],
+  );
 
-  const set = <K extends keyof ReceptionRequest>(
-    key: K,
-    value: ReceptionRequest[K],
-  ) => setData((current) => ({ ...current, [key]: value }));
+  const typeOptions = allowedRequestTypes(data.audience, requestTypeIds);
+  const schema = schemaFor(data.requestType);
+  const fields = visibleFields(schema);
 
-  const errorText = (key: keyof ValidationErrors): string | undefined => {
-    const code = errors[key];
-    if (!code) return undefined;
-    return reception.form.errors[
-      code === "required"
-        ? "required"
-        : code === "email"
-          ? "email"
-          : code === "consent"
-            ? "consent"
-            : "summaryLength"
-    ];
+  const setValue = (field: IntakeFieldId, value: string) =>
+    setData((current) => ({
+      ...current,
+      values: { ...current.values, [field]: value },
+    }));
+
+  const setEvidence = (id: string, checked: boolean) =>
+    setData((current) => ({
+      ...current,
+      evidence: checked
+        ? [...current.evidence, id]
+        : current.evidence.filter((entry) => entry !== id),
+    }));
+
+  const setAudience = (value: string) =>
+    setData((current) => {
+      const audience = (value || undefined) as AudienceId | undefined;
+      const allowed = allowedRequestTypes(audience, requestTypeIds);
+      return {
+        ...current,
+        audience,
+        requestType: allowed.includes(current.requestType)
+          ? current.requestType
+          : allowed[0]!,
+      };
+    });
+
+  const errorMessage = (field: IntakeFieldId): string | undefined => {
+    const code = errors[field];
+    return code ? reception.form.errors[code] : undefined;
   };
 
   const onReview = (event: React.FormEvent) => {
@@ -115,119 +131,73 @@ export default function ReceptionDesk({
   };
 
   const prepared = useMemo(
-    () =>
-      mailtoTransport.prepare(locale, data, reception, audiencePath?.name),
-    [locale, data, reception, audiencePath],
+    () => mailtoTransport.prepare(locale, data, reception),
+    [locale, data, reception],
   );
 
-  const field = (
-    key: keyof ReceptionRequest & string,
-    label: string,
-    options?: {
-      type?: string;
-      required?: boolean;
-      hint?: string;
-    },
-  ) => {
-    const error = errorText(key as keyof ValidationErrors);
-    const id = `rc-${key}`;
-    return (
-      <div className={styles.field}>
-        <label htmlFor={id} className={styles.label}>
-          {label}{" "}
-          <span className={styles.mark}>
-            (
-            {options?.required
-              ? reception.form.requiredMark
-              : reception.form.optionalMark}
-            )
-          </span>
-        </label>
-        {options?.hint ? (
-          <p id={`${id}-hint`} className={styles.hint}>
-            {options.hint}
-          </p>
-        ) : null}
-        <input
-          id={id}
-          type={options?.type ?? "text"}
-          dir={
-            options?.type === "email" ||
-            options?.type === "tel" ||
-            options?.type === "url"
-              ? "ltr"
-              : undefined
-          }
-          className={error ? styles.inputError : styles.input}
-          value={String(data[key] ?? "")}
-          required={options?.required}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={
-            [options?.hint ? `${id}-hint` : null, error ? `${id}-error` : null]
-              .filter(Boolean)
-              .join(" ") || undefined
-          }
-          onChange={(event) =>
-            set(key, event.target.value as ReceptionRequest[typeof key])
-          }
-        />
-        {error ? (
-          <p id={`${id}-error`} className={styles.error}>
-            {error}
-          </p>
-        ) : null}
-      </div>
-    );
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setAnnouncement(reception.review.copiedAnnouncement);
+    } catch {
+      /* Clipboard unavailable: the visitor can still open or download. */
+    }
+  };
+
+  const downloadDraft = () => {
+    const draft = buildDraftFile(locale, data, reception);
+    const blob = new Blob([draft.text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = draft.filename;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    setAnnouncement(reception.review.downloadedAnnouncement);
   };
 
   if (step === "review" || step === "opened") {
+    const definition = reception.requestTypes[data.requestType];
+    const labels = reception.email.fieldLabels;
+    const ltrFields: IntakeFieldId[] = ["email", "phone", "website"];
+
     const summaryRows: [string, string, boolean?][] = [
-      [
-        reception.email.fieldLabels.requestType,
-        reception.requestTypes[data.requestType].label,
-      ],
-      ...(audiencePath
-        ? ([[reception.email.fieldLabels.audience, audiencePath.name]] as [
+      [labels.requestType, definition.label],
+      ...(data.audience
+        ? ([[labels.audience, reception.audienceNames[data.audience]]] as [
             string,
             string,
           ][])
         : []),
-      [reception.email.fieldLabels.organization, data.organization],
-      [reception.email.fieldLabels.country, data.country],
-      [reception.email.fieldLabels.sector, data.sector],
-      [reception.email.fieldLabels.contactName, data.contactName],
-      [reception.email.fieldLabels.role, data.role],
-      [reception.email.fieldLabels.email, data.email, true],
-      ...(data.phone?.trim()
-        ? ([[reception.email.fieldLabels.phone, data.phone, true]] as [
-            string,
-            string,
-            boolean,
-          ][])
-        : []),
-      ...(data.website?.trim()
-        ? ([[reception.email.fieldLabels.website, data.website, true]] as [
-            string,
-            string,
-            boolean,
-          ][])
-        : []),
-      ...(data.preferredLanguage?.trim()
-        ? ([
-            [
-              reception.email.fieldLabels.preferredLanguage,
-              data.preferredLanguage,
-            ],
-          ] as [string, string][])
-        : []),
-      ...(data.valueChain?.trim()
-        ? ([[reception.email.fieldLabels.valueChain, data.valueChain]] as [
-            string,
-            string,
-          ][])
-        : []),
-      [reception.email.fieldLabels.summary, data.summary],
     ];
+    const ordered = [...schema.required, ...schema.optional];
+    for (const field of ordered) {
+      if (
+        field === "audience" ||
+        field === "requestType" ||
+        field === "consent"
+      )
+        continue;
+      if (field === "evidenceAvailable") {
+        if (data.evidence.length > 0) {
+          summaryRows.push([
+            labels.evidenceAvailable,
+            data.evidence
+              .map(
+                (id) =>
+                  reception.evidenceOptions.find((option) => option.id === id)
+                    ?.label,
+              )
+              .filter(Boolean)
+              .join(" · "),
+          ]);
+        }
+        continue;
+      }
+      const value = (data.values[field] ?? "").trim();
+      if (!value) continue;
+      summaryRows.push([labels[field], value, ltrFields.includes(field)]);
+    }
 
     return (
       <div className={styles.stage}>
@@ -283,6 +253,27 @@ export default function ReceptionDesk({
 
         {step === "review" ? (
           <>
+            <div className={styles.reviewContext}>
+              <h4 className={styles.whatHappensTitle}>
+                {reception.expectedReviewLabel}
+              </h4>
+              <ul className={styles.contextList}>
+                {definition.expectedReviewOutput.map((item) => (
+                  <li key={item} className={styles.contextItem}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              {definition.disclaimer ? (
+                <p className={styles.contextDisclaimer}>
+                  {definition.disclaimer}
+                </p>
+              ) : null}
+              <p className={styles.missingNote}>
+                {reception.review.missingOptionalNote}
+              </p>
+            </div>
+
             <div className={styles.whatHappens}>
               <h4 className={styles.whatHappensTitle}>
                 {reception.review.whatHappens}
@@ -298,6 +289,7 @@ export default function ReceptionDesk({
                 ))}
               </ol>
             </div>
+
             <div className={styles.reviewActions}>
               <a
                 className={styles.primaryAction}
@@ -314,6 +306,32 @@ export default function ReceptionDesk({
                 {reception.review.editButton}
               </button>
             </div>
+            <div className={styles.actionCluster}>
+              <button
+                type="button"
+                className={styles.tertiaryAction}
+                onClick={() => copyToClipboard(prepared.subject)}
+              >
+                {reception.review.copySubjectButton}
+              </button>
+              <button
+                type="button"
+                className={styles.tertiaryAction}
+                onClick={() => copyToClipboard(prepared.body)}
+              >
+                {reception.review.copyBodyButton}
+              </button>
+              <button
+                type="button"
+                className={styles.tertiaryAction}
+                onClick={downloadDraft}
+              >
+                {reception.review.downloadDraftButton}
+              </button>
+            </div>
+            <p aria-live="polite" role="status" className={styles.announcement}>
+              {announcement}
+            </p>
           </>
         ) : null}
       </div>
@@ -333,21 +351,32 @@ export default function ReceptionDesk({
         </div>
       ) : null}
 
-      {audiencePath ? (
-        <p className={styles.audienceChip}>
-          <span className={styles.audienceChipLabel}>
-            {reception.audienceLabel}:
-          </span>{" "}
-          {audiencePath.name}
-        </p>
-      ) : null}
-
       <fieldset className={styles.fieldset}>
         <legend className={styles.legend}>{reception.form.legend}</legend>
 
         <div className={styles.field}>
+          <label htmlFor="rc-audience" className={styles.label}>
+            {reception.fieldLabels.audience}{" "}
+            <span className={styles.mark}>({reception.form.optionalMark})</span>
+          </label>
+          <select
+            id="rc-audience"
+            className={styles.input}
+            value={data.audience ?? ""}
+            onChange={(event) => setAudience(event.target.value)}
+          >
+            <option value="">—</option>
+            {audienceIds.map((audienceId) => (
+              <option key={audienceId} value={audienceId}>
+                {reception.audienceNames[audienceId]}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.field}>
           <label htmlFor="rc-type" className={styles.label}>
-            {reception.form.requestType}{" "}
+            {reception.fieldLabels.requestType}{" "}
             <span className={styles.mark}>({reception.form.requiredMark})</span>
           </label>
           <select
@@ -355,99 +384,51 @@ export default function ReceptionDesk({
             className={styles.input}
             value={data.requestType}
             onChange={(event) =>
-              set("requestType", event.target.value as RequestTypeId)
+              setData((current) => ({
+                ...current,
+                requestType: event.target.value as RequestTypeId,
+              }))
             }
           >
-            {requestTypeIds.map((typeId) => (
+            {typeOptions.map((typeId) => (
               <option key={typeId} value={typeId}>
                 {reception.requestTypes[typeId].label}
               </option>
             ))}
           </select>
-          <p className={styles.hint}>
-            {reception.requestTypes[data.requestType].description}
-          </p>
         </div>
 
-        {field("organization", reception.form.organization, { required: true })}
-        {field("country", reception.form.country, { required: true })}
-        {field("sector", reception.form.sector, { required: true })}
-        {field("contactName", reception.form.contactName, { required: true })}
-        {field("role", reception.form.role, { required: true })}
-        {field("email", reception.form.email, {
-          required: true,
-          type: "email",
-        })}
+        <RequestContextPanel
+          reception={reception}
+          requestType={data.requestType}
+        />
 
-        <div className={styles.field}>
-          <label htmlFor="rc-summary" className={styles.label}>
-            {reception.form.summary}{" "}
-            <span className={styles.mark}>({reception.form.requiredMark})</span>
-          </label>
-          <p id="rc-summary-hint" className={styles.hint}>
-            {reception.form.summaryHint}
-          </p>
-          <textarea
-            id="rc-summary"
-            rows={5}
-            className={errorText("summary") ? styles.inputError : styles.input}
-            value={data.summary}
-            aria-invalid={errorText("summary") ? true : undefined}
-            aria-describedby={
-              errorText("summary")
-                ? "rc-summary-hint rc-summary-error"
-                : "rc-summary-hint"
-            }
-            onChange={(event) => set("summary", event.target.value)}
-          />
-          {errorText("summary") ? (
-            <p id="rc-summary-error" className={styles.error}>
-              {errorText("summary")}
-            </p>
-          ) : null}
-        </div>
+        <DynamicRequestFields
+          fields={fields.required}
+          required
+          reception={reception}
+          platformNames={platformNames}
+          data={data}
+          errors={errors}
+          onValue={setValue}
+          onEvidence={setEvidence}
+        />
       </fieldset>
 
       <fieldset className={styles.fieldset}>
-        <legend className={styles.legend}>{reception.form.optionalLegend}</legend>
-        {field("phone", reception.form.phone, { type: "tel" })}
-        {field("website", reception.form.website, { type: "url" })}
-        <div className={styles.field}>
-          <label htmlFor="rc-lang" className={styles.label}>
-            {reception.form.preferredLanguage}{" "}
-            <span className={styles.mark}>({reception.form.optionalMark})</span>
-          </label>
-          <select
-            id="rc-lang"
-            className={styles.input}
-            value={data.preferredLanguage ?? ""}
-            onChange={(event) => set("preferredLanguage", event.target.value)}
-          >
-            <option value="">—</option>
-            <option value="العربية">العربية</option>
-            <option value="Français">Français</option>
-            <option value="English">English</option>
-          </select>
-        </div>
-        <div className={styles.field}>
-          <label htmlFor="rc-chain" className={styles.label}>
-            {reception.form.valueChain}{" "}
-            <span className={styles.mark}>({reception.form.optionalMark})</span>
-          </label>
-          <select
-            id="rc-chain"
-            className={styles.input}
-            value={data.valueChain ?? ""}
-            onChange={(event) => set("valueChain", event.target.value)}
-          >
-            <option value="">{reception.form.valueChainNone}</option>
-            {site.chains.chains.map((chain) => (
-              <option key={chain.name} value={chain.name}>
-                {chain.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <legend className={styles.legend}>
+          {reception.form.optionalLegend}
+        </legend>
+        <DynamicRequestFields
+          fields={fields.optional}
+          required={false}
+          reception={reception}
+          platformNames={platformNames}
+          data={data}
+          errors={errors}
+          onValue={setValue}
+          onEvidence={setEvidence}
+        />
       </fieldset>
 
       <div className={styles.consentRow}>
@@ -456,18 +437,25 @@ export default function ReceptionDesk({
           type="checkbox"
           className={styles.checkbox}
           checked={data.consent}
-          aria-invalid={errorText("consent") ? true : undefined}
-          aria-describedby={errorText("consent") ? "rc-consent-error" : undefined}
-          onChange={(event) => set("consent", event.target.checked)}
+          aria-invalid={errorMessage("consent") ? true : undefined}
+          aria-describedby={
+            errorMessage("consent") ? "rc-consent-error" : undefined
+          }
+          onChange={(event) =>
+            setData((current) => ({
+              ...current,
+              consent: event.target.checked,
+            }))
+          }
         />
         <label htmlFor="rc-consent" className={styles.consentLabel}>
           <strong>{reception.form.consentLabel}</strong> —{" "}
           {reception.form.consentText}
         </label>
       </div>
-      {errorText("consent") ? (
+      {errorMessage("consent") ? (
         <p id="rc-consent-error" className={styles.error}>
-          {errorText("consent")}
+          {errorMessage("consent")}
         </p>
       ) : null}
 
