@@ -358,3 +358,9 @@
   color: #94a3b8;
   font-weight: 600;
 }
+
+/* P4-C limited-internal banner */
+.envBanner[data-kind="limited"] {
+  background: #2a230b;
+  color: #f2d98c;
+}

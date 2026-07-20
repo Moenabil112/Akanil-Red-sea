@@ -363,6 +363,142 @@ enum ReadinessAreaStatus {
   EXPIRED
 }
 
+// ---------------- P4-C enums ----------------
+
+enum LimitedOpsStatus {
+  DRAFT
+  PENDING_REVIEW
+  APPROVED
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  SUPERSEDED
+  REJECTED
+}
+
+enum LimitedOpsDecision {
+  GO_LIMITED_INTERNAL_OPERATIONS
+  CONDITIONAL_GO
+  EXTEND_CONTROLLED_PILOT
+  SUSPEND_PILOT
+  NO_GO
+}
+
+enum PilotRunStatus {
+  PLANNED
+  READY
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum PilotRunOutcome {
+  CONTINUE_PILOT
+  CONTINUE_WITH_CONDITIONS
+  READY_FOR_LIMITED_INTERNAL_OPERATIONS
+  EXTEND_PILOT
+  SUSPEND
+  NOT_READY
+}
+
+enum PilotMemberStatus {
+  PROPOSED
+  APPROVED
+  ACTIVE
+  SUSPENDED
+  REMOVED
+  EXPIRED
+}
+
+enum PilotCaseScenario {
+  MOROCCAN_COMPANY_REQUEST
+  SUDANESE_PROJECT_OR_OPPORTUNITY
+  FORUM_QUALIFICATION
+  VALUE_CHAIN_REQUEST
+  SPECIALIST_REVIEW_REQUIRED
+  NO_PROGRESSION
+  MEETING_DECISION_AND_COMMITMENT
+  OTHER_CONTROLLED_SCENARIO
+}
+
+enum PilotCaseStatus {
+  SELECTED
+  IN_PROGRESS
+  COMPLETED
+  REMOVED
+  BLOCKED
+}
+
+enum ProcedureStatus {
+  DRAFT
+  APPROVED
+  EFFECTIVE
+  SUPERSEDED
+  WITHDRAWN
+}
+
+enum AcknowledgementType {
+  READ_AND_UNDERSTOOD
+  BRIEFED
+  PRACTICAL_EXERCISE_COMPLETED
+}
+
+enum DataQualityCategory {
+  POSSIBLE_DUPLICATE_ORGANIZATION
+  POSSIBLE_DUPLICATE_CONTACT
+  CASE_WITHOUT_OWNER
+  CASE_WITHOUT_CLEAR_PURPOSE
+  INVALID_PLATFORM_CHAIN_COMBINATION
+  INVALID_FORUM_CONTEXT
+  QUALIFIED_WITHOUT_REVIEWER
+  MEETING_WITHOUT_OUTCOME
+  DECISION_WITHOUT_RATIONALE
+  COMMITMENT_WITHOUT_OWNER
+  COMMITMENT_WITHOUT_DUE_DATE
+  CLOSED_CASE_WITH_OPEN_COMMITMENT
+  STALE_INFORMATION_GAP
+  ARCHIVED_ORGANIZATION_WITH_ACTIVE_CASE
+  OTHER_DATA_QUALITY_ISSUE
+}
+
+enum DataQualityStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  WAIVED
+  FALSE_POSITIVE
+}
+
+enum ObservationCategory {
+  PROCESS_FRICTION
+  USER_EXPERIENCE
+  DATA_QUALITY
+  ACCESS_CONTROL
+  WORKFLOW_GAP
+  TRAINING_GAP
+  DOCUMENTATION_GAP
+  PERFORMANCE
+  SECURITY
+  OTHER
+}
+
+enum ObservationStatus {
+  OPEN
+  UNDER_REVIEW
+  CORRECTIVE_ACTION_OPENED
+  RESOLVED
+  ACCEPTED_OBSERVATION
+}
+
+enum ReleaseCandidateStatus {
+  DRAFT
+  VALIDATED
+  READY_FOR_DECISION
+  REJECTED
+  SUPERSEDED
+}
+
 // ---------------- Models ----------------
 
 model Employee {
@@ -961,6 +1097,233 @@ model ReadinessSignal {
   recordedById String?
   updatedAt    DateTime            @updatedAt
   expiresAt    DateTime?
+}
+
+// ---------------- P4-C models ----------------
+
+// Human-approved limited-internal-operations authorization (§7). The
+// environment value alone never authorizes limited_internal — an ACTIVE record
+// here is additionally required. Decisions are human-only; approved records are
+// superseded, never silently edited; records are never deleted.
+model LimitedOperationsAuthorization {
+  id                        String              @id @default(cuid())
+  status                    LimitedOpsStatus    @default(DRAFT)
+  decision                  LimitedOpsDecision?
+  title                     String
+  scope                     String
+  evidenceSummary           String?
+  conditions                String?
+  approvedEmployeeLimit     Int
+  approvedCaseLimit         Int
+  // CSV of allowed PilotDataCategory values (SYNTHETIC/DE_IDENTIFIED only).
+  allowedDataCategories     String
+  validFrom                 DateTime?
+  validUntil                DateTime?
+  proposedById              String
+  reviewedById              String?
+  approvedById              String?
+  proposedAt                DateTime            @default(now())
+  reviewedAt                DateTime?
+  decidedAt                 DateTime?
+  suspendedAt               DateTime?
+  supersedesAuthorizationId String?
+  createdAt                 DateTime            @default(now())
+  updatedAt                 DateTime            @updatedAt
+  recordVersion             Int                 @default(0)
+
+  @@index([status])
+}
+
+// Controlled operational pilot run (§9). Proportionate to 1–6 employees and
+// 1–10 cases; only one active run initially. Server-enforced transitions.
+model OperationalPilotRun {
+  id                    String           @id @default(cuid())
+  internalReference     String           @unique
+  title                 String
+  objective             String
+  status                PilotRunStatus   @default(PLANNED)
+  plannedStart          DateTime?
+  plannedEnd            DateTime?
+  actualStart           DateTime?
+  actualEnd             DateTime?
+  maximumEmployees      Int
+  maximumCases          Int
+  allowedDataCategories String
+  ownerId               String
+  reviewerId            String?
+  approvedById          String?
+  readinessGateId       String?
+  finalOutcome          PilotRunOutcome?
+  observationsSummary   String?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  recordVersion         Int              @default(0)
+
+  members      OperationalPilotMember[]
+  cases        OperationalPilotCase[]
+  observations OperationalObservation[]
+
+  @@index([status])
+}
+
+// Pilot membership (§10). No shared accounts; no self-approval; no automatic
+// membership; historical membership remains visible.
+model OperationalPilotMember {
+  id              String              @id @default(cuid())
+  pilotRunId      String
+  pilotRun        OperationalPilotRun @relation(fields: [pilotRunId], references: [id])
+  employeeId      String
+  operationalRole String
+  status          PilotMemberStatus   @default(PROPOSED)
+  accessReviewId  String?
+  pilotAccessId   String?
+  addedById       String
+  approvedById    String?
+  startsAt        DateTime?
+  endsAt          DateTime?
+  removedAt       DateTime?
+  createdAt       DateTime            @default(now())
+
+  @@index([pilotRunId])
+  @@index([employeeId])
+}
+
+// Controlled pilot case coverage (§11). Links existing cases to a run; SYNTHETIC
+// or approved DE_IDENTIFIED data only; removing a case never deletes it.
+model OperationalPilotCase {
+  id           String              @id @default(cuid())
+  pilotRunId   String
+  pilotRun     OperationalPilotRun @relation(fields: [pilotRunId], references: [id])
+  caseId       String
+  scenarioType PilotCaseScenario
+  dataCategory PilotDataCategory   @default(SYNTHETIC)
+  expectedPath String?
+  actualPath   String?
+  status       PilotCaseStatus     @default(SELECTED)
+  includedById String
+  reviewedById String?
+  completedAt  DateTime?
+  observations String?
+  createdAt    DateTime            @default(now())
+
+  @@index([pilotRunId])
+  @@index([caseId])
+}
+
+// Version-controlled operating-procedure register (§12). Authoritative content
+// lives in repository Markdown; this tracks metadata + lifecycle. History is
+// never overwritten (superseded rows are retained).
+model OperatingProcedure {
+  id                      String          @id @default(cuid())
+  procedureKey            String
+  version                 Int             @default(1)
+  title                   String
+  ownerId                 String?
+  status                  ProcedureStatus @default(DRAFT)
+  approvedById            String?
+  effectiveFrom           DateTime?
+  supersededAt            DateTime?
+  requiresAcknowledgement Boolean         @default(true)
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
+
+  @@unique([procedureKey, version])
+  @@index([procedureKey])
+  @@index([status])
+}
+
+// Procedure acknowledgement (§13). Not a certification. No automatic
+// acknowledgement; records are never deleted.
+model ProcedureAcknowledgement {
+  id                  String              @id @default(cuid())
+  procedureKey        String
+  procedureVersion    Int
+  employeeId          String
+  acknowledgedAt      DateTime            @default(now())
+  acknowledgementType AcknowledgementType @default(READ_AND_UNDERSTOOD)
+  recordedById        String
+
+  @@index([procedureKey, procedureVersion])
+  @@index([employeeId])
+}
+
+// Deterministic, explainable data-quality findings (§14). Detection may be
+// automated; resolution is human-controlled; nothing is merged or deleted
+// automatically; waiver requires a rationale.
+model DataQualityFinding {
+  id              String              @id @default(cuid())
+  entityType      String
+  entityId        String
+  caseId          String?
+  category        DataQualityCategory
+  severity        SecuritySeverity    @default(MEDIUM)
+  title           String
+  explanation     String
+  status          DataQualityStatus   @default(OPEN)
+  detectedAt      DateTime            @default(now())
+  detectedBy      String              @default("system")
+  assignedToId    String?
+  resolution      String?
+  resolvedAt      DateTime?
+  waivedById      String?
+  waiverRationale String?
+  // Deterministic signature used to de-duplicate repeat detections.
+  signature       String              @unique
+
+  @@index([status])
+  @@index([category])
+  @@index([caseId])
+}
+
+// Operational observations of the process/system (§17). Never employee scoring;
+// critical observations require a CorrectiveAction; no deletion.
+model OperationalObservation {
+  id                       String               @id @default(cuid())
+  pilotRunId               String?
+  pilotRun                 OperationalPilotRun? @relation(fields: [pilotRunId], references: [id])
+  caseId                   String?
+  category                 ObservationCategory
+  severity                 SecuritySeverity     @default(LOW)
+  title                    String
+  description              String
+  observedById             String
+  observedAt               DateTime             @default(now())
+  status                   ObservationStatus    @default(OPEN)
+  linkedCorrectiveActionId String?
+  resolutionSummary        String?
+  reviewedById             String?
+  closedAt                 DateTime?
+
+  @@index([status])
+  @@index([pilotRunId])
+}
+
+// Internal release-candidate evidence (§20). No deployment action; commit SHA
+// must match the reviewed branch commit; approved evidence is superseded, never
+// silently edited; no production URL or secret is stored.
+model InternalReleaseCandidate {
+  id                          String                 @id @default(cuid())
+  version                     String
+  commitSha                   String
+  migrationBaseline           String?
+  buildResult                 String                 @default("NOT_TESTED")
+  testResult                  String                 @default("NOT_TESTED")
+  accessibilityResult         String                 @default("NOT_TESTED")
+  auditVerificationResult     String                 @default("NOT_TESTED")
+  backupRestoreResult         String                 @default("NOT_TESTED")
+  secretScanResult            String                 @default("NOT_TESTED")
+  prohibitedFeatureScanResult String                 @default("NOT_TESTED")
+  publicRegressionResult      String                 @default("NOT_TESTED")
+  rollbackPlanVersion         String?
+  status                      ReleaseCandidateStatus @default(DRAFT)
+  preparedById                String
+  reviewedById                String?
+  approvedById                String?
+  createdAt                   DateTime               @default(now())
+  reviewedAt                  DateTime?
+  recordVersion               Int                    @default(0)
+
+  @@index([status])
 }
 
 // Transaction-safe monotonic counter for internal case references.

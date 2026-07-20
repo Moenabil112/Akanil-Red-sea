@@ -53,13 +53,25 @@ export class PilotAccessError extends Error {
 
 /**
  * Assert that operational case work is permitted right now for this employee:
- * operations must be available, the pilot must not be suspended, and — when a
- * mode is active — the employee must hold active pilot access. Throws
- * "PILOT_ACCESS_REQUIRED" (or "OPERATIONS_SUSPENDED") otherwise.
+ * operations must be available, the pilot must not be suspended, the employee
+ * must hold active pilot access, and — in limited_internal mode — an active
+ * human-approved LimitedOperationsAuthorization within its employee/case limits
+ * must be in force (§8). Fails closed and never silently falls back from
+ * limited_internal to pilot. Throws a PilotAccessError otherwise.
  */
 export async function assertPilotOperational(employeeId: string): Promise<void> {
-  if (operationMode() === "disabled") throw new PilotAccessError("OPERATIONS_DISABLED");
+  const mode = operationMode();
+  if (mode === "disabled") throw new PilotAccessError("OPERATIONS_DISABLED");
   if (!internalMutationsAllowed()) throw new PilotAccessError("OPERATIONS_SUSPENDED");
   const active = await hasActivePilotAccess(employeeId);
   if (!active) throw new PilotAccessError("PILOT_ACCESS_REQUIRED");
+  if (mode === "limited_internal") {
+    // Lazy import avoids a cycle (limited-operations imports audit/db only).
+    const { assertLimitedInternalAuthorized } = await import("./services/limited-operations");
+    try {
+      await assertLimitedInternalAuthorized();
+    } catch (error) {
+      throw new PilotAccessError(error instanceof Error ? error.message : "LIMITED_OPS_NOT_AUTHORIZED");
+    }
+  }
 }

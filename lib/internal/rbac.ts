@@ -55,6 +55,22 @@ export const PERMISSIONS = [
   "readiness.view",
   "readiness.approve",
   "audit.verify",
+  // P4-C controlled-operations permissions (§24).
+  "operations.pilot.view",
+  "operations.pilot.create",
+  "operations.pilot.manage",
+  "operations.pilot.complete",
+  "operations.procedure.view",
+  "operations.procedure.manage",
+  "operations.procedure.acknowledge",
+  "operations.data_quality.view",
+  "operations.data_quality.manage",
+  "operations.release.view",
+  "operations.release.prepare",
+  "operations.authorization.view",
+  "operations.authorization.propose",
+  "operations.authorization.review",
+  "operations.authorization.approve",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];
@@ -82,6 +98,15 @@ const MATRIX: Record<EmployeeRole, Permission[]> = {
     "corrective.view",
     "readiness.view",
     "audit.verify",
+    // P4-C: technical/security administration and release evidence; NO
+    // unilateral go-live approval (authorization.approve withheld).
+    "operations.pilot.view",
+    "operations.procedure.view",
+    "operations.data_quality.view",
+    "operations.release.view",
+    "operations.release.prepare",
+    "operations.authorization.view",
+    "operations.authorization.review",
   ],
   OPERATIONS_MANAGER: [
     "view.dashboard",
@@ -119,6 +144,23 @@ const MATRIX: Record<EmployeeRole, Permission[]> = {
     "readiness.view",
     "readiness.approve",
     "audit.verify",
+    // P4-C: manages the operational pilot, procedures, readiness and the
+    // limited-operations decision (subject to separation-of-duties checks).
+    "operations.pilot.view",
+    "operations.pilot.create",
+    "operations.pilot.manage",
+    "operations.pilot.complete",
+    "operations.procedure.view",
+    "operations.procedure.manage",
+    "operations.procedure.acknowledge",
+    "operations.data_quality.view",
+    "operations.data_quality.manage",
+    "operations.release.view",
+    "operations.release.prepare",
+    "operations.authorization.view",
+    "operations.authorization.propose",
+    "operations.authorization.review",
+    "operations.authorization.approve",
   ],
   CASE_MANAGER: [
     "view.dashboard",
@@ -137,6 +179,13 @@ const MATRIX: Record<EmployeeRole, Permission[]> = {
     "organization.viewAll",
     "organization.manage",
     "contact.manage",
+    // P4-C: operates assigned pilot cases; resolves authorized data-quality
+    // findings; acknowledges procedures. No go-live approval.
+    "operations.pilot.view",
+    "operations.procedure.view",
+    "operations.procedure.acknowledge",
+    "operations.data_quality.view",
+    "operations.data_quality.manage",
   ],
   SPECIALIST_REVIEWER: [
     "view.dashboard",
@@ -144,6 +193,11 @@ const MATRIX: Record<EmployeeRole, Permission[]> = {
     "note.create",
     "qualification.recommend",
     "gap.manage",
+    // P4-C: reviews assigned pilot cases; specialist observations. No go-live.
+    "operations.pilot.view",
+    "operations.procedure.view",
+    "operations.procedure.acknowledge",
+    "operations.data_quality.view",
   ],
   FORUM_COORDINATOR: [
     "view.dashboard",
@@ -153,6 +207,11 @@ const MATRIX: Record<EmployeeRole, Permission[]> = {
     "meeting.record",
     "decision.propose",
     "commitment.manage",
+    // P4-C: operates Forum-related pilot cases. No go-live.
+    "operations.pilot.view",
+    "operations.procedure.view",
+    "operations.procedure.acknowledge",
+    "operations.data_quality.view",
   ],
   READ_ONLY_AUDITOR: [
     "view.dashboard",
@@ -166,6 +225,12 @@ const MATRIX: Record<EmployeeRole, Permission[]> = {
     "corrective.view",
     "readiness.view",
     "audit.verify",
+    // P4-C: view-only across operations, release evidence and authorization.
+    "operations.pilot.view",
+    "operations.procedure.view",
+    "operations.data_quality.view",
+    "operations.release.view",
+    "operations.authorization.view",
   ],
 };
 

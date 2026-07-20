@@ -1,7 +1,8 @@
 # P4-B — Implementation Summary
 
 Branch: `feature/p4b-internal-pilot-security-validation` · Base: `main`
-(approved P4-A merge `eb3f02c`). Not merged, not deployed, no production
+(approved P4-A merge `eb3f02c`). **Merged into `main` via PR #8 (merge commit
+`84e868b`)** and accepted as the P4-C baseline; not deployed, no production
 infrastructure configured. P4-B does not authorize production.
 
 P4-B hardens and validates the merged P4-A internal system for a controlled,

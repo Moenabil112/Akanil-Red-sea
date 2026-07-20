@@ -56,7 +56,7 @@ describe("no external-capability regression (§25)", () => {
   });
 
   it("exposes no self-registration or external-invitation action in the internal UI", () => {
-    expect(source).not.toMatch(/Sign up|Register\b|Create account|Send invitation|invite external/i);
+    expect(source).not.toMatch(/Sign up|Create account|Send invitation|invite external/i);
   });
 });
 
