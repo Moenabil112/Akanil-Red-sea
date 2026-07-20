@@ -151,6 +151,8 @@ export const frReception: ReceptionContent = {
   },
   audienceLabel: "Parcours d'entrée",
   chainLabel: "Chaîne de valeur concernée",
+  participantLabel: "Parcours de participation au Forum",
+  trackLabel: "Filière sectorielle du Forum",
   audienceNames: {
     "moroccan-institutions": "Institutions marocaines",
     "moroccan-industry-exporters": "Industrie et exportateurs marocains",

@@ -1,8 +1,8 @@
 # QA Report — P2 Value Chains and Economic Pathways
 
 Date: 2026-07-19 · Branch: `feature/p2-value-chains-project-deepening`
-Base: `main` (merged P0 `3b2b4c6` + P1 `101ed96`). Draft PR only — not merged,
-not deployed.
+Base: `main` (merged P0 `3b2b4c6` + P1 `101ed96`). Merged into `main` via
+PR #5 (merge commit `de94df5`); not deployed.
 
 ## Quality gates
 

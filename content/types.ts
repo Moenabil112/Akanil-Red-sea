@@ -311,6 +311,10 @@ export interface ReceptionContent {
   audienceLabel: string;
   /** Label for the value-chain context carried into a chain-aware request (P2). */
   chainLabel: string;
+  /** Label for the Forum participation-path context (P3). */
+  participantLabel: string;
+  /** Label for the Forum sector-track context (P3). */
+  trackLabel: string;
   audienceNames: Record<EcoAudienceId, string>;
   fieldLabels: Record<EcoIntakeFieldId, string>;
   fieldHints: Partial<Record<EcoIntakeFieldId, string>>;

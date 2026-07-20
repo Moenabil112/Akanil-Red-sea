@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getEcosystem, getExperience, getValueChains } from "@/lib/content";
+import {
+  getEcosystem,
+  getExperience,
+  getForum,
+  getValueChains,
+} from "@/lib/content";
 import {
   valueChainIds,
   isValueChainId,
   platformsForChain,
 } from "@/lib/value-chains";
+import { tracksForChain, pathsForChain } from "@/lib/forum";
 import { resolveLocale } from "@/lib/page-meta";
 import type { ValueChainId } from "@/content/value-chains-types";
 import SiteChrome from "@/components/layout/SiteChrome";
 import PageHero from "@/components/layout/PageHero";
 import PageReceptionBand from "@/components/layout/PageReceptionBand";
 import ValueChainProfile from "@/components/value-chains/ValueChainProfile";
+import ForumEngagement from "@/components/forum/ForumEngagement";
 
 interface ChainParams {
   lang: string;
@@ -72,6 +79,7 @@ export default async function ValueChainProfilePage({
   const content = getValueChains(locale);
   const ecosystem = getEcosystem(locale);
   const experience = getExperience(locale);
+  const forum = getForum(locale);
   const id = chain as ValueChainId;
   const record = content.items.find((item) => item.id === id)!;
 
@@ -83,6 +91,15 @@ export default async function ValueChainProfilePage({
       href: `/${locale}/portfolio/${platformId}`,
     };
   });
+
+  const forumTracks = tracksForChain(id).map((trackId) => ({
+    id: trackId,
+    title: forum.tracks.items.find((t) => t.id === trackId)!.title,
+    href: `/${locale}/forum/participation#track-${trackId}`,
+  }));
+  const forumStakeholders = pathsForChain(id).map(
+    (pathId) => forum.participation.paths.find((p) => p.id === pathId)!.title,
+  );
 
   return (
     <SiteChrome locale={locale}>
@@ -97,6 +114,23 @@ export default async function ValueChainProfilePage({
         content={content}
         reviewPanel={ecosystem.reviewPanel}
         relatedPlatforms={relatedPlatforms}
+        forumEngagement={
+          <ForumEngagement
+            title={forum.crossLinks.chainTitle}
+            lead={forum.crossLinks.chainLead}
+            tracksLabel={forum.crossLinks.tracksLabel}
+            tracks={forumTracks}
+            stakeholders={{
+              label: forum.crossLinks.stakeholdersLabel,
+              items: forumStakeholders,
+            }}
+            ctaLabel={forum.crossLinks.ctaLabel}
+            ctaHref={`/${locale}/reception?type=forum-qualification&chain=${id}`}
+            exploreLabel={forum.crossLinks.exploreLabel}
+            exploreHref={`/${locale}/forum/participation`}
+            as="h2"
+          />
+        }
       />
       <PageReceptionBand
         locale={locale}

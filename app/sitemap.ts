@@ -3,6 +3,7 @@ import { locales } from "@/lib/i18n";
 import { pageRoutes } from "@/lib/routes";
 import { platformIds } from "@/lib/ecosystem";
 import { valueChainIds } from "@/lib/value-chains";
+import { forumSubroutes } from "@/lib/forum";
 
 /**
  * Sitemap for the trilingual routes, including the four dedicated
@@ -34,6 +35,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     for (const chain of valueChainIds) {
       entries.push({
         url: url(`/${locale}/value-chains/${chain}`),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      });
+    }
+    for (const sub of forumSubroutes) {
+      entries.push({
+        url: url(`/${locale}/forum/${sub}`),
         changeFrequency: "monthly",
         priority: 0.8,
       });

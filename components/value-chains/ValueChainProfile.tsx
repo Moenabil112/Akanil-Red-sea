@@ -18,6 +18,8 @@ interface ValueChainProfileProps {
   content: ValueChainsContent;
   reviewPanel: EcosystemContent["reviewPanel"];
   relatedPlatforms: { id: PlatformId; name: string; href: string }[];
+  /** P3 concise Forum-discussion cross-link. */
+  forumEngagement?: React.ReactNode;
 }
 
 /**
@@ -35,6 +37,7 @@ export default function ValueChainProfile({
   content,
   reviewPanel,
   relatedPlatforms,
+  forumEngagement,
 }: ValueChainProfileProps) {
   const reviewHref = `/${locale}/reception?type=${chain.cta.requestType}&chain=${chain.id}`;
 
@@ -160,6 +163,11 @@ export default function ValueChainProfile({
           </p>
         ) : null}
       </Reveal>
+
+      {/* Forum discussion (P3 cross-link) */}
+      {forumEngagement ? (
+        <div className={`container ${styles.block}`}>{forumEngagement}</div>
+      ) : null}
 
       {/* Specialist review pathway */}
       <div className={`container ${styles.reviewWrap}`}>

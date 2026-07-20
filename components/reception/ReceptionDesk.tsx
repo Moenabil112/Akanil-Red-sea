@@ -11,6 +11,7 @@ import type {
   RequestTypeId,
 } from "@/content/ecosystem-types";
 import type { ValueChainsContent } from "@/content/value-chains-types";
+import type { ForumContent } from "@/content/forum-types";
 import { audienceIds, requestTypeIds } from "@/lib/ecosystem";
 import {
   RECEPTION_EMAIL,
@@ -38,6 +39,7 @@ interface ReceptionDeskProps {
   reception: ReceptionContent;
   ecosystem: EcosystemContent;
   valueChains: ValueChainsContent;
+  forum: ForumContent;
 }
 
 /**
@@ -52,6 +54,7 @@ export default function ReceptionDesk({
   reception,
   ecosystem,
   valueChains,
+  forum,
 }: ReceptionDeskProps) {
   const searchParams = useSearchParams();
   const pre = useMemo(
@@ -61,6 +64,8 @@ export default function ReceptionDesk({
         audience: searchParams.get("audience"),
         platform: searchParams.get("platform"),
         chain: searchParams.get("chain"),
+        participant: searchParams.get("participant"),
+        track: searchParams.get("track"),
       }),
     [searchParams],
   );
@@ -72,6 +77,8 @@ export default function ReceptionDesk({
       pre.audience,
       pre.platform,
       pre.chain,
+      pre.participant,
+      pre.track,
     ),
   );
   const [errors, setErrors] = useState<ValidationErrors>({});
@@ -98,6 +105,23 @@ export default function ReceptionDesk({
     ? valueChains.items.find((chain) => chain.id === data.chain)
     : undefined;
   const selectedChainName = selectedChain?.shortName;
+
+  const selectedPath = data.participant
+    ? forum.participation.paths.find((path) => path.id === data.participant)
+    : undefined;
+  const selectedTrack = data.track
+    ? forum.tracks.items.find((track) => track.id === data.track)
+    : undefined;
+
+  const contextNames = useMemo(
+    () => ({
+      platformName: selectedPlatformName,
+      chainName: selectedChainName,
+      participantName: selectedPath?.title,
+      trackName: selectedTrack?.title,
+    }),
+    [selectedPlatformName, selectedChainName, selectedPath, selectedTrack],
+  );
 
   const typeOptions = allowedRequestTypes(data.audience, requestTypeIds);
   const schema = schemaFor(data.requestType);
@@ -148,15 +172,8 @@ export default function ReceptionDesk({
   };
 
   const prepared = useMemo(
-    () =>
-      mailtoTransport.prepare(
-        locale,
-        data,
-        reception,
-        selectedPlatformName,
-        selectedChainName,
-      ),
-    [locale, data, reception, selectedPlatformName, selectedChainName],
+    () => mailtoTransport.prepare(locale, data, reception, contextNames),
+    [locale, data, reception, contextNames],
   );
 
   const copyToClipboard = async (text: string) => {
@@ -169,13 +186,7 @@ export default function ReceptionDesk({
   };
 
   const downloadDraft = () => {
-    const draft = buildDraftFile(
-      locale,
-      data,
-      reception,
-      selectedPlatformName,
-      selectedChainName,
-    );
+    const draft = buildDraftFile(locale, data, reception, contextNames);
     const blob = new Blob([draft.text], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
@@ -198,6 +209,15 @@ export default function ReceptionDesk({
         : []),
       ...(selectedChainName
         ? ([[reception.chainLabel, selectedChainName]] as [string, string][])
+        : []),
+      ...(selectedPath
+        ? ([[reception.participantLabel, selectedPath.title]] as [
+            string,
+            string,
+          ][])
+        : []),
+      ...(selectedTrack
+        ? ([[reception.trackLabel, selectedTrack.title]] as [string, string][])
         : []),
       ...(data.audience
         ? ([[labels.audience, reception.audienceNames[data.audience]]] as [
@@ -444,6 +464,45 @@ export default function ReceptionDesk({
               <li key={item}>{item}</li>
             ))}
           </ul>
+        </aside>
+      ) : null}
+
+      {selectedPath || selectedTrack ? (
+        <aside
+          className={styles.platformContext}
+          aria-label={forum.hub.eyebrow}
+        >
+          <p className={styles.platformEyebrow}>{forum.hub.eyebrow}</p>
+          {selectedPath ? (
+            <>
+              <h2 className={styles.platformName}>{selectedPath.title}</h2>
+              <dl className={styles.platformFacts}>
+                <div>
+                  <dt>{reception.participantLabel}</dt>
+                  <dd>{selectedPath.summary}</dd>
+                </div>
+              </dl>
+              <h3 className={styles.platformPrepTitle}>
+                {forum.participation.preparationLabel}
+              </h3>
+              <ul className={styles.platformPrep}>
+                {selectedPath.preparationRequirements.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              {selectedPath.note ? (
+                <p className={styles.platformNote}>{selectedPath.note}</p>
+              ) : null}
+            </>
+          ) : null}
+          {selectedTrack ? (
+            <dl className={styles.platformFacts}>
+              <div>
+                <dt>{reception.trackLabel}</dt>
+                <dd>{selectedTrack.title}</dd>
+              </div>
+            </dl>
+          ) : null}
         </aside>
       ) : null}
 

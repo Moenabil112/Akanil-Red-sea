@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getEcosystem, getExperience, getValueChains } from "@/lib/content";
+import {
+  getEcosystem,
+  getExperience,
+  getForum,
+  getValueChains,
+} from "@/lib/content";
 import { platformIds, isPlatformId } from "@/lib/ecosystem";
 import { chainsForPlatform } from "@/lib/value-chains";
+import { tracksForPlatform } from "@/lib/forum";
 import { resolveLocale } from "@/lib/page-meta";
 import type { PlatformId } from "@/content/ecosystem-types";
 import SiteChrome from "@/components/layout/SiteChrome";
 import PageHero from "@/components/layout/PageHero";
 import PageReceptionBand from "@/components/layout/PageReceptionBand";
 import PlatformProfile from "@/components/portfolio/PlatformProfile";
+import ForumEngagement from "@/components/forum/ForumEngagement";
 
 interface ProfileParams {
   lang: string;
@@ -69,6 +76,7 @@ export default async function PlatformProfilePage({
   const ecosystem = getEcosystem(locale);
   const experience = getExperience(locale);
   const valueChains = getValueChains(locale);
+  const forum = getForum(locale);
   const id = platform as PlatformId;
   const record = ecosystem.platforms.items.find((p) => p.id === id)!;
 
@@ -80,6 +88,12 @@ export default async function PlatformProfilePage({
       href: `/${locale}/value-chains/${chainId}`,
     };
   });
+
+  const forumTracks = tracksForPlatform(id).map((trackId) => ({
+    id: trackId,
+    title: forum.tracks.items.find((t) => t.id === trackId)!.title,
+    href: `/${locale}/forum/participation#track-${trackId}`,
+  }));
 
   return (
     <SiteChrome locale={locale}>
@@ -95,6 +109,19 @@ export default async function PlatformProfilePage({
         states={ecosystem.states}
         reviewPanel={ecosystem.reviewPanel}
         relatedChains={relatedChains}
+        forumEngagement={
+          <ForumEngagement
+            title={forum.crossLinks.platformTitle}
+            lead={forum.crossLinks.platformLead}
+            tracksLabel={forum.crossLinks.tracksLabel}
+            tracks={forumTracks}
+            ctaLabel={forum.crossLinks.ctaLabel}
+            ctaHref={`/${locale}/reception?type=forum-qualification&platform=${id}`}
+            exploreLabel={forum.crossLinks.exploreLabel}
+            exploreHref={`/${locale}/forum/participation`}
+            as="h2"
+          />
+        }
       />
       <PageReceptionBand
         locale={locale}

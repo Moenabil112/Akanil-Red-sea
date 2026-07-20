@@ -6,12 +6,16 @@ import type {
 } from "@/content/types";
 import type { EcosystemContent } from "@/content/ecosystem-types";
 import type { ValueChainsContent } from "@/content/value-chains-types";
+import type { ForumContent } from "@/content/forum-types";
 import { arEcosystem } from "@/content/ar/ecosystem";
 import { frEcosystem } from "@/content/fr/ecosystem";
 import { enEcosystem } from "@/content/en/ecosystem";
 import { arValueChains } from "@/content/ar/value-chains";
 import { frValueChains } from "@/content/fr/value-chains";
 import { enValueChains } from "@/content/en/value-chains";
+import { arForum } from "@/content/ar/forum";
+import { frForum } from "@/content/fr/forum";
+import { enForum } from "@/content/en/forum";
 import { ar } from "@/content/ar/site";
 import { fr } from "@/content/fr/site";
 import { en } from "@/content/en/site";
@@ -66,4 +70,14 @@ const valueChainRecords: Record<Locale, ValueChainsContent> = {
 
 export function getValueChains(locale: Locale): ValueChainsContent {
   return valueChainRecords[locale];
+}
+
+const forumRecords: Record<Locale, ForumContent> = {
+  ar: arForum,
+  fr: frForum,
+  en: enForum,
+};
+
+export function getForum(locale: Locale): ForumContent {
+  return forumRecords[locale];
 }

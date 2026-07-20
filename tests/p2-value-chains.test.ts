@@ -197,20 +197,16 @@ describe("chain-aware reception routing", () => {
     const chainName = enValueChains.items.find(
       (c) => c.id === "oilseeds-agro-processing",
     )!.shortName;
-    const subject = buildSubject(request, enReception, undefined, chainName);
-    const body = buildEmailBody("en", request, enReception, undefined, chainName);
+    const subject = buildSubject(request, enReception, { chainName });
+    const body = buildEmailBody("en", request, enReception, { chainName });
     expect(subject).toContain(chainName);
     expect(body).toContain(chainName);
     const arName = arValueChains.items.find(
       (c) => c.id === "oilseeds-agro-processing",
     )!.shortName;
-    const arBody = buildEmailBody(
-      "ar",
-      request,
-      arReception,
-      undefined,
-      arName,
-    );
+    const arBody = buildEmailBody("ar", request, arReception, {
+      chainName: arName,
+    });
     expect(arBody).toContain(arName);
   });
 });

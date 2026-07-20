@@ -32,6 +32,8 @@ const nextConfig: NextConfig = {
       "mining-mineral-value",
       "ports-logistics-corridors",
     ];
+    // Forum subroute slugs (P3).
+    const forumSlugs = ["programme", "participation", "prepare"];
     return [
       {
         source: "/",
@@ -52,6 +54,11 @@ const nextConfig: NextConfig = {
       ...valueChainSlugs.map((slug) => ({
         source: `/value-chains/${slug}`,
         destination: `/ar/value-chains/${slug}`,
+        permanent: false,
+      })),
+      ...forumSlugs.map((slug) => ({
+        source: `/forum/${slug}`,
+        destination: `/ar/forum/${slug}`,
         permanent: false,
       })),
     ];

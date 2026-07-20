@@ -1,5 +1,10 @@
 import { Suspense } from "react";
-import { getEcosystem, getReception, getValueChains } from "@/lib/content";
+import {
+  getEcosystem,
+  getForum,
+  getReception,
+  getValueChains,
+} from "@/lib/content";
 import { pageMetadata, resolveLocale } from "@/lib/page-meta";
 import {
   RECEPTION_EMAIL,
@@ -23,6 +28,7 @@ export default async function ReceptionPage({
   const reception = getReception(locale);
   const ecosystem = getEcosystem(locale);
   const valueChains = getValueChains(locale);
+  const forum = getForum(locale);
 
   return (
     <SiteChrome locale={locale}>
@@ -87,6 +93,7 @@ export default async function ReceptionPage({
                 reception={reception}
                 ecosystem={ecosystem}
                 valueChains={valueChains}
+                forum={forum}
               />
             </Suspense>
           </div>
