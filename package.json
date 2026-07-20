@@ -28,7 +28,8 @@
     "internal:audit:test": "vitest run tests/p4b-audit-integrity.test.ts",
     "internal:sessions:cleanup": "tsx scripts/internal/sessions-cleanup.ts",
     "internal:backup:smoke": "bash scripts/internal/backup-restore-smoke.sh",
-    "internal:restore:verify": "bash scripts/internal/backup-verify.sh"
+    "internal:restore:verify": "bash scripts/internal/backup-verify.sh",
+    "internal:p4c:rehearsal": "tsx scripts/internal/p4c-rehearsal.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",

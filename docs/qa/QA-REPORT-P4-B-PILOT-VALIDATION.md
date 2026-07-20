@@ -1,7 +1,8 @@
 # QA Report — P4-B Internal Pilot, Security Hardening and Operational Validation
 
 Date: 2026-07-20 · Branch: `feature/p4b-internal-pilot-security-validation`
-Base: `main` (approved P4-A merge `eb3f02c`). Not merged; not deployed; no
+Base: `main` (approved P4-A merge `eb3f02c`). Merged into `main` via PR #8
+(merge commit `84e868b`) and accepted as the P4-C baseline; not deployed; no
 production service configured. **P4-B does not authorize production.**
 
 This release hardens and validates the internal, **employee-only** system for a
@@ -179,5 +180,6 @@ monitoring). No ISO/SOC/pen-test/legal/production certification is claimed.
 External accounts, self-registration, client/participant portal, data room,
 file upload, external notification, calendar integration, webhooks, automatic
 matching, AI decision-making, direct public database submission, public case
-tracking, and any production deployment. The branch is not merged and has not
-been deployed.
+tracking, and any production deployment. P4-B was subsequently merged into
+`main` via PR #8 (merge commit `84e868b`) and accepted as the P4-C baseline; it
+has not been deployed.

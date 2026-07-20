@@ -36,6 +36,10 @@ export const SIGNAL_IDS = [
   "secret-scan",
   "accessibility",
   "public-regression",
+  // P4-C evidence-based signals (§18).
+  "rollback-readiness",
+  "emergency-suspension",
+  "residual-risk-review",
 ] as const;
 
 async function auditChainArea(): Promise<ReadinessArea> {
@@ -245,4 +249,90 @@ export async function setReadinessGate(
     entityId: input.state,
     summary: `Readiness gate set to ${input.state}`,
   });
+}
+
+// ---------------- P4-C final readiness (§18) ----------------
+
+/**
+ * The 22 final readiness areas for the limited go-live decision (§18). Extends
+ * the P4-B computed areas and signals with P4-C-specific ones (procedures,
+ * scenario coverage, workflow evidence, data quality, rollback, emergency
+ * suspension, residual-risk review). No percentage is computed; a system is not
+ * ready merely because most items pass.
+ */
+export async function getFinalReadinessAreas(): Promise<ReadinessArea[]> {
+  const now = new Date();
+  const base = await getReadinessAreas();
+  const byId = new Map(base.map((a) => [a.id, a]));
+  const sig = new Map(
+    (await prisma.readinessSignal.findMany({ where: { id: { in: SIGNAL_IDS as unknown as string[] } } })).map((s) => [s.id, s]),
+  );
+  const signal = (id: string, critical = false): ReadinessArea => {
+    const s = sig.get(id);
+    let status: AreaStatus = "NOT_TESTED";
+    let detail = "No evidence recorded yet.";
+    if (s) {
+      status = s.expiresAt && s.expiresAt < now ? "EXPIRED" : (s.status as AreaStatus);
+      detail = s.detail ?? "";
+    }
+    return { id, status, detail, critical };
+  };
+  const fromBase = (id: string, fallbackCritical = false): ReadinessArea =>
+    byId.get(id) ?? { id, status: "NOT_TESTED", detail: "", critical: fallbackCritical };
+
+  const [
+    effectiveProcedures, requiredEffective, activeMembers, missingAckMembers,
+    scenarioCount, completedPilotCases, qualReviews, meetingRecords, closedWithOpen,
+    openCriticalDq,
+  ] = await Promise.all([
+    prisma.operatingProcedure.count({ where: { status: "EFFECTIVE" } }),
+    prisma.operatingProcedure.findMany({ where: { status: "EFFECTIVE", requiresAcknowledgement: true }, select: { procedureKey: true, version: true } }),
+    prisma.operationalPilotMember.findMany({ where: { status: "ACTIVE" }, select: { employeeId: true } }),
+    Promise.resolve(0),
+    prisma.operationalPilotCase.findMany({ where: { status: { in: ["IN_PROGRESS", "COMPLETED"] } }, select: { scenarioType: true } }),
+    prisma.operationalPilotCase.count({ where: { status: "COMPLETED" } }),
+    prisma.qualificationReview.count(),
+    prisma.meetingRecord.count(),
+    prisma.case.count({ where: { status: "CLOSED" } }),
+    prisma.dataQualityFinding.count({ where: { status: { in: ["OPEN", "UNDER_REVIEW"] }, severity: { in: ["HIGH", "CRITICAL"] } } }),
+  ]);
+
+  // Procedures acknowledged: every active member has all required acks.
+  let membersMissingAck = 0;
+  for (const m of activeMembers) {
+    for (const p of requiredEffective) {
+      const ack = await prisma.procedureAcknowledgement.count({
+        where: { employeeId: m.employeeId, procedureKey: p.procedureKey, procedureVersion: p.version },
+      });
+      if (ack === 0) { membersMissingAck += 1; break; }
+    }
+  }
+  void missingAckMembers;
+  const distinctScenarios = new Set(scenarioCount.map((s) => s.scenarioType)).size;
+
+  const areas: ReadinessArea[] = [
+    fromBase("pilot-cohort"),
+    fromBase("access-approvals"),
+    { id: "procedures-approved", status: effectiveProcedures > 0 ? (effectiveProcedures >= 13 ? "PASS" : "PASS_WITH_OBSERVATIONS") : "NOT_TESTED", detail: `${effectiveProcedures} effective procedure(s).`, critical: false },
+    { id: "procedures-acknowledged", status: activeMembers.length === 0 ? "NOT_TESTED" : membersMissingAck > 0 ? "FAIL" : "PASS", detail: `${membersMissingAck} active member(s) missing acknowledgements.`, critical: true },
+    { id: "case-scenario-coverage", status: distinctScenarios === 0 ? "NOT_TESTED" : distinctScenarios >= 4 ? "PASS" : "PASS_WITH_OBSERVATIONS", detail: `${distinctScenarios} distinct scenario(s) exercised.`, critical: false },
+    { id: "qualification-workflow", status: qualReviews > 0 ? "PASS" : "NOT_TESTED", detail: `${qualReviews} qualification review(s).`, critical: false },
+    { id: "meeting-and-decision-workflow", status: meetingRecords > 0 ? "PASS" : "NOT_TESTED", detail: `${meetingRecords} meeting record(s).`, critical: false },
+    { id: "commitment-and-closure-workflow", status: completedPilotCases > 0 || closedWithOpen >= 0 ? (completedPilotCases > 0 ? "PASS" : "NOT_TESTED") : "NOT_TESTED", detail: `${completedPilotCases} completed pilot case(s).`, critical: false },
+    { id: "data-quality", status: openCriticalDq > 0 ? "FAIL" : "PASS", detail: `${openCriticalDq} open high/critical finding(s).`, critical: true },
+    fromBase("open-incidents", true),
+    fromBase("open-corrective-actions", true),
+    fromBase("overdue-access-reviews"),
+    fromBase("audit-chain-verification", true),
+    signal("last-restore-test", true),
+    fromBase("database-migration-status"),
+    signal("rollback-readiness", true),
+    signal("emergency-suspension", true),
+    signal("public-internal-boundary", true),
+    signal("public-regression", true),
+    signal("accessibility"),
+    signal("secret-scan"),
+    signal("residual-risk-review"),
+  ];
+  return areas;
 }

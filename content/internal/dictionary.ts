@@ -137,7 +137,325 @@ export interface InternalDict {
   };
   privacyNote: string;
   p4b: P4bDict;
+  p4c: P4cDict;
 }
+
+/** P4-C controlled-operations UI strings (§23/§27, trilingual). */
+export interface P4cDict {
+  nav: { operations: string };
+  banner: { limitedInternal: string; note: string; expires: string };
+  overview: {
+    title: string;
+    lead: string;
+    workQueue: string;
+    report: string;
+    finalReadiness: string;
+    pilotLink: string;
+    dataQualityLink: string;
+    proceduresLink: string;
+    releaseLink: string;
+    authorizationLink: string;
+    humanDecisionPending: string;
+  };
+  pilot: {
+    title: string;
+    create: string;
+    objective: string;
+    maxEmployees: string;
+    maxCases: string;
+    reference: string;
+    status: string;
+    members: string;
+    cases: string;
+    observations: string;
+    addMember: string;
+    activate: string;
+    remove: string;
+    addCase: string;
+    scenario: string;
+    dataCategory: string;
+    complete: string;
+    outcome: string;
+    observationsSummary: string;
+    transition: string;
+    recordObservation: string;
+    proportionNote: string;
+  };
+  procedures: {
+    title: string;
+    key: string;
+    version: string;
+    status: string;
+    approve: string;
+    makeEffective: string;
+    acknowledge: string;
+    ackType: string;
+    register: string;
+    note: string;
+  };
+  dataQuality: {
+    title: string;
+    runScan: string;
+    category: string;
+    severity: string;
+    status: string;
+    resolve: string;
+    resolution: string;
+    waiver: string;
+    deterministicNote: string;
+  };
+  release: {
+    title: string;
+    version: string;
+    commit: string;
+    prepare: string;
+    review: string;
+    confirmCommit: string;
+    status: string;
+    noDeployNote: string;
+  };
+  authorization: {
+    title: string;
+    propose: string;
+    scope: string;
+    employeeLimit: string;
+    caseLimit: string;
+    dataCategories: string;
+    validFrom: string;
+    validUntil: string;
+    review: string;
+    decide: string;
+    decision: string;
+    conditions: string;
+    suspend: string;
+    status: string;
+    reason: string;
+    blockedNote: string;
+    envNotSufficient: string;
+  };
+  common: { none: string; save: string; area: string; status: string; detail: string };
+  areaLabels: Record<string, string>;
+}
+
+const P4C_AREA_LABELS_EN: Record<string, string> = {
+  "pilot-cohort": "Pilot cohort",
+  "access-approvals": "Access approvals",
+  "procedures-approved": "Procedures approved",
+  "procedures-acknowledged": "Procedures acknowledged",
+  "case-scenario-coverage": "Case scenario coverage",
+  "qualification-workflow": "Qualification workflow",
+  "meeting-and-decision-workflow": "Meeting & decision workflow",
+  "commitment-and-closure-workflow": "Commitment & closure workflow",
+  "data-quality": "Data quality",
+  "open-incidents": "Security incidents",
+  "open-corrective-actions": "Corrective actions",
+  "overdue-access-reviews": "Access reviews",
+  "audit-chain-verification": "Audit chain",
+  "last-restore-test": "Backup & restore",
+  "database-migration-status": "Migration status",
+  "rollback-readiness": "Rollback readiness",
+  "emergency-suspension": "Emergency suspension",
+  "public-internal-boundary": "Public / internal boundary",
+  "public-regression": "Public regression",
+  accessibility: "Accessibility",
+  "secret-scan": "Secret scan",
+  "residual-risk-review": "Residual-risk review",
+};
+
+const p4cEn: P4cDict = {
+  nav: { operations: "Operations" },
+  banner: {
+    limitedInternal: "Limited Internal Operations",
+    note: "Employee-only · authorized scope · no external access.",
+    expires: "Authorization expires",
+  },
+  overview: {
+    title: "Controlled internal operations",
+    lead: "A proportionate, employee-only operational pilot (3–6 employees, 3–10 cases). Synthetic or approved de-identified data only.",
+    workQueue: "Consolidated work queue",
+    report: "Operational summary",
+    finalReadiness: "Final readiness",
+    pilotLink: "Operational pilot",
+    dataQualityLink: "Data quality",
+    proceduresLink: "Procedures",
+    releaseLink: "Release evidence",
+    authorizationLink: "Limited-operations authorization",
+    humanDecisionPending: "The Go/No-Go decision is a human decision and remains pending authorized review.",
+  },
+  pilot: {
+    title: "Operational pilot", create: "Plan a run", objective: "Objective",
+    maxEmployees: "Max employees (1–6)", maxCases: "Max cases (1–10)", reference: "Reference",
+    status: "Status", members: "Members", cases: "Cases", observations: "Observations",
+    addMember: "Propose member", activate: "Approve & activate", remove: "Remove",
+    addCase: "Add case", scenario: "Scenario", dataCategory: "Data category", complete: "Complete run",
+    outcome: "Final outcome", observationsSummary: "Observations summary", transition: "Move to",
+    recordObservation: "Record observation",
+    proportionNote: "This tests a variety of workflows, not high volume.",
+  },
+  procedures: {
+    title: "Operating procedures", key: "Procedure", version: "Version", status: "Status",
+    approve: "Approve", makeEffective: "Make effective", acknowledge: "Acknowledge",
+    ackType: "Type", register: "Register", note: "Acknowledgement is not a professional certification.",
+  },
+  dataQuality: {
+    title: "Data-quality findings", runScan: "Run scan", category: "Category", severity: "Severity",
+    status: "Status", resolve: "Resolve", resolution: "Resolution", waiver: "Waiver rationale",
+    deterministicNote: "Deterministic detection only. Duplicates are suggestions — never auto-merged; nothing is deleted.",
+  },
+  release: {
+    title: "Release evidence", version: "Version", commit: "Commit SHA", prepare: "Prepare candidate",
+    review: "Review", confirmCommit: "Confirm commit SHA", status: "Status",
+    noDeployNote: "No deployment action is taken. No production URL or secret is stored.",
+  },
+  authorization: {
+    title: "Limited-operations authorization", propose: "Propose", scope: "Scope",
+    employeeLimit: "Employee limit", caseLimit: "Case limit", dataCategories: "Allowed data categories",
+    validFrom: "Valid from", validUntil: "Valid until", review: "Review", decide: "Record decision",
+    decision: "Decision", conditions: "Conditions", suspend: "Suspend", status: "Status", reason: "Reason",
+    blockedNote: "An authorization cannot become ACTIVE while any critical gate is failing.",
+    envNotSufficient: "The environment mode alone never authorizes limited internal operations.",
+  },
+  common: { none: "Nothing to show.", save: "Save", area: "Area", status: "Status", detail: "Detail" },
+  areaLabels: P4C_AREA_LABELS_EN,
+};
+
+const p4cFr: P4cDict = {
+  nav: { operations: "Opérations" },
+  banner: {
+    limitedInternal: "Opérations internes limitées",
+    note: "Employés uniquement · périmètre autorisé · aucun accès externe.",
+    expires: "L'autorisation expire",
+  },
+  overview: {
+    title: "Opérations internes contrôlées",
+    lead: "Un pilote opérationnel proportionné, réservé aux employés (3–6 employés, 3–10 dossiers). Données synthétiques ou anonymisées approuvées uniquement.",
+    workQueue: "File de travail consolidée",
+    report: "Synthèse opérationnelle",
+    finalReadiness: "Préparation finale",
+    pilotLink: "Pilote opérationnel",
+    dataQualityLink: "Qualité des données",
+    proceduresLink: "Procédures",
+    releaseLink: "Preuves de version",
+    authorizationLink: "Autorisation d'opérations limitées",
+    humanDecisionPending: "La décision Go/No-Go est humaine et reste en attente d'une revue autorisée.",
+  },
+  pilot: {
+    title: "Pilote opérationnel", create: "Planifier un cycle", objective: "Objectif",
+    maxEmployees: "Employés max (1–6)", maxCases: "Dossiers max (1–10)", reference: "Référence",
+    status: "Statut", members: "Membres", cases: "Dossiers", observations: "Observations",
+    addMember: "Proposer un membre", activate: "Approuver et activer", remove: "Retirer",
+    addCase: "Ajouter un dossier", scenario: "Scénario", dataCategory: "Catégorie de données", complete: "Clore le cycle",
+    outcome: "Résultat final", observationsSummary: "Synthèse des observations", transition: "Passer à",
+    recordObservation: "Enregistrer une observation",
+    proportionNote: "Ceci teste une variété de flux, pas un volume élevé.",
+  },
+  procedures: {
+    title: "Procédures d'exploitation", key: "Procédure", version: "Version", status: "Statut",
+    approve: "Approuver", makeEffective: "Rendre effective", acknowledge: "Accuser réception",
+    ackType: "Type", register: "Enregistrer", note: "L'accusé n'est pas une certification professionnelle.",
+  },
+  dataQuality: {
+    title: "Constats de qualité des données", runScan: "Lancer l'analyse", category: "Catégorie", severity: "Gravité",
+    status: "Statut", resolve: "Résoudre", resolution: "Résolution", waiver: "Justification de dérogation",
+    deterministicNote: "Détection déterministe uniquement. Les doublons sont des suggestions — jamais fusionnés ; rien n'est supprimé.",
+  },
+  release: {
+    title: "Preuves de version", version: "Version", commit: "SHA du commit", prepare: "Préparer le candidat",
+    review: "Réviser", confirmCommit: "Confirmer le SHA", status: "Statut",
+    noDeployNote: "Aucune action de déploiement. Aucune URL ni secret de production n'est stocké.",
+  },
+  authorization: {
+    title: "Autorisation d'opérations limitées", propose: "Proposer", scope: "Périmètre",
+    employeeLimit: "Limite d'employés", caseLimit: "Limite de dossiers", dataCategories: "Catégories de données autorisées",
+    validFrom: "Valable du", validUntil: "Valable jusqu'au", review: "Réviser", decide: "Enregistrer la décision",
+    decision: "Décision", conditions: "Conditions", suspend: "Suspendre", status: "Statut", reason: "Motif",
+    blockedNote: "Une autorisation ne peut devenir ACTIVE tant qu'un contrôle critique échoue.",
+    envNotSufficient: "Le mode d'environnement seul n'autorise jamais les opérations internes limitées.",
+  },
+  common: { none: "Rien à afficher.", save: "Enregistrer", area: "Domaine", status: "Statut", detail: "Détail" },
+  areaLabels: {
+    "pilot-cohort": "Cohorte pilote", "access-approvals": "Approbations d'accès",
+    "procedures-approved": "Procédures approuvées", "procedures-acknowledged": "Procédures reconnues",
+    "case-scenario-coverage": "Couverture des scénarios", "qualification-workflow": "Flux de qualification",
+    "meeting-and-decision-workflow": "Flux réunion & décision", "commitment-and-closure-workflow": "Flux engagement & clôture",
+    "data-quality": "Qualité des données", "open-incidents": "Incidents de sécurité",
+    "open-corrective-actions": "Actions correctives", "overdue-access-reviews": "Revues d'accès",
+    "audit-chain-verification": "Chaîne d'audit", "last-restore-test": "Sauvegarde & restauration",
+    "database-migration-status": "État des migrations", "rollback-readiness": "Préparation au rollback",
+    "emergency-suspension": "Suspension d'urgence", "public-internal-boundary": "Frontière public / interne",
+    "public-regression": "Régression publique", accessibility: "Accessibilité", "secret-scan": "Analyse des secrets",
+    "residual-risk-review": "Revue des risques résiduels",
+  },
+};
+
+const p4cAr: P4cDict = {
+  nav: { operations: "العمليات" },
+  banner: {
+    limitedInternal: "عمليات داخلية محدودة",
+    note: "للموظفين فقط · نطاق مُعتمد · لا وصول خارجي.",
+    expires: "ينتهي التفويض",
+  },
+  overview: {
+    title: "العمليات الداخلية المضبوطة",
+    lead: "تجربة تشغيلية متناسبة للموظفين فقط (3–6 موظفين، 3–10 حالات). بيانات اصطناعية أو مجهّلة الهوية معتمدة فقط.",
+    workQueue: "قائمة العمل الموحّدة",
+    report: "الملخص التشغيلي",
+    finalReadiness: "الجاهزية النهائية",
+    pilotLink: "التجربة التشغيلية",
+    dataQualityLink: "جودة البيانات",
+    proceduresLink: "الإجراءات",
+    releaseLink: "أدلة الإصدار",
+    authorizationLink: "تفويض العمليات المحدودة",
+    humanDecisionPending: "قرار المضي/عدم المضي قرار بشري ويبقى بانتظار مراجعة معتمدة.",
+  },
+  pilot: {
+    title: "التجربة التشغيلية", create: "تخطيط دورة", objective: "الهدف",
+    maxEmployees: "أقصى موظفين (1–6)", maxCases: "أقصى حالات (1–10)", reference: "المرجع",
+    status: "الحالة", members: "الأعضاء", cases: "الحالات", observations: "الملاحظات",
+    addMember: "اقتراح عضو", activate: "اعتماد وتفعيل", remove: "إزالة",
+    addCase: "إضافة حالة", scenario: "السيناريو", dataCategory: "فئة البيانات", complete: "إنهاء الدورة",
+    outcome: "النتيجة النهائية", observationsSummary: "ملخص الملاحظات", transition: "الانتقال إلى",
+    recordObservation: "تسجيل ملاحظة",
+    proportionNote: "يختبر هذا تنوّع المسارات لا الحجم الكبير.",
+  },
+  procedures: {
+    title: "إجراءات التشغيل", key: "الإجراء", version: "الإصدار", status: "الحالة",
+    approve: "اعتماد", makeEffective: "تفعيل", acknowledge: "إقرار",
+    ackType: "النوع", register: "تسجيل", note: "الإقرار ليس شهادة مهنية.",
+  },
+  dataQuality: {
+    title: "نتائج جودة البيانات", runScan: "تشغيل الفحص", category: "الفئة", severity: "الخطورة",
+    status: "الحالة", resolve: "حلّ", resolution: "الحل", waiver: "مبرر الإعفاء",
+    deterministicNote: "كشف حتمي فقط. التكرارات اقتراحات — لا تُدمج تلقائيًا؛ ولا يُحذف شيء.",
+  },
+  release: {
+    title: "أدلة الإصدار", version: "الإصدار", commit: "معرّف الـ commit", prepare: "إعداد مرشّح",
+    review: "مراجعة", confirmCommit: "تأكيد معرّف الـ commit", status: "الحالة",
+    noDeployNote: "لا يُتخذ أي إجراء نشر. ولا يُخزَّن أي رابط أو سرّ إنتاجي.",
+  },
+  authorization: {
+    title: "تفويض العمليات المحدودة", propose: "اقتراح", scope: "النطاق",
+    employeeLimit: "حد الموظفين", caseLimit: "حد الحالات", dataCategories: "فئات البيانات المسموحة",
+    validFrom: "ساري من", validUntil: "ساري حتى", review: "مراجعة", decide: "تسجيل القرار",
+    decision: "القرار", conditions: "الشروط", suspend: "تعليق", status: "الحالة", reason: "السبب",
+    blockedNote: "لا يمكن أن يصبح التفويض نشطًا بينما أي ضابط حرج فاشل.",
+    envNotSufficient: "وضع البيئة وحده لا يفوّض أبدًا العمليات الداخلية المحدودة.",
+  },
+  common: { none: "لا شيء لعرضه.", save: "حفظ", area: "المجال", status: "الحالة", detail: "التفصيل" },
+  areaLabels: {
+    "pilot-cohort": "فريق التجربة", "access-approvals": "اعتمادات الوصول",
+    "procedures-approved": "إجراءات معتمدة", "procedures-acknowledged": "إجراءات مُقرّة",
+    "case-scenario-coverage": "تغطية السيناريوهات", "qualification-workflow": "مسار التأهيل",
+    "meeting-and-decision-workflow": "مسار الاجتماع والقرار", "commitment-and-closure-workflow": "مسار الالتزام والإغلاق",
+    "data-quality": "جودة البيانات", "open-incidents": "حوادث الأمن",
+    "open-corrective-actions": "الإجراءات التصحيحية", "overdue-access-reviews": "مراجعات الوصول",
+    "audit-chain-verification": "سلسلة التدقيق", "last-restore-test": "النسخ والاسترجاع",
+    "database-migration-status": "حالة الترحيل", "rollback-readiness": "جاهزية التراجع",
+    "emergency-suspension": "التعليق الطارئ", "public-internal-boundary": "الحدّ بين العام والداخلي",
+    "public-regression": "الانحدار العام", accessibility: "إمكانية الوصول", "secret-scan": "فحص الأسرار",
+    "residual-risk-review": "مراجعة المخاطر المتبقية",
+  },
+};
 
 /** P4-B pilot / security-hardening UI strings (§27, trilingual). */
 export interface P4bDict {
@@ -838,6 +1156,7 @@ const en: InternalDict = {
   privacyNote:
     "Collect only professional operational data. No participant directory, no external accounts, no uploads.",
   p4b: p4bEn,
+  p4c: p4cEn,
 };
 
 const fr: InternalDict = {
@@ -977,6 +1296,7 @@ const fr: InternalDict = {
   privacyNote:
     "Ne collectez que des données opérationnelles professionnelles. Pas d'annuaire de participants, pas de comptes externes, pas de téléversements.",
   p4b: p4bFr,
+  p4c: p4cFr,
 };
 
 const ar: InternalDict = {
@@ -1116,6 +1436,7 @@ const ar: InternalDict = {
   privacyNote:
     "اجمع فقط البيانات التشغيلية المهنية. لا دليل مشاركين، ولا حسابات خارجية، ولا رفع ملفات.",
   p4b: p4bAr,
+  p4c: p4cAr,
 };
 
 const DICTS: Record<Locale, InternalDict> = { ar, fr, en };

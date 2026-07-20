@@ -7,6 +7,7 @@ import { getCurrentEmployee } from "@/lib/internal/session";
 import { can } from "@/lib/internal/rbac";
 import { ROLE_LABELS } from "@/lib/internal/roles";
 import { operationMode, pilotSuspended } from "@/lib/internal/env";
+import { activeAuthorization } from "@/lib/internal/services/limited-operations";
 import { logoutAction } from "./actions";
 import styles from "./internal.module.css";
 
@@ -46,6 +47,9 @@ export default async function InternalLayout({
         ...(can(employee.role, "security.event.view")
           ? [{ href: `/${locale}/internal/security`, label: dict.p4b.nav.security }]
           : []),
+        ...(can(employee.role, "operations.pilot.view")
+          ? [{ href: `/${locale}/internal/operations`, label: dict.p4c.nav.operations }]
+          : []),
         ...(can(employee.role, "user.manage")
           ? [{ href: `/${locale}/internal/admin/users`, label: dict.nav.users }]
           : []),
@@ -54,13 +58,23 @@ export default async function InternalLayout({
 
   const mode = operationMode();
   const suspended = pilotSuspended();
-  const banner = suspended
-    ? { text: dict.p4b.banner.suspended, kind: "suspended" as const }
-    : mode === "pilot"
-      ? { text: dict.p4b.banner.pilot, kind: "pilot" as const }
-      : mode === "validation"
-        ? { text: dict.p4b.banner.validation, kind: "validation" as const }
-        : null;
+  let banner: { text: string; kind: "suspended" | "pilot" | "validation" | "limited" } | null = null;
+  if (employee) {
+    if (suspended) {
+      banner = { text: dict.p4b.banner.suspended, kind: "suspended" };
+    } else if (mode === "limited_internal") {
+      const auth = await activeAuthorization();
+      const expiry = auth?.validUntil ? ` — ${dict.p4c.banner.expires} ${auth.validUntil.toISOString().slice(0, 10)}` : "";
+      banner = {
+        text: `${dict.p4c.banner.limitedInternal} — ${dict.p4c.banner.note}${expiry}`,
+        kind: "limited",
+      };
+    } else if (mode === "pilot") {
+      banner = { text: dict.p4b.banner.pilot, kind: "pilot" };
+    } else if (mode === "validation") {
+      banner = { text: dict.p4b.banner.validation, kind: "validation" };
+    }
+  }
 
   return (
     <div className={styles.app}>

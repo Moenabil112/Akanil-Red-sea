@@ -26,3 +26,10 @@ export const INCIDENT_COUNTER_ID = "incident-reference";
 export function formatIncidentReference(year: number, value: number): string {
   return `SEC-${year}-${String(value).padStart(6, "0")}`;
 }
+
+/** Internal operational-pilot-run reference (P4-C §9): OPR-YYYY-000001. */
+export const PILOT_RUN_COUNTER_ID = "pilot-run-reference";
+
+export function formatPilotRunReference(year: number, value: number): string {
+  return `OPR-${year}-${String(value).padStart(6, "0")}`;
+}

@@ -23,21 +23,29 @@ function intEnv(name: string, fallback: number): number {
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
-// ---------------- P4-B operating mode ----------------
+// ---------------- P4-B/P4-C operating mode ----------------
 
-export type OperationMode = "disabled" | "validation" | "pilot";
+export type OperationMode = "disabled" | "validation" | "pilot" | "limited_internal";
 
 /**
  * Effective operating mode. Fails closed to "disabled" when the internal
- * feature flag is off or P4_OPERATION_MODE is absent/invalid. There is no
- * "production" mode in P4-B. The pilot emergency suspension is a separate,
- * authoritative override enforced by callers (see internalMutationsAllowed).
+ * feature flag is off or P4_OPERATION_MODE is absent/invalid/unsupported.
+ * There is NO "production" mode. P4-C adds "limited_internal", which the
+ * environment value ALONE never authorizes: it additionally requires an active
+ * human-approved LimitedOperationsAuthorization, checked in the service layer
+ * (see lib/internal/limited-operations.ts). The pilot emergency suspension is a
+ * separate, authoritative override enforced by callers.
  */
 export function operationMode(): OperationMode {
   if (!internalEnabled()) return "disabled";
   const raw = process.env.P4_OPERATION_MODE;
-  if (raw === "validation" || raw === "pilot") return raw;
+  if (raw === "validation" || raw === "pilot" || raw === "limited_internal") return raw;
   return "disabled";
+}
+
+/** True only when the environment requests limited_internal mode. */
+export function limitedInternalRequested(): boolean {
+  return operationMode() === "limited_internal";
 }
 
 /** The pilot emergency stop (§19). Only the exact string "true" suspends. */

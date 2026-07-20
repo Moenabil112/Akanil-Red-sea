@@ -88,7 +88,10 @@ jobs:
       - name: Audit hash-chain verification (test database)
         run: npm run internal:audit:verify
 
-      - name: Migration drift / status
+      - name: P4-C synthetic operational rehearsal
+        run: npm run internal:p4c:rehearsal
+
+      - name: Migration status (fresh install + P4-B → P4-C upgrade applied)
         run: npx prisma migrate status
         continue-on-error: true
 
