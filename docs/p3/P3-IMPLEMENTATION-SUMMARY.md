@@ -1,8 +1,9 @@
 # P3 — Implementation Summary
 
 Branch: `feature/p3-forum-qualification-stakeholder-engagement` · Base: `main`
-(merged P0 `3b2b4c6` + P1 `101ed96` + P2 `de94df5`). Draft PR only — not merged,
-not deployed. P3 turns the Forum from a descriptive section into a public
+(merged P0 `3b2b4c6` + P1 `101ed96` + P2 `de94df5`). Merged into `main` via
+PR #6 (merge commit `a2a2293`); not deployed. P4-A (internal secure operations)
+builds on this merged baseline. P3 turns the Forum from a descriptive section into a public
 qualification and engagement programme; it does not redesign P0/P1/P2 and adds
 no new portfolio platforms or value chains.
 

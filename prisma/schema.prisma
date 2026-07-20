@@ -1,0 +1,527 @@
+// P4-A — Internal Secure Case Management data model (Akanil employees only).
+// Normalized PostgreSQL schema. No external accounts, no uploads, no
+// external notifications. Public controlled taxonomies (request types,
+// platform / value-chain / Forum ids) are stored as validated strings —
+// never redefined here (validation lives in lib/internal/taxonomy.ts).
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------- Enums ----------------
+
+enum EmployeeRole {
+  SYSTEM_ADMIN
+  OPERATIONS_MANAGER
+  CASE_MANAGER
+  SPECIALIST_REVIEWER
+  FORUM_COORDINATOR
+  READ_ONLY_AUDITOR
+}
+
+enum AccountStatus {
+  ACTIVE
+  DISABLED
+  LOCKED
+}
+
+enum OrgVerificationStatus {
+  UNREVIEWED
+  DECLARED
+  PARTIALLY_VERIFIED
+  VERIFIED
+  CONFLICT_IDENTIFIED
+  ARCHIVED
+}
+
+enum AuthorityStatus {
+  UNKNOWN
+  DECLARED
+  EVIDENCE_REQUESTED
+  VERIFIED
+  NOT_AUTHORIZED
+}
+
+enum CaseSource {
+  PUBLIC_RECEPTION_EMAIL
+  DIRECT_EMAIL
+  PHONE
+  FORUM
+  INTERNAL_REFERRAL
+  OTHER
+}
+
+enum CasePriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum Classification {
+  INTERNAL
+  CONFIDENTIAL
+  RESTRICTED
+}
+
+enum CaseStatus {
+  NEW
+  TRIAGE
+  INFORMATION_REQUIRED
+  QUALIFIED
+  UNDER_REVIEW
+  MEETING_PREPARATION
+  DECISION_PENDING
+  FOLLOW_UP
+  ON_HOLD
+  CLOSED
+}
+
+enum ClosureReason {
+  PROGRESSED_OUTSIDE_MVP
+  NOT_PROGRESSED
+  WITHDRAWN
+  DUPLICATE
+  COMPLETED
+  OTHER
+}
+
+enum AssignmentType {
+  OWNER
+  REVIEWER
+  FORUM_COORDINATOR
+}
+
+enum NoteType {
+  GENERAL
+  REVIEW
+  RISK
+  LEGAL
+  FINANCIAL
+  TECHNICAL
+  MEETING
+  FOLLOW_UP
+}
+
+enum QualificationOutcome {
+  PENDING
+  QUALIFIED
+  CONDITIONALLY_QUALIFIED
+  NOT_QUALIFIED
+  ON_HOLD
+}
+
+enum CriterionState {
+  NOT_REVIEWED
+  PASS
+  GAP
+  NOT_APPLICABLE
+}
+
+enum GapStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  WAIVED
+}
+
+enum EvidenceStatus {
+  DECLARED
+  RECEIVED_OUTSIDE_SYSTEM
+  UNDER_REVIEW
+  VERIFIED_FOR_INTERNAL_USE
+  GAP_IDENTIFIED
+  SUPERSEDED
+}
+
+enum MeetingType {
+  INTERNAL_REVIEW
+  TECHNICAL_DISCUSSION
+  INSTITUTIONAL_DISCUSSION
+  B2B
+  B2G
+  PROJECT_REVIEW
+  FOLLOW_UP
+}
+
+enum MeetingPrepStatus {
+  DRAFT
+  READY_FOR_INTERNAL_APPROVAL
+  APPROVED_FOR_COORDINATION
+  HELD
+  CANCELLED
+}
+
+enum DecisionType {
+  REQUEST_MORE_INFORMATION
+  PROGRESS_TO_SPECIALIST_REVIEW
+  PROGRESS_TO_MEETING
+  PROGRESS_TO_PROJECT_REVIEW
+  PROGRESS_TO_INSTITUTIONAL_DISCUSSION
+  PROGRESS_TO_FOLLOW_UP
+  PLACE_ON_HOLD
+  DO_NOT_PROGRESS
+  CLOSE_CASE
+}
+
+enum DecisionStatus {
+  PROPOSED
+  APPROVED
+  REJECTED
+  DEFERRED
+  SUPERSEDED
+}
+
+enum CommitmentStatus {
+  OPEN
+  IN_PROGRESS
+  BLOCKED
+  COMPLETED
+  CANCELLED
+}
+
+// ---------------- Models ----------------
+
+model Employee {
+  id               String        @id @default(cuid())
+  email            String        @unique
+  displayName      String
+  passwordHash     String
+  role             EmployeeRole
+  status           AccountStatus @default(ACTIVE)
+  mustChangePassword Boolean     @default(true)
+  failedLoginCount Int           @default(0)
+  lockedUntil      DateTime?
+  lastLoginAt      DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  disabledAt       DateTime?
+
+  sessions         Session[]
+  createdOrgs      Organization[]  @relation("OrgCreatedBy")
+  createdCases     Case[]          @relation("CaseCreatedBy")
+  ownedCases       Case[]          @relation("CaseOwner")
+  assignments      CaseAssignment[] @relation("AssignmentEmployee")
+  assignmentsMade  CaseAssignment[] @relation("AssignmentBy")
+  notes            InternalNote[]
+  auditEvents      AuditEvent[]
+
+  @@index([role])
+  @@index([status])
+}
+
+model Session {
+  id            String   @id @default(cuid())
+  // Opaque token hash (SHA-256 of the cookie value); the raw token is
+  // never stored. Sessions are revocable and attributable to one employee.
+  tokenHash     String   @unique
+  employeeId    String
+  employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  absoluteExpiry DateTime
+  idleExpiry    DateTime
+  revokedAt     DateTime?
+
+  @@index([employeeId])
+}
+
+model Organization {
+  id               String                @id @default(cuid())
+  workingName      String
+  legalName        String?
+  organizationType String?
+  country          String?
+  region           String?
+  officialWebsite  String?
+  officialEmail    String?
+  officialPhone    String?
+  verificationStatus OrgVerificationStatus @default(UNREVIEWED)
+  operationalNotes String?
+  createdById      String
+  createdBy        Employee              @relation("OrgCreatedBy", fields: [createdById], references: [id])
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  archivedAt       DateTime?
+  recordVersion    Int                   @default(0)
+
+  contacts         Contact[]
+  cases            Case[]
+
+  @@index([verificationStatus])
+  @@index([workingName])
+}
+
+model Contact {
+  id               String          @id @default(cuid())
+  organizationId   String
+  organization     Organization    @relation(fields: [organizationId], references: [id])
+  fullName         String
+  professionalRole String?
+  professionalEmail String?
+  professionalPhone String?
+  authorityStatus  AuthorityStatus @default(UNKNOWN)
+  preferredLanguage String?
+  operationalNotes String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  archivedAt       DateTime?
+  recordVersion    Int             @default(0)
+
+  cases            Case[]
+
+  @@index([organizationId])
+}
+
+model Case {
+  id                     String        @id @default(cuid())
+  internalReference      String        @unique
+  title                  String
+  summary                String
+  source                 CaseSource
+  // Validated public taxonomy ids (strings, never redefined here).
+  requestType            String?
+  primaryPlatformId      String?
+  primaryValueChainId    String?
+  forumParticipationPathId String?
+  forumSectorTrackId     String?
+
+  organizationId         String?
+  organization           Organization? @relation(fields: [organizationId], references: [id])
+  primaryContactId       String?
+  primaryContact         Contact?      @relation(fields: [primaryContactId], references: [id])
+
+  status                 CaseStatus    @default(NEW)
+  qualificationStatus    QualificationOutcome @default(PENDING)
+  priority               CasePriority  @default(NORMAL)
+  classification         Classification @default(INTERNAL)
+
+  currentOwnerId         String?
+  currentOwner           Employee?     @relation("CaseOwner", fields: [currentOwnerId], references: [id])
+  createdById            String
+  createdBy              Employee      @relation("CaseCreatedBy", fields: [createdById], references: [id])
+
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  closedAt               DateTime?
+  closureReason          ClosureReason?
+  recordVersion          Int           @default(0)
+
+  assignments            CaseAssignment[]
+  notes                  InternalNote[]
+  qualificationReviews   QualificationReview[]
+  informationGaps        InformationGap[]
+  evidenceReferences     EvidenceReference[]
+  meetingPreparations    MeetingPreparation[]
+  meetingRecords         MeetingRecord[]
+  decisions              Decision[]
+  commitments            Commitment[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([classification])
+  @@index([currentOwnerId])
+  @@index([organizationId])
+}
+
+model CaseAssignment {
+  id             String         @id @default(cuid())
+  caseId         String
+  case           Case           @relation(fields: [caseId], references: [id])
+  employeeId     String
+  employee       Employee       @relation("AssignmentEmployee", fields: [employeeId], references: [id])
+  assignmentType AssignmentType
+  assignedById   String
+  assignedBy     Employee       @relation("AssignmentBy", fields: [assignedById], references: [id])
+  assignedAt     DateTime       @default(now())
+  endedAt        DateTime?
+
+  @@index([caseId])
+  @@index([employeeId])
+}
+
+model InternalNote {
+  id             String         @id @default(cuid())
+  caseId         String
+  case           Case           @relation(fields: [caseId], references: [id])
+  noteType       NoteType       @default(GENERAL)
+  classification Classification @default(INTERNAL)
+  body           String
+  authorId       String
+  author         Employee       @relation(fields: [authorId], references: [id])
+  supersedesNoteId String?
+  createdAt      DateTime       @default(now())
+
+  @@index([caseId])
+}
+
+model QualificationReview {
+  id                       String               @id @default(cuid())
+  caseId                   String
+  case                     Case                 @relation(fields: [caseId], references: [id])
+  organizationIdentity     CriterionState       @default(NOT_REVIEWED)
+  representativeAuthority  CriterionState       @default(NOT_REVIEWED)
+  statedPurpose            CriterionState       @default(NOT_REVIEWED)
+  informationCompleteness  CriterionState       @default(NOT_REVIEWED)
+  evidenceAvailability     CriterionState       @default(NOT_REVIEWED)
+  regulatoryOrRiskConcern  CriterionState       @default(NOT_REVIEWED)
+  recommendation           String?
+  finalOutcome             QualificationOutcome @default(PENDING)
+  reviewerId               String
+  decisionOwnerId          String?
+  createdAt                DateTime             @default(now())
+  approvedAt               DateTime?
+
+  @@index([caseId])
+}
+
+model InformationGap {
+  id             String    @id @default(cuid())
+  caseId         String
+  case           Case      @relation(fields: [caseId], references: [id])
+  category       String
+  title          String
+  description    String?
+  status         GapStatus @default(OPEN)
+  internalOwnerId String?
+  dueDate        DateTime?
+  resolutionNote String?
+  createdById    String
+  createdAt      DateTime  @default(now())
+  resolvedAt     DateTime?
+
+  @@index([caseId])
+  @@index([status])
+}
+
+model EvidenceReference {
+  id                 String         @id @default(cuid())
+  caseId             String
+  case               Case           @relation(fields: [caseId], references: [id])
+  title              String
+  evidenceType       String?
+  sourceOrganization String?
+  sourceDate         DateTime?
+  receivedDate       DateTime?
+  verificationStatus EvidenceStatus @default(DECLARED)
+  classification     Classification @default(INTERNAL)
+  // Plain internal text only — never a public link or a download.
+  locationNote       String?
+  notes              String?
+  recordedById       String
+  createdAt          DateTime       @default(now())
+
+  @@index([caseId])
+}
+
+model MeetingPreparation {
+  id                   String            @id @default(cuid())
+  caseId               String
+  case                 Case              @relation(fields: [caseId], references: [id])
+  title                String
+  purpose              String?
+  meetingType          MeetingType       @default(INTERNAL_REVIEW)
+  proposedDate         DateTime?
+  participantCategories String?
+  keyQuestions         String?
+  decisionsSought      String?
+  expectedOutcome      String?
+  status               MeetingPrepStatus @default(DRAFT)
+  preparedById         String
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  recordVersion        Int               @default(0)
+
+  records              MeetingRecord[]
+
+  @@index([caseId])
+}
+
+model MeetingRecord {
+  id                          String             @id @default(cuid())
+  meetingPreparationId        String?
+  meetingPreparation          MeetingPreparation? @relation(fields: [meetingPreparationId], references: [id])
+  caseId                      String
+  case                        Case               @relation(fields: [caseId], references: [id])
+  occurredAt                  DateTime?
+  internalAttendees           String?
+  externalParticipantCategories String?
+  summary                     String
+  informationGaps             String?
+  proposedNextSteps           String?
+  supersedesRecordId          String?
+  recordedById                String
+  createdAt                   DateTime           @default(now())
+
+  @@index([caseId])
+}
+
+model Decision {
+  id                 String         @id @default(cuid())
+  caseId             String
+  case               Case           @relation(fields: [caseId], references: [id])
+  title              String
+  decisionType       DecisionType
+  status             DecisionStatus @default(PROPOSED)
+  recommendation     String?
+  rationale          String?
+  proposedById       String
+  approvedById       String?
+  proposedAt         DateTime       @default(now())
+  decidedAt          DateTime?
+  supersedesDecisionId String?
+
+  @@index([caseId])
+  @@index([status])
+}
+
+model Commitment {
+  id                  String           @id @default(cuid())
+  caseId              String
+  case                Case             @relation(fields: [caseId], references: [id])
+  title               String
+  description         String?
+  internalOwnerId     String?
+  relatedOrganizationId String?
+  dueDate             DateTime?
+  status              CommitmentStatus @default(OPEN)
+  completionNote      String?
+  createdById         String
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  completedAt         DateTime?
+  recordVersion       Int              @default(0)
+
+  @@index([caseId])
+  @@index([status])
+}
+
+model AuditEvent {
+  id               String   @id @default(cuid())
+  actorEmployeeId  String?
+  actor            Employee? @relation(fields: [actorEmployeeId], references: [id])
+  action           String
+  entityType       String
+  entityId         String?
+  caseId           String?
+  summary          String
+  changedFields    Json?
+  correlationId    String?
+  createdAt        DateTime @default(now())
+
+  @@index([actorEmployeeId])
+  @@index([entityType])
+  @@index([caseId])
+  @@index([createdAt])
+}
+
+// Transaction-safe monotonic counter for internal case references.
+model Counter {
+  id    String @id
+  value Int    @default(0)
+}

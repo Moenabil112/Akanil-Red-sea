@@ -1,8 +1,8 @@
 # QA Report — P3 Forum Programme, Qualification and Stakeholder Engagement
 
 Date: 2026-07-20 · Branch: `feature/p3-forum-qualification-stakeholder-engagement`
-Base: `main` (merged P0 `3b2b4c6` + P1 `101ed96` + P2 `de94df5`). Draft PR only —
-not merged, not deployed.
+Base: `main` (merged P0 `3b2b4c6` + P1 `101ed96` + P2 `de94df5`). Merged into
+`main` via PR #6 (merge commit `a2a2293`); not deployed.
 
 ## Quality gates
 

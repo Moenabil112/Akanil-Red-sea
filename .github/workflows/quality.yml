@@ -1,6 +1,8 @@
 name: Quality
 
 # Runs the repository's quality gates. No deployment, secrets or analytics.
+# The public build never requires a database; P4-A integration tests use a
+# throwaway PostgreSQL service with synthetic credentials (not repository secret contexts).
 on:
   pull_request:
     branches: [main]
@@ -10,6 +12,32 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
+
+    # Ephemeral PostgreSQL for P4-A integration tests only. Synthetic
+    # credentials defined inline — never production credentials.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: akanil_p4
+          POSTGRES_PASSWORD: ci_synthetic_only
+          POSTGRES_DB: akanil_p4_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U akanil_p4 -d akanil_p4_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # Synthetic CI values only. The public build ignores these; the
+      # internal system stays disabled unless P4_INTERNAL_ENABLED=true.
+      DATABASE_URL: postgresql://akanil_p4:ci_synthetic_only@localhost:5432/akanil_p4_test?schema=public
+      DATABASE_URL_TEST: postgresql://akanil_p4:ci_synthetic_only@localhost:5432/akanil_p4_test?schema=public
+      AUTH_SECRET: ci_synthetic_secret_not_for_production_use_only
+      P4_INTERNAL_ENABLED: "false"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,13 +51,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate Prisma client
+        run: npm run db:generate
+
+      - name: Apply test migrations
+        run: npm run db:migrate:test
+
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Test
+      - name: Test (unit + component)
         run: npm test
 
-      - name: Build
+      - name: Test (integration, PostgreSQL)
+        run: npm run test:integration
+
+      - name: Build (public build succeeds without a database)
         run: npm run build
 
       - name: Lint
