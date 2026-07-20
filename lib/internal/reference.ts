@@ -15,3 +15,14 @@ export function formatCaseReference(year: number, value: number): string {
 export function isCaseReferenceShape(value: string): boolean {
   return /^AKN-\d{4}-\d{6,}$/.test(value);
 }
+
+/**
+ * Internal security-incident reference (P4-B §14): SEC-YYYY-000001. Also
+ * produced by a transaction-safe database counter — never public, never a
+ * public case number.
+ */
+export const INCIDENT_COUNTER_ID = "incident-reference";
+
+export function formatIncidentReference(year: number, value: number): string {
+  return `SEC-${year}-${String(value).padStart(6, "0")}`;
+}

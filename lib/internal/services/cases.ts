@@ -36,7 +36,12 @@ export interface NewCaseInput {
   priority?: CasePriority;
   classification?: Classification;
   initialOwnerId?: string | null;
+  // P4-B pilot data boundary (§15): SYNTHETIC or DE_IDENTIFIED only. Live
+  // categories are impossible by type and rejected below.
+  pilotDataCategory?: string;
 }
+
+const ALLOWED_PILOT_DATA = new Set(["SYNTHETIC", "DE_IDENTIFIED"]);
 
 /**
  * Create a case manually (P4-A §14) in a single transaction: increment the
@@ -50,6 +55,14 @@ export async function createCase(
   input: NewCaseInput,
 ): Promise<Case> {
   assertCan(actor, "case.create");
+
+  // Reject any non-approved pilot data category (§15). Live personal,
+  // confidential, banking, government-identity, password or secret data is
+  // never permitted in the pilot database.
+  const pilotDataCategory = input.pilotDataCategory ?? "SYNTHETIC";
+  if (!ALLOWED_PILOT_DATA.has(pilotDataCategory)) {
+    throw new Error("PILOT_DATA_CATEGORY_NOT_ALLOWED");
+  }
 
   const year = new Date().getFullYear();
   const ownerId = input.initialOwnerId || actor.id;
@@ -80,6 +93,7 @@ export async function createCase(
         forumSectorTrackId: validPublicId("track", input.forumSectorTrackId),
         priority: input.priority ?? "NORMAL",
         classification: input.classification ?? "INTERNAL",
+        pilotDataCategory: pilotDataCategory as never,
         status: "NEW",
         currentOwnerId: ownerId,
         createdById: actor.id,

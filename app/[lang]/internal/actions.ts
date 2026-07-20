@@ -39,6 +39,7 @@ import {
   UserServiceError,
 } from "@/lib/internal/services/users";
 import { assertCan } from "@/lib/internal/authz";
+import { assertPilotOperational, PilotAccessError } from "@/lib/internal/pilot";
 
 /** Read the authenticated actor or reject (server-side enforcement). */
 async function actor() {
@@ -47,9 +48,27 @@ async function actor() {
   return employee;
 }
 
-/** Reject a mutation when the actor may not access the case (object-level). */
-async function requireCaseAccess(caseId: string) {
+/**
+ * Read the authenticated actor for an OPERATIONAL mutation. Beyond
+ * authentication, this enforces the P4-B operating mode, the pilot emergency
+ * suspension and the pilot-cohort gate: an ACTIVE account alone is not enough —
+ * the employee must hold active pilot access. Governance actions use a
+ * different gate and do not require pilot access.
+ */
+async function operationalActor(locale: string) {
   const employee = await actor();
+  try {
+    await assertPilotOperational(employee.id);
+  } catch (error) {
+    if (error instanceof PilotAccessError) redirect(`/${locale}/internal/denied?reason=pilot`);
+    throw error;
+  }
+  return employee;
+}
+
+/** Reject a mutation when the actor may not access the case (object-level). */
+async function requireCaseAccess(locale: string, caseId: string) {
+  const employee = await operationalActor(locale);
   if (!(await canAccessCase(employee, caseId))) throw new Error("FORBIDDEN");
   return employee;
 }
@@ -101,7 +120,7 @@ export async function changePasswordAction(
 /* ---------------- Cases ---------------- */
 
 export async function createCaseAction(locale: string, formData: FormData) {
-  const employee = await actor();
+  const employee = await operationalActor(locale);
   const created = await createCase(employee, {
     title: s(formData, "title"),
     summary: s(formData, "summary"),
@@ -114,13 +133,14 @@ export async function createCaseAction(locale: string, formData: FormData) {
     forumSectorTrackId: s(formData, "track") || null,
     priority: (s(formData, "priority") || "NORMAL") as never,
     classification: (s(formData, "classification") || "INTERNAL") as never,
+    pilotDataCategory: s(formData, "pilotDataCategory") || "SYNTHETIC",
   });
   redirect(`/${locale}/internal/cases/${created.id}`);
 }
 
 export async function transitionAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   try {
     await transitionCase(
       employee,
@@ -140,21 +160,21 @@ export async function transitionAction(locale: string, formData: FormData) {
 
 export async function assignOwnerAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await assignOwner(employee, caseId, s(formData, "ownerId"));
   revalidatePath(`/${locale}/internal/cases/${caseId}`);
 }
 
 export async function addReviewerAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await addReviewer(employee, caseId, s(formData, "reviewerId"));
   revalidatePath(`/${locale}/internal/cases/${caseId}`);
 }
 
 export async function addNoteAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await addNote(employee, caseId, {
     noteType: s(formData, "noteType") || "GENERAL",
     classification: s(formData, "classification") || "INTERNAL",
@@ -167,7 +187,7 @@ export async function addNoteAction(locale: string, formData: FormData) {
 
 export async function createGapAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await createGap(employee, caseId, {
     category: s(formData, "category"),
     title: s(formData, "title"),
@@ -178,14 +198,14 @@ export async function createGapAction(locale: string, formData: FormData) {
 
 export async function resolveGapAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await resolveGap(employee, s(formData, "gapId"), s(formData, "status") as never, s(formData, "resolutionNote"));
   revalidatePath(`/${locale}/internal/cases/${caseId}`);
 }
 
 export async function createEvidenceAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await createEvidenceReference(employee, caseId, {
     title: s(formData, "title"),
     evidenceType: s(formData, "evidenceType"),
@@ -198,7 +218,7 @@ export async function createEvidenceAction(locale: string, formData: FormData) {
 
 export async function qualRecommendAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   const criteria: Record<string, string> = {};
   for (const key of [
     "organizationIdentity",
@@ -220,14 +240,14 @@ export async function qualRecommendAction(locale: string, formData: FormData) {
 
 export async function qualApproveAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await approveQualificationOutcome(employee, s(formData, "reviewId"), s(formData, "outcome"));
   revalidatePath(`/${locale}/internal/cases/${caseId}`);
 }
 
 export async function meetingPrepAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await createMeetingPreparation(employee, caseId, {
     title: s(formData, "title"),
     meetingType: s(formData, "meetingType") || "INTERNAL_REVIEW",
@@ -242,7 +262,7 @@ export async function meetingPrepAction(locale: string, formData: FormData) {
 
 export async function meetingRecordAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await createMeetingRecord(employee, caseId, {
     summary: s(formData, "summary"),
     internalAttendees: s(formData, "internalAttendees"),
@@ -254,7 +274,7 @@ export async function meetingRecordAction(locale: string, formData: FormData) {
 
 export async function decisionProposeAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await proposeDecision(employee, caseId, {
     title: s(formData, "title"),
     decisionType: s(formData, "decisionType"),
@@ -266,14 +286,14 @@ export async function decisionProposeAction(locale: string, formData: FormData) 
 
 export async function decisionResolveAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await resolveDecision(employee, s(formData, "decisionId"), s(formData, "outcome") as never);
   revalidatePath(`/${locale}/internal/cases/${caseId}`);
 }
 
 export async function commitmentCreateAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   await createCommitment(employee, caseId, {
     title: s(formData, "title"),
     description: s(formData, "description"),
@@ -284,7 +304,7 @@ export async function commitmentCreateAction(locale: string, formData: FormData)
 
 export async function commitmentUpdateAction(locale: string, formData: FormData) {
   const caseId = s(formData, "caseId");
-  const employee = await requireCaseAccess(caseId);
+  const employee = await requireCaseAccess(locale, caseId);
   try {
     await updateCommitmentStatus(
       employee,
@@ -305,7 +325,7 @@ export async function commitmentUpdateAction(locale: string, formData: FormData)
 /* ---------------- Organizations ---------------- */
 
 export async function createOrgAction(locale: string, formData: FormData) {
-  const employee = await actor();
+  const employee = await operationalActor(locale);
   const id = await createOrganization(employee, {
     workingName: s(formData, "workingName"),
     legalName: s(formData, "legalName"),
@@ -319,7 +339,7 @@ export async function createOrgAction(locale: string, formData: FormData) {
 }
 
 export async function createContactAction(locale: string, formData: FormData) {
-  const employee = await actor();
+  const employee = await operationalActor(locale);
   const organizationId = s(formData, "organizationId");
   await createContact(employee, organizationId, {
     fullName: s(formData, "fullName"),
@@ -331,14 +351,14 @@ export async function createContactAction(locale: string, formData: FormData) {
 }
 
 export async function orgVerifyAction(locale: string, formData: FormData) {
-  const employee = await actor();
+  const employee = await operationalActor(locale);
   const id = s(formData, "organizationId");
   await updateOrganizationVerification(employee, id, s(formData, "verificationStatus"), Number(formData.get("version")));
   revalidatePath(`/${locale}/internal/organizations/${id}`);
 }
 
 export async function orgArchiveAction(locale: string, formData: FormData) {
-  const employee = await actor();
+  const employee = await operationalActor(locale);
   const id = s(formData, "organizationId");
   await archiveOrganization(employee, id, Number(formData.get("version")));
   revalidatePath(`/${locale}/internal/organizations/${id}`);

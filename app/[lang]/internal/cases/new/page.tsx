@@ -27,8 +27,18 @@ export default async function NewCasePage({
     <>
       <h1 className={styles.h1}>{dict.cases.create}</h1>
       <p className={styles.warning}>{dict.cases.sensitiveWarning}</p>
+      <p className={styles.warning}>{dict.p4b.common.minimizationWarning}</p>
 
       <form action={createCaseAction.bind(null, locale)} className={styles.form}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="pilotDataCategory">
+            Pilot data category
+          </label>
+          <select id="pilotDataCategory" name="pilotDataCategory" defaultValue="SYNTHETIC" className={styles.select}>
+            <option value="SYNTHETIC">SYNTHETIC</option>
+            <option value="DE_IDENTIFIED">DE_IDENTIFIED</option>
+          </select>
+        </div>
         <div className={styles.field}>
           <label className={styles.label} htmlFor="title">
             {dict.cases.caseTitle}

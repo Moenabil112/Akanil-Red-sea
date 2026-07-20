@@ -320,3 +320,41 @@
 .mono {
   font-family: var(--font-mono, ui-monospace, monospace);
 }
+
+/* P4-B environment banner and status helpers */
+.envBanner {
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 1px solid #1e293b;
+}
+.envBanner[data-kind="validation"] {
+  background: #0b2a3a;
+  color: #a5e0f5;
+}
+.envBanner[data-kind="pilot"] {
+  background: #10281a;
+  color: #a7e8c4;
+}
+.envBanner[data-kind="suspended"] {
+  background: #3a0f16;
+  color: #f7b5bf;
+}
+
+.areaOk {
+  color: #6ee7b7;
+  font-weight: 600;
+}
+.areaWarn {
+  color: #fcd34d;
+  font-weight: 600;
+}
+.areaFail {
+  color: #fca5a5;
+  font-weight: 700;
+}
+.areaNeutral {
+  color: #94a3b8;
+  font-weight: 600;
+}

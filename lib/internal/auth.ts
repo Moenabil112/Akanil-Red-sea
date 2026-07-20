@@ -4,6 +4,7 @@ import { verifyPassword, hashPassword, checkPasswordPolicy } from "./password";
 import { loginConfig } from "./env";
 import { audit } from "./audit";
 import { createSession, revokeAllSessions } from "./session";
+import { recordSecurityEvent } from "./security-events";
 
 /**
  * Employee-only authentication (P4-A §6/§7). No self-registration, no
@@ -40,6 +41,16 @@ export async function login(
 
   // Disabled accounts can never log in (generic failure).
   if (employee.status === "DISABLED") {
+    await verifyPassword(TIMING_DUMMY_HASH, password);
+    return { ok: false };
+  }
+
+  // Suspended / offboarding / disabled lifecycle stages block login (§9).
+  if (
+    employee.lifecycleStage === "SUSPENDED" ||
+    employee.lifecycleStage === "OFFBOARDING" ||
+    employee.lifecycleStage === "DISABLED"
+  ) {
     await verifyPassword(TIMING_DUMMY_HASH, password);
     return { ok: false };
   }
@@ -102,6 +113,43 @@ export async function login(
     summary: "Successful login",
   });
   return { ok: true, mustChangePassword: employee.mustChangePassword };
+}
+
+/**
+ * Step-up reauthentication (P4-B §8). Verifies the employee's password
+ * server-side for a sensitive action. The password is never stored. A failure
+ * is generic and is recorded as a REAUTHENTICATION_FAILURE security event for
+ * monitoring. The caller stamps the current session on success.
+ */
+export async function reauthenticate(
+  employeeId: string,
+  password: string,
+): Promise<boolean> {
+  const employee = await prisma.employee.findUnique({ where: { id: employeeId } });
+  if (!employee || employee.status !== "ACTIVE") {
+    await verifyPassword(TIMING_DUMMY_HASH, password);
+    return false;
+  }
+  const valid = await verifyPassword(employee.passwordHash, password);
+  if (!valid) {
+    await recordSecurityEvent({
+      category: "REAUTHENTICATION_FAILURE",
+      severity: "MEDIUM",
+      actorEmployeeId: employee.id,
+      subjectType: "Employee",
+      subjectId: employee.id,
+      summary: "Step-up reauthentication failed",
+    });
+    return false;
+  }
+  await audit({
+    actorEmployeeId: employee.id,
+    action: "AUTH_STEP_UP_SUCCESS",
+    entityType: "Employee",
+    entityId: employee.id,
+    summary: "Step-up reauthentication succeeded",
+  });
+  return true;
 }
 
 export type ChangePasswordResult =

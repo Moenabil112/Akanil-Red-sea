@@ -146,4 +146,5 @@ client or participant portal, data room, file upload, external notification
 (email / SMS / WhatsApp), calendar integration, webhooks, automatic partner
 matching, AI decision-making, public case tracking, payment or contracting,
 live logistics intelligence, and any production deployment. None were
-activated; the branch is not merged and has not been deployed.
+activated. P4-A was subsequently merged into `main` via PR #7 (merge commit
+`eb3f02c`) and accepted as the P4-B baseline; it has not been deployed.

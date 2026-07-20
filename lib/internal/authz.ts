@@ -14,6 +14,10 @@ export interface CurrentEmployee {
   displayName: string;
   role: EmployeeRole;
   mustChangePassword: boolean;
+  // P4-B: lifecycle stage and the current session's most recent step-up
+  // reauthentication timestamp (used to gate sensitive actions).
+  lifecycleStage?: string;
+  stepUpVerifiedAt?: Date | null;
 }
 
 /** Throws "FORBIDDEN" when the employee's role lacks the permission. */

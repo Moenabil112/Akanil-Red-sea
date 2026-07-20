@@ -186,141 +186,359 @@ enum CommitmentStatus {
   CANCELLED
 }
 
+// ---------------- P4-B enums ----------------
+
+enum EmployeeLifecycleStage {
+  PROVISIONING
+  ACTIVE
+  SUSPENDED
+  OFFBOARDING
+  DISABLED
+}
+
+enum PilotDataCategory {
+  SYNTHETIC
+  DE_IDENTIFIED
+}
+
+enum PilotAccessStatus {
+  REQUESTED
+  APPROVED
+  ACTIVE
+  SUSPENDED
+  REVOKED
+  EXPIRED
+}
+
+enum AccessChangeType {
+  CREATE_EMPLOYEE_ACCESS
+  CHANGE_ROLE
+  ENABLE_ACCOUNT
+  DISABLE_ACCOUNT
+  GRANT_PILOT_ACCESS
+  SUSPEND_PILOT_ACCESS
+  REVOKE_PILOT_ACCESS
+  RESET_PASSWORD
+  REVOKE_SESSIONS
+}
+
+enum AccessChangeStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  APPLIED
+  EXPIRED
+  CANCELLED
+}
+
+enum AccessReviewOutcome {
+  RETAIN
+  MODIFY
+  SUSPEND
+  REVOKE
+  FURTHER_REVIEW_REQUIRED
+}
+
+enum SecurityEventCategory {
+  LOGIN_FAILURE_THRESHOLD
+  ACCOUNT_LOCKED
+  REAUTHENTICATION_FAILURE
+  UNAUTHORIZED_ROUTE_ATTEMPT
+  OBJECT_ACCESS_DENIED
+  INVALID_STATE_TRANSITION
+  CONCURRENCY_CONFLICT
+  SESSION_REVOKED
+  PILOT_ACCESS_SUSPENDED
+  AUDIT_INTEGRITY_FAILURE
+  BACKUP_VALIDATION_FAILURE
+  SECRET_SCAN_FAILURE
+  OTHER_SECURITY_EVENT
+}
+
+enum SecuritySeverity {
+  INFORMATIONAL
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SecurityEventStatus {
+  OPEN
+  ACKNOWLEDGED
+  UNDER_REVIEW
+  RESOLVED
+  FALSE_POSITIVE
+}
+
+enum IncidentStatus {
+  OPEN
+  TRIAGE
+  CONTAINMENT
+  INVESTIGATION
+  RECOVERY
+  CLOSED
+}
+
+enum IncidentCategory {
+  AUTHENTICATION
+  AUTHORIZATION
+  DATA_EXPOSURE
+  AUDIT_INTEGRITY
+  DATABASE
+  BACKUP_RESTORE
+  AVAILABILITY
+  SECRET_HANDLING
+  OPERATIONAL_ERROR
+  OTHER
+}
+
+enum ExerciseType {
+  EMPLOYEE_ONBOARDING
+  EMPLOYEE_OFFBOARDING
+  ROLE_CHANGE
+  MANUAL_CASE_CREATION
+  CASE_ASSIGNMENT
+  QUALIFICATION_REVIEW
+  INFORMATION_GAP
+  MEETING_PREPARATION
+  DECISION_APPROVAL
+  COMMITMENT_FOLLOW_UP
+  CASE_CLOSURE_AND_REOPEN
+  SESSION_REVOCATION
+  ACCOUNT_LOCKOUT
+  OBJECT_ACCESS_DENIAL
+  CONCURRENCY_CONFLICT
+  AUDIT_CHAIN_VERIFICATION
+  BACKUP_AND_RESTORE
+  INCIDENT_RESPONSE
+  PUBLIC_INTERNAL_BOUNDARY
+  INTERNAL_FEATURE_SHUTDOWN
+}
+
+enum ExerciseStatus {
+  PLANNED
+  IN_PROGRESS
+  PASSED
+  PASSED_WITH_OBSERVATIONS
+  FAILED
+  BLOCKED
+  CANCELLED
+}
+
+enum CorrectiveActionSource {
+  PILOT_EXERCISE
+  SECURITY_INCIDENT
+  ACCESS_REVIEW
+  AUDIT_INTEGRITY
+  BACKUP_TEST
+  SECURITY_REVIEW
+  OPERATIONAL_OBSERVATION
+}
+
+enum CorrectiveActionStatus {
+  OPEN
+  IN_PROGRESS
+  READY_FOR_VERIFICATION
+  VERIFIED
+  ACCEPTED_RISK
+  CANCELLED
+}
+
+enum ReadinessGateState {
+  NOT_READY
+  READY_FOR_LIMITED_INTERNAL_PILOT
+  LIMITED_INTERNAL_PILOT_ACTIVE
+  PILOT_SUSPENDED
+  PILOT_COMPLETED_PENDING_REVIEW
+}
+
+enum ReadinessAreaStatus {
+  NOT_TESTED
+  PASS
+  PASS_WITH_OBSERVATIONS
+  FAIL
+  BLOCKED
+  EXPIRED
+}
+
 // ---------------- Models ----------------
 
 model Employee {
-  id               String        @id @default(cuid())
-  email            String        @unique
-  displayName      String
-  passwordHash     String
-  role             EmployeeRole
-  status           AccountStatus @default(ACTIVE)
-  mustChangePassword Boolean     @default(true)
-  failedLoginCount Int           @default(0)
-  lockedUntil      DateTime?
-  lastLoginAt      DateTime?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  disabledAt       DateTime?
+  id                 String        @id @default(cuid())
+  email              String        @unique
+  displayName        String
+  passwordHash       String
+  role               EmployeeRole
+  status             AccountStatus @default(ACTIVE)
+  mustChangePassword Boolean       @default(true)
+  failedLoginCount   Int           @default(0)
+  lockedUntil        DateTime?
+  lastLoginAt        DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  disabledAt         DateTime?
 
-  sessions         Session[]
-  createdOrgs      Organization[]  @relation("OrgCreatedBy")
-  createdCases     Case[]          @relation("CaseCreatedBy")
-  ownedCases       Case[]          @relation("CaseOwner")
-  assignments      CaseAssignment[] @relation("AssignmentEmployee")
-  assignmentsMade  CaseAssignment[] @relation("AssignmentBy")
-  notes            InternalNote[]
-  auditEvents      AuditEvent[]
+  // P4-B controlled employee lifecycle (§9). Historical authorship and audit
+  // attribution are always preserved — an employee record is never deleted.
+  lifecycleStage             EmployeeLifecycleStage @default(ACTIVE)
+  accessPurpose              String?
+  roleJustification          String?
+  approvingManagerId         String?
+  accessStartsAt             DateTime?
+  accessReviewDueAt          DateTime?
+  lastAccessReviewAt         DateTime?
+  offboardingReason          String?
+  offboardingStartedAt       DateTime?
+  offboardingCompletedAt     DateTime?
+  sessionsRevokedConfirmedAt DateTime?
+  casesReassignedConfirmedAt DateTime?
+
+  sessions        Session[]
+  createdOrgs     Organization[]   @relation("OrgCreatedBy")
+  createdCases    Case[]           @relation("CaseCreatedBy")
+  ownedCases      Case[]           @relation("CaseOwner")
+  assignments     CaseAssignment[] @relation("AssignmentEmployee")
+  assignmentsMade CaseAssignment[] @relation("AssignmentBy")
+  notes           InternalNote[]
+  auditEvents     AuditEvent[]
+
+  // P4-B relations.
+  pilotAccess            PilotAccess[]         @relation("PilotAccessEmployee")
+  pilotAccessApproved    PilotAccess[]         @relation("PilotAccessApprover")
+  pilotAccessRequested   PilotAccess[]         @relation("PilotAccessRequester")
+  accessChangesTarget    AccessChangeRequest[] @relation("AccessChangeTarget")
+  accessChangesRequested AccessChangeRequest[] @relation("AccessChangeRequester")
+  accessChangesApproved  AccessChangeRequest[] @relation("AccessChangeApprover")
+  accessReviewsSubject   AccessReview[]        @relation("AccessReviewSubject")
+  accessReviewsDone      AccessReview[]        @relation("AccessReviewReviewer")
+  securityEventsRaised   SecurityEvent[]       @relation("SecurityEventActor")
+  incidentsOwned         SecurityIncident[]    @relation("IncidentOwner")
+  correctiveActionsOwned CorrectiveAction[]    @relation("CorrectiveActionOwner")
 
   @@index([role])
   @@index([status])
+  @@index([lifecycleStage])
 }
 
 model Session {
-  id            String   @id @default(cuid())
+  id               String    @id @default(cuid())
   // Opaque token hash (SHA-256 of the cookie value); the raw token is
   // never stored. Sessions are revocable and attributable to one employee.
-  tokenHash     String   @unique
-  employeeId    String
-  employee      Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-  createdAt     DateTime @default(now())
-  absoluteExpiry DateTime
-  idleExpiry    DateTime
-  revokedAt     DateTime?
+  tokenHash        String    @unique
+  employeeId       String
+  employee         Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  createdAt        DateTime  @default(now())
+  absoluteExpiry   DateTime
+  idleExpiry       DateTime
+  revokedAt        DateTime?
+  // P4-B step-up: timestamp of the most recent successful reauthentication
+  // on this session. Sensitive actions require this to be within the
+  // configured recent-auth window. Never stores the password.
+  stepUpVerifiedAt DateTime?
+  lastActivityAt   DateTime? @default(now())
+  // Privacy-minimized, coarse device description (e.g. "Firefox on Linux").
+  // Never a full user-agent string, never an IP address.
+  deviceLabel      String?
 
   @@index([employeeId])
 }
 
 model Organization {
-  id               String                @id @default(cuid())
-  workingName      String
-  legalName        String?
-  organizationType String?
-  country          String?
-  region           String?
-  officialWebsite  String?
-  officialEmail    String?
-  officialPhone    String?
+  id                 String                @id @default(cuid())
+  workingName        String
+  legalName          String?
+  organizationType   String?
+  country            String?
+  region             String?
+  officialWebsite    String?
+  officialEmail      String?
+  officialPhone      String?
   verificationStatus OrgVerificationStatus @default(UNREVIEWED)
-  operationalNotes String?
-  createdById      String
-  createdBy        Employee              @relation("OrgCreatedBy", fields: [createdById], references: [id])
-  createdAt        DateTime              @default(now())
-  updatedAt        DateTime              @updatedAt
-  archivedAt       DateTime?
-  recordVersion    Int                   @default(0)
+  operationalNotes   String?
+  createdById        String
+  createdBy          Employee              @relation("OrgCreatedBy", fields: [createdById], references: [id])
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  archivedAt         DateTime?
+  recordVersion      Int                   @default(0)
 
-  contacts         Contact[]
-  cases            Case[]
+  contacts Contact[]
+  cases    Case[]
 
   @@index([verificationStatus])
   @@index([workingName])
 }
 
 model Contact {
-  id               String          @id @default(cuid())
-  organizationId   String
-  organization     Organization    @relation(fields: [organizationId], references: [id])
-  fullName         String
-  professionalRole String?
+  id                String          @id @default(cuid())
+  organizationId    String
+  organization      Organization    @relation(fields: [organizationId], references: [id])
+  fullName          String
+  professionalRole  String?
   professionalEmail String?
   professionalPhone String?
-  authorityStatus  AuthorityStatus @default(UNKNOWN)
+  authorityStatus   AuthorityStatus @default(UNKNOWN)
   preferredLanguage String?
-  operationalNotes String?
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
-  archivedAt       DateTime?
-  recordVersion    Int             @default(0)
+  operationalNotes  String?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  archivedAt        DateTime?
+  recordVersion     Int             @default(0)
 
-  cases            Case[]
+  cases Case[]
 
   @@index([organizationId])
 }
 
 model Case {
-  id                     String        @id @default(cuid())
-  internalReference      String        @unique
-  title                  String
-  summary                String
-  source                 CaseSource
+  id                       String     @id @default(cuid())
+  internalReference        String     @unique
+  title                    String
+  summary                  String
+  source                   CaseSource
   // Validated public taxonomy ids (strings, never redefined here).
-  requestType            String?
-  primaryPlatformId      String?
-  primaryValueChainId    String?
+  requestType              String?
+  primaryPlatformId        String?
+  primaryValueChainId      String?
   forumParticipationPathId String?
-  forumSectorTrackId     String?
+  forumSectorTrackId       String?
 
-  organizationId         String?
-  organization           Organization? @relation(fields: [organizationId], references: [id])
-  primaryContactId       String?
-  primaryContact         Contact?      @relation(fields: [primaryContactId], references: [id])
+  organizationId   String?
+  organization     Organization? @relation(fields: [organizationId], references: [id])
+  primaryContactId String?
+  primaryContact   Contact?      @relation(fields: [primaryContactId], references: [id])
 
-  status                 CaseStatus    @default(NEW)
-  qualificationStatus    QualificationOutcome @default(PENDING)
-  priority               CasePriority  @default(NORMAL)
-  classification         Classification @default(INTERNAL)
+  status              CaseStatus           @default(NEW)
+  qualificationStatus QualificationOutcome @default(PENDING)
+  priority            CasePriority         @default(NORMAL)
+  classification      Classification       @default(INTERNAL)
+  // P4-B pilot data boundary (§15): every case must declare that its content
+  // is synthetic or approved de-identified data. Live personal, confidential,
+  // banking, government-identity, password or secret data is never permitted.
+  pilotDataCategory   PilotDataCategory    @default(SYNTHETIC)
 
-  currentOwnerId         String?
-  currentOwner           Employee?     @relation("CaseOwner", fields: [currentOwnerId], references: [id])
-  createdById            String
-  createdBy              Employee      @relation("CaseCreatedBy", fields: [createdById], references: [id])
+  currentOwnerId String?
+  currentOwner   Employee? @relation("CaseOwner", fields: [currentOwnerId], references: [id])
+  createdById    String
+  createdBy      Employee  @relation("CaseCreatedBy", fields: [createdById], references: [id])
 
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
-  closedAt               DateTime?
-  closureReason          ClosureReason?
-  recordVersion          Int           @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  closedAt      DateTime?
+  closureReason ClosureReason?
+  recordVersion Int            @default(0)
 
-  assignments            CaseAssignment[]
-  notes                  InternalNote[]
-  qualificationReviews   QualificationReview[]
-  informationGaps        InformationGap[]
-  evidenceReferences     EvidenceReference[]
-  meetingPreparations    MeetingPreparation[]
-  meetingRecords         MeetingRecord[]
-  decisions              Decision[]
-  commitments            Commitment[]
+  assignments          CaseAssignment[]
+  notes                InternalNote[]
+  qualificationReviews QualificationReview[]
+  informationGaps      InformationGap[]
+  evidenceReferences   EvidenceReference[]
+  meetingPreparations  MeetingPreparation[]
+  meetingRecords       MeetingRecord[]
+  decisions            Decision[]
+  commitments          Commitment[]
 
   @@index([status])
   @@index([priority])
@@ -346,54 +564,54 @@ model CaseAssignment {
 }
 
 model InternalNote {
-  id             String         @id @default(cuid())
-  caseId         String
-  case           Case           @relation(fields: [caseId], references: [id])
-  noteType       NoteType       @default(GENERAL)
-  classification Classification @default(INTERNAL)
-  body           String
-  authorId       String
-  author         Employee       @relation(fields: [authorId], references: [id])
+  id               String         @id @default(cuid())
+  caseId           String
+  case             Case           @relation(fields: [caseId], references: [id])
+  noteType         NoteType       @default(GENERAL)
+  classification   Classification @default(INTERNAL)
+  body             String
+  authorId         String
+  author           Employee       @relation(fields: [authorId], references: [id])
   supersedesNoteId String?
-  createdAt      DateTime       @default(now())
+  createdAt        DateTime       @default(now())
 
   @@index([caseId])
 }
 
 model QualificationReview {
-  id                       String               @id @default(cuid())
-  caseId                   String
-  case                     Case                 @relation(fields: [caseId], references: [id])
-  organizationIdentity     CriterionState       @default(NOT_REVIEWED)
-  representativeAuthority  CriterionState       @default(NOT_REVIEWED)
-  statedPurpose            CriterionState       @default(NOT_REVIEWED)
-  informationCompleteness  CriterionState       @default(NOT_REVIEWED)
-  evidenceAvailability     CriterionState       @default(NOT_REVIEWED)
-  regulatoryOrRiskConcern  CriterionState       @default(NOT_REVIEWED)
-  recommendation           String?
-  finalOutcome             QualificationOutcome @default(PENDING)
-  reviewerId               String
-  decisionOwnerId          String?
-  createdAt                DateTime             @default(now())
-  approvedAt               DateTime?
+  id                      String               @id @default(cuid())
+  caseId                  String
+  case                    Case                 @relation(fields: [caseId], references: [id])
+  organizationIdentity    CriterionState       @default(NOT_REVIEWED)
+  representativeAuthority CriterionState       @default(NOT_REVIEWED)
+  statedPurpose           CriterionState       @default(NOT_REVIEWED)
+  informationCompleteness CriterionState       @default(NOT_REVIEWED)
+  evidenceAvailability    CriterionState       @default(NOT_REVIEWED)
+  regulatoryOrRiskConcern CriterionState       @default(NOT_REVIEWED)
+  recommendation          String?
+  finalOutcome            QualificationOutcome @default(PENDING)
+  reviewerId              String
+  decisionOwnerId         String?
+  createdAt               DateTime             @default(now())
+  approvedAt              DateTime?
 
   @@index([caseId])
 }
 
 model InformationGap {
-  id             String    @id @default(cuid())
-  caseId         String
-  case           Case      @relation(fields: [caseId], references: [id])
-  category       String
-  title          String
-  description    String?
-  status         GapStatus @default(OPEN)
+  id              String    @id @default(cuid())
+  caseId          String
+  case            Case      @relation(fields: [caseId], references: [id])
+  category        String
+  title           String
+  description     String?
+  status          GapStatus @default(OPEN)
   internalOwnerId String?
-  dueDate        DateTime?
-  resolutionNote String?
-  createdById    String
-  createdAt      DateTime  @default(now())
-  resolvedAt     DateTime?
+  dueDate         DateTime?
+  resolutionNote  String?
+  createdById     String
+  createdAt       DateTime  @default(now())
+  resolvedAt      DateTime?
 
   @@index([caseId])
   @@index([status])
@@ -420,60 +638,60 @@ model EvidenceReference {
 }
 
 model MeetingPreparation {
-  id                   String            @id @default(cuid())
-  caseId               String
-  case                 Case              @relation(fields: [caseId], references: [id])
-  title                String
-  purpose              String?
-  meetingType          MeetingType       @default(INTERNAL_REVIEW)
-  proposedDate         DateTime?
+  id                    String            @id @default(cuid())
+  caseId                String
+  case                  Case              @relation(fields: [caseId], references: [id])
+  title                 String
+  purpose               String?
+  meetingType           MeetingType       @default(INTERNAL_REVIEW)
+  proposedDate          DateTime?
   participantCategories String?
-  keyQuestions         String?
-  decisionsSought      String?
-  expectedOutcome      String?
-  status               MeetingPrepStatus @default(DRAFT)
-  preparedById         String
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @updatedAt
-  recordVersion        Int               @default(0)
+  keyQuestions          String?
+  decisionsSought       String?
+  expectedOutcome       String?
+  status                MeetingPrepStatus @default(DRAFT)
+  preparedById          String
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  recordVersion         Int               @default(0)
 
-  records              MeetingRecord[]
+  records MeetingRecord[]
 
   @@index([caseId])
 }
 
 model MeetingRecord {
-  id                          String             @id @default(cuid())
-  meetingPreparationId        String?
-  meetingPreparation          MeetingPreparation? @relation(fields: [meetingPreparationId], references: [id])
-  caseId                      String
-  case                        Case               @relation(fields: [caseId], references: [id])
-  occurredAt                  DateTime?
-  internalAttendees           String?
+  id                            String              @id @default(cuid())
+  meetingPreparationId          String?
+  meetingPreparation            MeetingPreparation? @relation(fields: [meetingPreparationId], references: [id])
+  caseId                        String
+  case                          Case                @relation(fields: [caseId], references: [id])
+  occurredAt                    DateTime?
+  internalAttendees             String?
   externalParticipantCategories String?
-  summary                     String
-  informationGaps             String?
-  proposedNextSteps           String?
-  supersedesRecordId          String?
-  recordedById                String
-  createdAt                   DateTime           @default(now())
+  summary                       String
+  informationGaps               String?
+  proposedNextSteps             String?
+  supersedesRecordId            String?
+  recordedById                  String
+  createdAt                     DateTime            @default(now())
 
   @@index([caseId])
 }
 
 model Decision {
-  id                 String         @id @default(cuid())
-  caseId             String
-  case               Case           @relation(fields: [caseId], references: [id])
-  title              String
-  decisionType       DecisionType
-  status             DecisionStatus @default(PROPOSED)
-  recommendation     String?
-  rationale          String?
-  proposedById       String
-  approvedById       String?
-  proposedAt         DateTime       @default(now())
-  decidedAt          DateTime?
+  id                   String         @id @default(cuid())
+  caseId               String
+  case                 Case           @relation(fields: [caseId], references: [id])
+  title                String
+  decisionType         DecisionType
+  status               DecisionStatus @default(PROPOSED)
+  recommendation       String?
+  rationale            String?
+  proposedById         String
+  approvedById         String?
+  proposedAt           DateTime       @default(now())
+  decidedAt            DateTime?
   supersedesDecisionId String?
 
   @@index([caseId])
@@ -481,43 +699,268 @@ model Decision {
 }
 
 model Commitment {
-  id                  String           @id @default(cuid())
-  caseId              String
-  case                Case             @relation(fields: [caseId], references: [id])
-  title               String
-  description         String?
-  internalOwnerId     String?
+  id                    String           @id @default(cuid())
+  caseId                String
+  case                  Case             @relation(fields: [caseId], references: [id])
+  title                 String
+  description           String?
+  internalOwnerId       String?
   relatedOrganizationId String?
-  dueDate             DateTime?
-  status              CommitmentStatus @default(OPEN)
-  completionNote      String?
-  createdById         String
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @updatedAt
-  completedAt         DateTime?
-  recordVersion       Int              @default(0)
+  dueDate               DateTime?
+  status                CommitmentStatus @default(OPEN)
+  completionNote        String?
+  createdById           String
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  completedAt           DateTime?
+  recordVersion         Int              @default(0)
 
   @@index([caseId])
   @@index([status])
 }
 
 model AuditEvent {
-  id               String   @id @default(cuid())
-  actorEmployeeId  String?
-  actor            Employee? @relation(fields: [actorEmployeeId], references: [id])
-  action           String
-  entityType       String
-  entityId         String?
-  caseId           String?
-  summary          String
-  changedFields    Json?
-  correlationId    String?
-  createdAt        DateTime @default(now())
+  id              String    @id @default(cuid())
+  actorEmployeeId String?
+  actor           Employee? @relation(fields: [actorEmployeeId], references: [id])
+  action          String
+  entityType      String
+  entityId        String?
+  caseId          String?
+  summary         String
+  changedFields   Json?
+  correlationId   String?
+  createdAt       DateTime  @default(now())
+
+  // P4-B tamper-evident hash chain (§12). Assigned transaction-safely at
+  // write time from the "audit-sequence" counter. The hash covers only
+  // canonical, non-secret immutable metadata — never passwords, tokens,
+  // secrets or confidential note bodies. Legacy pre-P4-B rows are backfilled
+  // deterministically by scripts/internal/audit-backfill.ts; until then these
+  // columns are null. This is application-level tamper-evidence, not an
+  // external notarization or blockchain.
+  sequenceNumber    Int?    @unique
+  previousEventHash String?
+  eventHash         String?
+  hashVersion       Int     @default(1)
 
   @@index([actorEmployeeId])
   @@index([entityType])
   @@index([caseId])
   @@index([createdAt])
+  @@index([sequenceNumber])
+}
+
+// ---------------- P4-B models ----------------
+
+// Pilot-cohort control (§6). An ACTIVE account alone never grants pilot
+// access; an employee must also hold an APPROVED/ACTIVE, time-limited record.
+model PilotAccess {
+  id            String            @id @default(cuid())
+  employeeId    String
+  employee      Employee          @relation("PilotAccessEmployee", fields: [employeeId], references: [id])
+  status        PilotAccessStatus @default(REQUESTED)
+  approvedRole  EmployeeRole
+  requestedById String
+  requestedBy   Employee          @relation("PilotAccessRequester", fields: [requestedById], references: [id])
+  approvedById  String?
+  approvedBy    Employee?         @relation("PilotAccessApprover", fields: [approvedById], references: [id])
+  justification String
+  startsAt      DateTime?
+  expiresAt     DateTime?
+  suspendedAt   DateTime?
+  revokedAt     DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  recordVersion Int               @default(0)
+
+  @@index([employeeId])
+  @@index([status])
+}
+
+// Two-person privileged access-change process (§7). Role changes and
+// account/pilot/session/password changes are proposed, independently
+// approved, then applied. Requester and target can never approve.
+model AccessChangeRequest {
+  id               String             @id @default(cuid())
+  targetEmployeeId String
+  targetEmployee   Employee           @relation("AccessChangeTarget", fields: [targetEmployeeId], references: [id])
+  changeType       AccessChangeType
+  currentRole      EmployeeRole?
+  proposedRole     EmployeeRole?
+  requestedById    String
+  requestedBy      Employee           @relation("AccessChangeRequester", fields: [requestedById], references: [id])
+  approvedById     String?
+  approvedBy       Employee?          @relation("AccessChangeApprover", fields: [approvedById], references: [id])
+  justification    String
+  status           AccessChangeStatus @default(PENDING_APPROVAL)
+  requestedAt      DateTime           @default(now())
+  decidedAt        DateTime?
+  appliedAt        DateTime?
+  expiresAt        DateTime?
+  recordVersion    Int                @default(0)
+
+  @@index([targetEmployeeId])
+  @@index([status])
+  @@index([changeType])
+}
+
+// Periodic access review (§10). Outcomes never silently change access;
+// modifications produce an AccessChangeRequest.
+model AccessReview {
+  id                  String               @id @default(cuid())
+  reviewPeriodStart   DateTime
+  reviewPeriodEnd     DateTime
+  employeeId          String
+  employee            Employee             @relation("AccessReviewSubject", fields: [employeeId], references: [id])
+  currentRole         EmployeeRole
+  pilotAccessStatus   PilotAccessStatus?
+  activeSessionCount  Int                  @default(0)
+  openCaseCount       Int                  @default(0)
+  openCommitmentCount Int                  @default(0)
+  reviewerId          String?
+  reviewer            Employee?            @relation("AccessReviewReviewer", fields: [reviewerId], references: [id])
+  outcome             AccessReviewOutcome?
+  rationale           String?
+  reviewedAt          DateTime?
+  nextReviewDueAt     DateTime?
+  createdAt           DateTime             @default(now())
+
+  @@index([employeeId])
+  @@index([reviewerId])
+}
+
+// Internal security-event monitoring (§13). Minimized information only —
+// never passwords, tokens, secrets or confidential content. No external alert.
+model SecurityEvent {
+  id               String                @id @default(cuid())
+  category         SecurityEventCategory
+  severity         SecuritySeverity      @default(LOW)
+  status           SecurityEventStatus   @default(OPEN)
+  actorEmployeeId  String?
+  actor            Employee?             @relation("SecurityEventActor", fields: [actorEmployeeId], references: [id])
+  subjectType      String?
+  subjectId        String?
+  summary          String
+  detail           Json?
+  correlationId    String?
+  acknowledgedById String?
+  acknowledgedAt   DateTime?
+  resolvedById     String?
+  resolution       String?
+  resolvedAt       DateTime?
+  createdAt        DateTime              @default(now())
+
+  @@index([category])
+  @@index([severity])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// Internal incident management (§14). Internal use only; synthetic incidents
+// for QA; no external notification; no legal-breach determination; no delete.
+model SecurityIncident {
+  id                  String           @id @default(cuid())
+  internalReference   String           @unique
+  title               String
+  category            IncidentCategory
+  severity            SecuritySeverity @default(MEDIUM)
+  status              IncidentStatus   @default(OPEN)
+  detectedAt          DateTime         @default(now())
+  detectedById        String?
+  summary             String
+  affectedAreas       String?
+  containmentActions  String?
+  evidenceNotes       String?
+  recoveryActions     String?
+  lessonsLearned      String?
+  ownerId             String?
+  owner               Employee?        @relation("IncidentOwner", fields: [ownerId], references: [id])
+  approvedClosureById String?
+  closedAt            DateTime?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  recordVersion       Int              @default(0)
+
+  @@index([status])
+  @@index([severity])
+  @@index([category])
+}
+
+// Controlled pilot-workflow exercises (§16). Synthetic/de-identified data
+// only; failed exercises create a corrective action; no delete.
+model PilotExercise {
+  id                 String         @id @default(cuid())
+  type               ExerciseType
+  title              String
+  status             ExerciseStatus @default(PLANNED)
+  plannedById        String?
+  executedById       String?
+  observedById       String?
+  startedAt          DateTime?
+  completedAt        DateTime?
+  expectedResult     String
+  actualResult       String?
+  evidenceSummary    String?
+  deviation          String?
+  correctiveActionId String?
+  approvedById       String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  recordVersion      Int            @default(0)
+
+  @@index([type])
+  @@index([status])
+}
+
+// Corrective actions (§17). Critical items cannot be silently accepted;
+// completion requires independent verification.
+model CorrectiveAction {
+  id                    String                 @id @default(cuid())
+  sourceType            CorrectiveActionSource
+  sourceId              String?
+  title                 String
+  description           String
+  severity              SecuritySeverity       @default(MEDIUM)
+  ownerId               String?
+  owner                 Employee?              @relation("CorrectiveActionOwner", fields: [ownerId], references: [id])
+  dueDate               DateTime?
+  status                CorrectiveActionStatus @default(OPEN)
+  resolutionEvidence    String?
+  verifiedById          String?
+  verifiedAt            DateTime?
+  acceptedRiskById      String?
+  acceptedRiskRationale String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  @@index([status])
+  @@index([sourceType])
+}
+
+// Readiness-gate decisions (§18). Append-only history; the latest row is the
+// current gate state. The application never auto-approves a gate change.
+model ReadinessGate {
+  id          String             @id @default(cuid())
+  state       ReadinessGateState @default(NOT_READY)
+  rationale   String
+  decidedById String
+  createdAt   DateTime           @default(now())
+
+  @@index([createdAt])
+}
+
+// Evidence-based readiness signals (§18) recorded by controlled commands or
+// exercises (e.g. backup recency, restore result, secret scan, a11y). Live
+// signals (open incidents, audit chain) are computed, not stored here.
+model ReadinessSignal {
+  id           String              @id
+  status       ReadinessAreaStatus @default(NOT_TESTED)
+  detail       String?
+  evidenceRef  String?
+  recordedById String?
+  updatedAt    DateTime            @updatedAt
+  expiresAt    DateTime?
 }
 
 // Transaction-safe monotonic counter for internal case references.
