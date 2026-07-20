@@ -138,6 +138,8 @@ export const arReception: ReceptionContent = {
   },
   audienceLabel: "مسار الدخول",
   chainLabel: "سلسلة القيمة المعنية",
+  participantLabel: "مسار المشاركة في المنتدى",
+  trackLabel: "المسار القطاعي للمنتدى",
   audienceNames: {
     "moroccan-institutions": "المؤسسات المغربية",
     "moroccan-industry-exporters": "الصناعة والمصدّرون المغاربة",

@@ -4,6 +4,7 @@ import ReceptionDesk from "@/components/reception/ReceptionDesk";
 import { enReception } from "@/content/en/reception";
 import { enEcosystem } from "@/content/en/ecosystem";
 import { enValueChains } from "@/content/en/value-chains";
+import { enForum } from "@/content/en/forum";
 
 let searchParams = new URLSearchParams("");
 
@@ -19,6 +20,7 @@ function setup(query = "") {
       reception={enReception}
       ecosystem={enEcosystem}
       valueChains={enValueChains}
+      forum={enForum}
     />,
   );
 }
@@ -123,6 +125,42 @@ describe("ReceptionDesk (P0 dynamic schemas)", () => {
     expect(
       screen.queryByText(enValueChains.profileHeroEyebrow),
     ).toBeNull();
+  });
+
+  it("recognizes a Forum participant + track query and shows the context (P3)", () => {
+    setup(
+      "type=forum-qualification&participant=moroccan-companies-exporters&track=agriculture-food-industrialization",
+    );
+    const path = enForum.participation.paths.find(
+      (p) => p.id === "moroccan-companies-exporters",
+    )!;
+    const track = enForum.tracks.items.find(
+      (t) => t.id === "agriculture-food-industrialization",
+    )!;
+    expect(screen.getAllByText(path.title).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(track.title).length).toBeGreaterThan(0);
+    const select = screen.getByLabelText(/Request type/) as HTMLSelectElement;
+    expect(select.value).toBe("forum-qualification");
+  });
+
+  it("carries the Forum participant into the prepared email (P3)", () => {
+    setup(
+      "type=forum-qualification&participant=finance-investment-development",
+    );
+    const path = enForum.participation.paths.find(
+      (p) => p.id === "finance-investment-development",
+    )!;
+    fillBaseFields();
+    fireEvent.click(screen.getByRole("button", { name: /Review the request/ }));
+    const openLink = screen.getByRole("link", {
+      name: enReception.review.openEmailButton,
+    }) as HTMLAnchorElement;
+    expect(openLink.href).toContain(encodeURIComponent(path.title));
+  });
+
+  it("ignores an invalid participant id (fails safe)", () => {
+    setup("type=forum-qualification&participant=not-a-path");
+    expect(screen.queryByText(enForum.hub.eyebrow)).toBeNull();
   });
 
   it("falls back safely for unknown or disallowed preselection values", () => {

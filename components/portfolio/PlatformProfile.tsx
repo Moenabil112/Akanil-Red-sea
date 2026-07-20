@@ -17,6 +17,8 @@ interface PlatformProfileProps {
   reviewPanel: EcosystemContent["reviewPanel"];
   /** P2 Level-3 mapping: value chains this platform relates to. */
   relatedChains: { id: ValueChainId; name: string; href: string }[];
+  /** P3 concise Forum-engagement cross-link. */
+  forumEngagement?: React.ReactNode;
 }
 
 /**
@@ -35,6 +37,7 @@ export default function PlatformProfile({
   states,
   reviewPanel,
   relatedChains,
+  forumEngagement,
 }: PlatformProfileProps) {
   const reviewHref = `/${locale}/reception?type=${platform.cta.requestType}&platform=${platform.id}`;
 
@@ -188,6 +191,13 @@ export default function PlatformProfile({
             ))}
           </ul>
         </Reveal>
+      ) : null}
+
+      {/* 13c. Forum engagement (P3 cross-link) */}
+      {forumEngagement ? (
+        <div className={`container ${styles.relatedChains}`}>
+          {forumEngagement}
+        </div>
       ) : null}
 
       {/* 14. Specialist review pathway */}

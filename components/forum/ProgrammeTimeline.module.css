@@ -1,0 +1,80 @@
+.timeline {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.day {
+  position: relative;
+}
+
+.dayInner {
+  padding: var(--space-5);
+  border: 1px solid var(--line-on-light);
+  border-inline-start: 3px solid var(--color-copper);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.dayLabel {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-copper-text);
+}
+
+[dir="rtl"] .dayLabel {
+  letter-spacing: 0.03em;
+}
+
+.dayTitle {
+  margin-block-start: var(--space-1);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  line-height: var(--leading-heading);
+  color: var(--text-on-light);
+}
+
+.dayBody {
+  margin-block-start: var(--space-3);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.subLabel {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-nile-text);
+  margin-block-end: var(--space-2);
+}
+
+[dir="rtl"] .subLabel {
+  letter-spacing: 0.02em;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--text-on-light-soft);
+  padding-inline-start: var(--space-4);
+  list-style: disc;
+}
+
+.note {
+  grid-column: 1 / -1;
+  font-size: var(--text-sm);
+  color: var(--text-on-light-mute);
+  padding: var(--space-3);
+  border: 1px dashed var(--line-on-light-strong);
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 48rem) {
+  .dayBody {
+    grid-template-columns: 1fr;
+  }
+}

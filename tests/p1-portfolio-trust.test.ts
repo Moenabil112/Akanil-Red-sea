@@ -257,15 +257,17 @@ describe("reception platform context", () => {
     const platformName = enEcosystem.platforms.items.find(
       (p) => p.id === "valura",
     )!.name;
-    const subject = buildSubject(request, enReception, platformName);
-    const body = buildEmailBody("en", request, enReception, platformName);
+    const subject = buildSubject(request, enReception, { platformName });
+    const body = buildEmailBody("en", request, enReception, { platformName });
     expect(subject).toContain(platformName);
     expect(body).toContain(platformName);
     // Arabic body isolates the platform label line too.
     const arName = arEcosystem.platforms.items.find(
       (p) => p.id === "valura",
     )!.name;
-    const arBody = buildEmailBody("ar", request, arReception, arName);
+    const arBody = buildEmailBody("ar", request, arReception, {
+      platformName: arName,
+    });
     expect(arBody).toContain(arName);
   });
 });

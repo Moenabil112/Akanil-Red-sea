@@ -1,9 +1,11 @@
 # P2 — Implementation Summary
 
 Branch: `feature/p2-value-chains-project-deepening` · Base: `main` (merged P0
-`3b2b4c6` + P1 `101ed96`). Draft PR only — not merged, not deployed. P2 deepens
-the value-chain layer into six economic pathways; it does not redesign the P0
-ecosystem or the P1 portfolio architecture.
+`3b2b4c6` + P1 `101ed96`). Merged into `main` via PR #5 (merge commit
+`de94df5`); not deployed. P2 deepens the value-chain layer into six economic
+pathways; it does not redesign the P0 ecosystem or the P1 portfolio
+architecture. P3 (Forum programme and qualification) builds on this merged
+baseline.
 
 ## What P2 adds
 
