@@ -1,8 +1,15 @@
 
 /**
- * P4-A environment and feature control. The internal system is OFF unless
- * P4_INTERNAL_ENABLED is exactly "true". When disabled it fails closed:
- * internal routes reveal nothing and no database connection is attempted.
+ * P4-A/P4-B environment and feature control. The internal system is OFF
+ * unless P4_INTERNAL_ENABLED is exactly "true". When disabled it fails
+ * closed: internal routes reveal nothing and no database connection is
+ * attempted.
+ *
+ * P4-B adds a server-enforced operating mode (disabled | validation | pilot),
+ * a pilot emergency-suspension kill switch, and pilot/access/step-up
+ * durations. Every control fails closed: an absent or invalid value behaves
+ * as the most restrictive setting. None of these may be changed from the
+ * browser — they are read only on the server.
  */
 
 export function internalEnabled(): boolean {
@@ -15,6 +22,47 @@ function intEnv(name: string, fallback: number): number {
   const value = Number.parseInt(raw, 10);
   return Number.isFinite(value) && value > 0 ? value : fallback;
 }
+
+// ---------------- P4-B operating mode ----------------
+
+export type OperationMode = "disabled" | "validation" | "pilot";
+
+/**
+ * Effective operating mode. Fails closed to "disabled" when the internal
+ * feature flag is off or P4_OPERATION_MODE is absent/invalid. There is no
+ * "production" mode in P4-B. The pilot emergency suspension is a separate,
+ * authoritative override enforced by callers (see internalMutationsAllowed).
+ */
+export function operationMode(): OperationMode {
+  if (!internalEnabled()) return "disabled";
+  const raw = process.env.P4_OPERATION_MODE;
+  if (raw === "validation" || raw === "pilot") return raw;
+  return "disabled";
+}
+
+/** The pilot emergency stop (§19). Only the exact string "true" suspends. */
+export function pilotSuspended(): boolean {
+  return process.env.P4_PILOT_SUSPENDED === "true";
+}
+
+/**
+ * Whether internal operational data is available at all. False when disabled
+ * mode is in effect. Public pages never depend on this.
+ */
+export function internalOperationsAvailable(): boolean {
+  return operationMode() !== "disabled";
+}
+
+/**
+ * Whether internal write operations (mutations) are permitted right now.
+ * Blocked in disabled mode and while the pilot is suspended. This is the
+ * server-side gate every mutation must honour, in addition to authz.
+ */
+export function internalMutationsAllowed(): boolean {
+  return internalOperationsAvailable() && !pilotSuspended();
+}
+
+// ---------------- Session / login ----------------
 
 export const sessionConfig = {
   /** Absolute session lifetime (default 8 hours). */
@@ -35,6 +83,26 @@ export const loginConfig = {
   /** Temporary lock duration in minutes (default 15). */
   get lockMinutes() {
     return intEnv("P4_LOGIN_LOCK_MINUTES", 15);
+  },
+};
+
+// ---------------- P4-B pilot / access / step-up ----------------
+
+export const pilotConfig = {
+  /** Conservative maximum pilot-access duration (default 30 days). */
+  get accessMaxDays() {
+    return intEnv("P4_PILOT_ACCESS_MAX_DAYS", 30);
+  },
+  /** Access-review cadence (default 30 days). */
+  get accessReviewDays() {
+    return intEnv("P4_ACCESS_REVIEW_DAYS", 30);
+  },
+};
+
+export const stepUpConfig = {
+  /** Recent-reauthentication window for sensitive actions (default 15 min). */
+  get windowMinutes() {
+    return intEnv("P4_STEPUP_WINDOW_MINUTES", 15);
   },
 };
 

@@ -1,8 +1,9 @@
 # P4-A — Implementation Summary
 
 Branch: `feature/p4a-internal-secure-case-management` · Base: `main` (merged
-P0 `3b2b4c6` + P1 `101ed96` + P2 `de94df5` + P3 `a2a2293`). Draft PR only —
-not merged, not deployed, no production infrastructure configured.
+P0 `3b2b4c6` + P1 `101ed96` + P2 `de94df5` + P3 `a2a2293`). **Merged into
+`main` via PR #7 (merge commit `eb3f02c`)** and accepted as the P4-B baseline;
+not deployed, no production infrastructure configured.
 
 P4-A adds an **internal, employee-only** secure case-management foundation
 alongside the unchanged public Gateway. The first release is restricted to

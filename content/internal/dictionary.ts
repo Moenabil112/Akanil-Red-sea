@@ -136,7 +136,570 @@ export interface InternalDict {
     noExternal: string;
   };
   privacyNote: string;
+  p4b: P4bDict;
 }
+
+/** P4-B pilot / security-hardening UI strings (§27, trilingual). */
+export interface P4bDict {
+  nav: { readiness: string; security: string };
+  banner: { validation: string; pilot: string; suspended: string };
+  stepUp: { title: string; lead: string; password: string; submit: string; error: string };
+  suspended: { title: string; body: string };
+  readiness: {
+    title: string;
+    lead: string;
+    gate: string;
+    area: string;
+    status: string;
+    detail: string;
+    setGate: string;
+    rationale: string;
+    state: string;
+    decide: string;
+    accessLink: string;
+    exercisesLink: string;
+    recoveryLink: string;
+    notProductionReady: string;
+  };
+  access: {
+    title: string;
+    cohort: string;
+    requestPilot: string;
+    employee: string;
+    role: string;
+    justification: string;
+    approve: string;
+    suspend: string;
+    revoke: string;
+    reason: string;
+    days: string;
+    changes: string;
+    changeType: string;
+    proposedRole: string;
+    propose: string;
+    apply: string;
+    reject: string;
+    reviews: string;
+    openReview: string;
+    outcome: string;
+    conduct: string;
+    lifecycle: string;
+    offboard: string;
+    complete: string;
+    sessions: string;
+    revokeSession: string;
+    revokeAll: string;
+    signOutOthers: string;
+    device: string;
+    lastActivity: string;
+    expires: string;
+    twoPersonNote: string;
+  };
+  security: {
+    title: string;
+    events: string;
+    category: string;
+    severity: string;
+    status: string;
+    acknowledge: string;
+    resolve: string;
+    resolution: string;
+    incidents: string;
+    newIncident: string;
+    reference: string;
+    summary: string;
+    affected: string;
+    open: string;
+    transition: string;
+    close: string;
+    lessons: string;
+    containment: string;
+    evidence: string;
+    recovery: string;
+    internalOnly: string;
+  };
+  exercises: {
+    title: string;
+    type: string;
+    expected: string;
+    plan: string;
+    start: string;
+    record: string;
+    result: string;
+    actual: string;
+    deviation: string;
+    evidence: string;
+    approve: string;
+    corrective: string;
+    verify: string;
+    acceptRisk: string;
+    syntheticOnly: string;
+  };
+  recovery: {
+    title: string;
+    lead: string;
+    backupRecency: string;
+    restoreTest: string;
+    note: string;
+  };
+  common: { none: string; save: string; conflict: string; minimizationWarning: string };
+  areaLabels: Record<string, string>;
+  gateStates: Record<string, string>;
+}
+
+const AREA_LABELS_EN: Record<string, string> = {
+  "pilot-cohort": "Pilot cohort",
+  "access-approvals": "Access approvals",
+  "overdue-access-reviews": "Overdue access reviews",
+  "employee-offboarding-readiness": "Employee offboarding readiness",
+  "audit-chain-verification": "Audit-chain verification",
+  "unresolved-security-events": "Unresolved security events",
+  "open-incidents": "Open incidents",
+  "failed-or-blocked-exercises": "Failed or blocked exercises",
+  "open-corrective-actions": "Open corrective actions",
+  "database-migration-status": "Database migration status",
+  "authentication-control-tests": "Authentication control tests",
+  "authorization-control-tests": "Authorization control tests",
+  "backup-recency": "Backup recency",
+  "last-restore-test": "Last restore-test result",
+  "public-internal-boundary": "Public / internal boundary",
+  "secret-scan": "Secret-scan result",
+  accessibility: "Accessibility result",
+  "public-regression": "Public regression result",
+};
+
+const GATE_STATES_EN: Record<string, string> = {
+  NOT_READY: "Not ready",
+  READY_FOR_LIMITED_INTERNAL_PILOT: "Ready for limited internal pilot",
+  LIMITED_INTERNAL_PILOT_ACTIVE: "Limited internal pilot active",
+  PILOT_SUSPENDED: "Pilot suspended",
+  PILOT_COMPLETED_PENDING_REVIEW: "Pilot completed, pending review",
+};
+
+const p4bEn: P4bDict = {
+  nav: { readiness: "Readiness", security: "Security" },
+  banner: {
+    validation: "Validation mode — synthetic or de-identified data only. Not real operational use.",
+    pilot: "Internal pilot mode — authorized Akanil employees only.",
+    suspended: "Pilot suspended — internal operations are stopped. The public Gateway is unaffected.",
+  },
+  stepUp: {
+    title: "Confirm your identity",
+    lead: "This sensitive action requires you to re-enter your password.",
+    password: "Password",
+    submit: "Confirm",
+    error: "Reauthentication failed.",
+  },
+  suspended: {
+    title: "Internal pilot suspended",
+    body: "The internal pilot is suspended. Operational data and mutations are unavailable. The public Gateway and Digital Reception Lite continue to operate normally.",
+  },
+  readiness: {
+    title: "Pilot readiness",
+    lead: "Controlled readiness areas. No overall score; a limited pilot is a human decision.",
+    gate: "Readiness gate",
+    area: "Area",
+    status: "Status",
+    detail: "Detail",
+    setGate: "Record a gate decision",
+    rationale: "Rationale",
+    state: "Gate state",
+    decide: "Record decision",
+    accessLink: "Access & cohort",
+    exercisesLink: "Exercises & corrective actions",
+    recoveryLink: "Backup & recovery",
+    notProductionReady: "This is a readiness view for a limited internal pilot. It is not a production-readiness certification.",
+  },
+  access: {
+    title: "Pilot access, changes and reviews",
+    cohort: "Pilot cohort",
+    requestPilot: "Request pilot access",
+    employee: "Employee",
+    role: "Role",
+    justification: "Justification",
+    approve: "Approve",
+    suspend: "Suspend",
+    revoke: "Revoke",
+    reason: "Reason",
+    days: "Days",
+    changes: "Access-change requests",
+    changeType: "Change type",
+    proposedRole: "Proposed role",
+    propose: "Request change",
+    apply: "Apply",
+    reject: "Reject",
+    reviews: "Access reviews",
+    openReview: "Open review",
+    outcome: "Outcome",
+    conduct: "Record review",
+    lifecycle: "Employee lifecycle",
+    offboard: "Begin offboarding",
+    complete: "Complete offboarding",
+    sessions: "Active sessions",
+    revokeSession: "Revoke",
+    revokeAll: "Revoke all",
+    signOutOthers: "Sign out my other sessions",
+    device: "Device",
+    lastActivity: "Last activity",
+    expires: "Expires",
+    twoPersonNote: "A requester can never approve their own request; a target can never approve their own change.",
+  },
+  security: {
+    title: "Security events",
+    events: "Events",
+    category: "Category",
+    severity: "Severity",
+    status: "Status",
+    acknowledge: "Acknowledge",
+    resolve: "Resolve",
+    resolution: "Resolution",
+    incidents: "Incidents",
+    newIncident: "Open incident",
+    reference: "Reference",
+    summary: "Summary",
+    affected: "Affected areas",
+    open: "Open",
+    transition: "Move to",
+    close: "Close incident",
+    lessons: "Lessons learned",
+    containment: "Containment actions",
+    evidence: "Evidence notes",
+    recovery: "Recovery actions",
+    internalOnly: "Internal use only. No external notification is sent and no legal-breach determination is made.",
+  },
+  exercises: {
+    title: "Pilot exercises",
+    type: "Type",
+    expected: "Expected result",
+    plan: "Plan exercise",
+    start: "Start",
+    record: "Record result",
+    result: "Result",
+    actual: "Actual result",
+    deviation: "Deviation",
+    evidence: "Evidence summary",
+    approve: "Approve",
+    corrective: "Corrective actions",
+    verify: "Verify",
+    acceptRisk: "Accept risk",
+    syntheticOnly: "Exercises use synthetic or de-identified data only. No real credentials are recorded.",
+  },
+  recovery: {
+    title: "Backup & recovery validation",
+    lead: "Local backup and restore verification signals. Backups are never committed and never contain real data.",
+    backupRecency: "Backup recency",
+    restoreTest: "Restore-test result",
+    note: "Operational backups must be encrypted outside the repository before any future live deployment.",
+  },
+  common: {
+    none: "Nothing to show.",
+    save: "Save",
+    conflict: "This record changed since you loaded it. Reload and retry.",
+    minimizationWarning: "Data minimization: enter synthetic or approved de-identified data only. Never enter real personal, confidential, banking, government-identity, password or secret data.",
+  },
+  areaLabels: AREA_LABELS_EN,
+  gateStates: GATE_STATES_EN,
+};
+
+const p4bFr: P4bDict = {
+  nav: { readiness: "Préparation", security: "Sécurité" },
+  banner: {
+    validation: "Mode validation — données synthétiques ou anonymisées uniquement. Pas d'usage opérationnel réel.",
+    pilot: "Mode pilote interne — employés autorisés d'Akanil uniquement.",
+    suspended: "Pilote suspendu — les opérations internes sont arrêtées. La passerelle publique n'est pas affectée.",
+  },
+  stepUp: {
+    title: "Confirmez votre identité",
+    lead: "Cette action sensible exige de saisir à nouveau votre mot de passe.",
+    password: "Mot de passe",
+    submit: "Confirmer",
+    error: "Échec de la ré-authentification.",
+  },
+  suspended: {
+    title: "Pilote interne suspendu",
+    body: "Le pilote interne est suspendu. Les données opérationnelles et les modifications sont indisponibles. La passerelle publique et la réception numérique continuent de fonctionner normalement.",
+  },
+  readiness: {
+    title: "Préparation du pilote",
+    lead: "Domaines de préparation contrôlés. Aucun score global ; un pilote limité est une décision humaine.",
+    gate: "Porte de préparation",
+    area: "Domaine",
+    status: "Statut",
+    detail: "Détail",
+    setGate: "Enregistrer une décision de porte",
+    rationale: "Justification",
+    state: "État de la porte",
+    decide: "Enregistrer la décision",
+    accessLink: "Accès et cohorte",
+    exercisesLink: "Exercices et actions correctives",
+    recoveryLink: "Sauvegarde et restauration",
+    notProductionReady: "Ceci est une vue de préparation pour un pilote interne limité. Ce n'est pas une certification de mise en production.",
+  },
+  access: {
+    title: "Accès pilote, changements et revues",
+    cohort: "Cohorte pilote",
+    requestPilot: "Demander l'accès pilote",
+    employee: "Employé",
+    role: "Rôle",
+    justification: "Justification",
+    approve: "Approuver",
+    suspend: "Suspendre",
+    revoke: "Révoquer",
+    reason: "Motif",
+    days: "Jours",
+    changes: "Demandes de changement d'accès",
+    changeType: "Type de changement",
+    proposedRole: "Rôle proposé",
+    propose: "Demander un changement",
+    apply: "Appliquer",
+    reject: "Rejeter",
+    reviews: "Revues d'accès",
+    openReview: "Ouvrir une revue",
+    outcome: "Résultat",
+    conduct: "Enregistrer la revue",
+    lifecycle: "Cycle de vie de l'employé",
+    offboard: "Commencer le départ",
+    complete: "Terminer le départ",
+    sessions: "Sessions actives",
+    revokeSession: "Révoquer",
+    revokeAll: "Tout révoquer",
+    signOutOthers: "Déconnecter mes autres sessions",
+    device: "Appareil",
+    lastActivity: "Dernière activité",
+    expires: "Expire",
+    twoPersonNote: "Un demandeur ne peut jamais approuver sa propre demande ; une cible ne peut jamais approuver son propre changement.",
+  },
+  security: {
+    title: "Événements de sécurité",
+    events: "Événements",
+    category: "Catégorie",
+    severity: "Gravité",
+    status: "Statut",
+    acknowledge: "Accuser réception",
+    resolve: "Résoudre",
+    resolution: "Résolution",
+    incidents: "Incidents",
+    newIncident: "Ouvrir un incident",
+    reference: "Référence",
+    summary: "Résumé",
+    affected: "Zones affectées",
+    open: "Ouvrir",
+    transition: "Passer à",
+    close: "Clore l'incident",
+    lessons: "Enseignements tirés",
+    containment: "Actions de confinement",
+    evidence: "Notes de preuve",
+    recovery: "Actions de récupération",
+    internalOnly: "Usage interne uniquement. Aucune notification externe n'est envoyée et aucune détermination légale de violation n'est faite.",
+  },
+  exercises: {
+    title: "Exercices du pilote",
+    type: "Type",
+    expected: "Résultat attendu",
+    plan: "Planifier l'exercice",
+    start: "Démarrer",
+    record: "Enregistrer le résultat",
+    result: "Résultat",
+    actual: "Résultat réel",
+    deviation: "Écart",
+    evidence: "Résumé des preuves",
+    approve: "Approuver",
+    corrective: "Actions correctives",
+    verify: "Vérifier",
+    acceptRisk: "Accepter le risque",
+    syntheticOnly: "Les exercices utilisent uniquement des données synthétiques ou anonymisées. Aucun identifiant réel n'est enregistré.",
+  },
+  recovery: {
+    title: "Validation sauvegarde et restauration",
+    lead: "Signaux locaux de vérification de sauvegarde et de restauration. Les sauvegardes ne sont jamais versionnées et ne contiennent jamais de données réelles.",
+    backupRecency: "Récence de la sauvegarde",
+    restoreTest: "Résultat du test de restauration",
+    note: "Les sauvegardes opérationnelles doivent être chiffrées en dehors du dépôt avant tout déploiement réel futur.",
+  },
+  common: {
+    none: "Rien à afficher.",
+    save: "Enregistrer",
+    conflict: "Cet enregistrement a changé depuis son chargement. Rechargez et réessayez.",
+    minimizationWarning: "Minimisation des données : saisissez uniquement des données synthétiques ou anonymisées approuvées. Ne saisissez jamais de données réelles personnelles, confidentielles, bancaires, d'identité gouvernementale, de mot de passe ou de secret.",
+  },
+  areaLabels: {
+    "pilot-cohort": "Cohorte pilote",
+    "access-approvals": "Approbations d'accès",
+    "overdue-access-reviews": "Revues d'accès en retard",
+    "employee-offboarding-readiness": "Préparation au départ des employés",
+    "audit-chain-verification": "Vérification de la chaîne d'audit",
+    "unresolved-security-events": "Événements de sécurité non résolus",
+    "open-incidents": "Incidents ouverts",
+    "failed-or-blocked-exercises": "Exercices échoués ou bloqués",
+    "open-corrective-actions": "Actions correctives ouvertes",
+    "database-migration-status": "État des migrations de base de données",
+    "authentication-control-tests": "Tests des contrôles d'authentification",
+    "authorization-control-tests": "Tests des contrôles d'autorisation",
+    "backup-recency": "Récence de la sauvegarde",
+    "last-restore-test": "Dernier test de restauration",
+    "public-internal-boundary": "Frontière public / interne",
+    "secret-scan": "Analyse des secrets",
+    accessibility: "Résultat d'accessibilité",
+    "public-regression": "Résultat de régression publique",
+  },
+  gateStates: {
+    NOT_READY: "Pas prêt",
+    READY_FOR_LIMITED_INTERNAL_PILOT: "Prêt pour un pilote interne limité",
+    LIMITED_INTERNAL_PILOT_ACTIVE: "Pilote interne limité actif",
+    PILOT_SUSPENDED: "Pilote suspendu",
+    PILOT_COMPLETED_PENDING_REVIEW: "Pilote terminé, en attente de revue",
+  },
+};
+
+const p4bAr: P4bDict = {
+  nav: { readiness: "الجاهزية", security: "الأمن" },
+  banner: {
+    validation: "وضع التحقق — بيانات اصطناعية أو مجهّلة الهوية فقط. ليس استخدامًا تشغيليًا حقيقيًا.",
+    pilot: "وضع التجربة الداخلية — موظفو أكانيل المصرّح لهم فقط.",
+    suspended: "التجربة معلّقة — العمليات الداخلية متوقفة. البوابة العامة غير متأثرة.",
+  },
+  stepUp: {
+    title: "أكّد هويتك",
+    lead: "يتطلب هذا الإجراء الحساس إعادة إدخال كلمة المرور.",
+    password: "كلمة المرور",
+    submit: "تأكيد",
+    error: "فشلت إعادة المصادقة.",
+  },
+  suspended: {
+    title: "التجربة الداخلية معلّقة",
+    body: "التجربة الداخلية معلّقة. البيانات التشغيلية والتعديلات غير متاحة. تستمر البوابة العامة والاستقبال الرقمي في العمل بشكل طبيعي.",
+  },
+  readiness: {
+    title: "جاهزية التجربة",
+    lead: "مجالات جاهزية مضبوطة. لا توجد نتيجة إجمالية؛ التجربة المحدودة قرار بشري.",
+    gate: "بوابة الجاهزية",
+    area: "المجال",
+    status: "الحالة",
+    detail: "التفصيل",
+    setGate: "تسجيل قرار البوابة",
+    rationale: "المبرر",
+    state: "حالة البوابة",
+    decide: "تسجيل القرار",
+    accessLink: "الوصول والفريق",
+    exercisesLink: "التمارين والإجراءات التصحيحية",
+    recoveryLink: "النسخ الاحتياطي والاسترجاع",
+    notProductionReady: "هذه واجهة جاهزية لتجربة داخلية محدودة. وليست شهادة جاهزية للإنتاج.",
+  },
+  access: {
+    title: "وصول التجربة والتغييرات والمراجعات",
+    cohort: "فريق التجربة",
+    requestPilot: "طلب وصول التجربة",
+    employee: "الموظف",
+    role: "الدور",
+    justification: "المبرر",
+    approve: "اعتماد",
+    suspend: "تعليق",
+    revoke: "إلغاء",
+    reason: "السبب",
+    days: "الأيام",
+    changes: "طلبات تغيير الوصول",
+    changeType: "نوع التغيير",
+    proposedRole: "الدور المقترح",
+    propose: "طلب تغيير",
+    apply: "تطبيق",
+    reject: "رفض",
+    reviews: "مراجعات الوصول",
+    openReview: "فتح مراجعة",
+    outcome: "النتيجة",
+    conduct: "تسجيل المراجعة",
+    lifecycle: "دورة حياة الموظف",
+    offboard: "بدء إنهاء الخدمة",
+    complete: "إكمال إنهاء الخدمة",
+    sessions: "الجلسات النشطة",
+    revokeSession: "إلغاء",
+    revokeAll: "إلغاء الكل",
+    signOutOthers: "إنهاء جلساتي الأخرى",
+    device: "الجهاز",
+    lastActivity: "آخر نشاط",
+    expires: "تنتهي",
+    twoPersonNote: "لا يمكن لمقدّم الطلب اعتماد طلبه؛ ولا يمكن للهدف اعتماد تغييره.",
+  },
+  security: {
+    title: "أحداث الأمن",
+    events: "الأحداث",
+    category: "الفئة",
+    severity: "الخطورة",
+    status: "الحالة",
+    acknowledge: "إقرار",
+    resolve: "حلّ",
+    resolution: "الحل",
+    incidents: "الحوادث",
+    newIncident: "فتح حادث",
+    reference: "المرجع",
+    summary: "الملخص",
+    affected: "المجالات المتأثرة",
+    open: "فتح",
+    transition: "الانتقال إلى",
+    close: "إغلاق الحادث",
+    lessons: "الدروس المستفادة",
+    containment: "إجراءات الاحتواء",
+    evidence: "ملاحظات الأدلة",
+    recovery: "إجراءات الاسترجاع",
+    internalOnly: "للاستخدام الداخلي فقط. لا يُرسل أي إشعار خارجي ولا يُتخذ أي قرار قانوني بشأن الاختراق.",
+  },
+  exercises: {
+    title: "تمارين التجربة",
+    type: "النوع",
+    expected: "النتيجة المتوقعة",
+    plan: "تخطيط تمرين",
+    start: "بدء",
+    record: "تسجيل النتيجة",
+    result: "النتيجة",
+    actual: "النتيجة الفعلية",
+    deviation: "الانحراف",
+    evidence: "ملخص الأدلة",
+    approve: "اعتماد",
+    corrective: "الإجراءات التصحيحية",
+    verify: "تحقّق",
+    acceptRisk: "قبول المخاطرة",
+    syntheticOnly: "تستخدم التمارين بيانات اصطناعية أو مجهّلة الهوية فقط. لا تُسجَّل أي بيانات اعتماد حقيقية.",
+  },
+  recovery: {
+    title: "التحقق من النسخ الاحتياطي والاسترجاع",
+    lead: "إشارات محلية للتحقق من النسخ الاحتياطي والاسترجاع. لا تُودَع النسخ الاحتياطية أبدًا ولا تحتوي على بيانات حقيقية.",
+    backupRecency: "حداثة النسخة الاحتياطية",
+    restoreTest: "نتيجة اختبار الاسترجاع",
+    note: "يجب تشفير النسخ الاحتياطية التشغيلية خارج المستودع قبل أي نشر حقيقي مستقبلي.",
+  },
+  common: {
+    none: "لا شيء لعرضه.",
+    save: "حفظ",
+    conflict: "تغيّر هذا السجل منذ تحميله. أعد التحميل وحاول مجددًا.",
+    minimizationWarning: "تقليل البيانات: أدخل فقط بيانات اصطناعية أو مجهّلة الهوية معتمدة. لا تُدخل أبدًا بيانات حقيقية شخصية أو سرية أو مصرفية أو هوية حكومية أو كلمات مرور أو أسرار.",
+  },
+  areaLabels: {
+    "pilot-cohort": "فريق التجربة",
+    "access-approvals": "اعتمادات الوصول",
+    "overdue-access-reviews": "مراجعات وصول متأخرة",
+    "employee-offboarding-readiness": "جاهزية إنهاء خدمة الموظفين",
+    "audit-chain-verification": "التحقق من سلسلة التدقيق",
+    "unresolved-security-events": "أحداث أمنية غير محلولة",
+    "open-incidents": "حوادث مفتوحة",
+    "failed-or-blocked-exercises": "تمارين فاشلة أو محجوبة",
+    "open-corrective-actions": "إجراءات تصحيحية مفتوحة",
+    "database-migration-status": "حالة ترحيل قاعدة البيانات",
+    "authentication-control-tests": "اختبارات ضوابط المصادقة",
+    "authorization-control-tests": "اختبارات ضوابط التفويض",
+    "backup-recency": "حداثة النسخة الاحتياطية",
+    "last-restore-test": "آخر اختبار استرجاع",
+    "public-internal-boundary": "الحدّ بين العام والداخلي",
+    "secret-scan": "فحص الأسرار",
+    accessibility: "نتيجة إمكانية الوصول",
+    "public-regression": "نتيجة الانحدار العام",
+  },
+  gateStates: {
+    NOT_READY: "غير جاهز",
+    READY_FOR_LIMITED_INTERNAL_PILOT: "جاهز لتجربة داخلية محدودة",
+    LIMITED_INTERNAL_PILOT_ACTIVE: "تجربة داخلية محدودة نشطة",
+    PILOT_SUSPENDED: "التجربة معلّقة",
+    PILOT_COMPLETED_PENDING_REVIEW: "اكتملت التجربة، بانتظار المراجعة",
+  },
+};
 
 const en: InternalDict = {
   appName: "Akanil internal operations",
@@ -274,6 +837,7 @@ const en: InternalDict = {
   },
   privacyNote:
     "Collect only professional operational data. No participant directory, no external accounts, no uploads.",
+  p4b: p4bEn,
 };
 
 const fr: InternalDict = {
@@ -412,6 +976,7 @@ const fr: InternalDict = {
   },
   privacyNote:
     "Ne collectez que des données opérationnelles professionnelles. Pas d'annuaire de participants, pas de comptes externes, pas de téléversements.",
+  p4b: p4bFr,
 };
 
 const ar: InternalDict = {
@@ -550,6 +1115,7 @@ const ar: InternalDict = {
   },
   privacyNote:
     "اجمع فقط البيانات التشغيلية المهنية. لا دليل مشاركين، ولا حسابات خارجية، ولا رفع ملفات.",
+  p4b: p4bAr,
 };
 
 const DICTS: Record<Locale, InternalDict> = { ar, fr, en };

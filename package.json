@@ -20,7 +20,13 @@
     "db:studio": "prisma studio",
     "internal:user:create": "tsx scripts/internal/create-user.ts",
     "internal:user:disable": "tsx scripts/internal/disable-user.ts",
-    "internal:user:reset-password": "tsx scripts/internal/reset-password.ts"
+    "internal:user:reset-password": "tsx scripts/internal/reset-password.ts",
+    "internal:audit:verify": "tsx scripts/internal/audit-verify.ts",
+    "internal:audit:backfill": "tsx scripts/internal/audit-backfill.ts",
+    "internal:audit:test": "vitest run tests/p4b-audit-integrity.test.ts",
+    "internal:sessions:cleanup": "tsx scripts/internal/sessions-cleanup.ts",
+    "internal:backup:smoke": "bash scripts/internal/backup-restore-smoke.sh",
+    "internal:restore:verify": "bash scripts/internal/backup-verify.sh"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",

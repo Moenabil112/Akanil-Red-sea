@@ -14,6 +14,8 @@ next-env.d.ts
 *.pem
 npm-debug.log*
 .env*
+# The placeholder template is tracked; real .env files remain ignored above.
+!.env.example
 
 # typescript
 *.tsbuildinfo

@@ -6,6 +6,7 @@ import { getInternalDict } from "@/content/internal/dictionary";
 import { getCurrentEmployee } from "@/lib/internal/session";
 import { can } from "@/lib/internal/rbac";
 import { ROLE_LABELS } from "@/lib/internal/roles";
+import { operationMode, pilotSuspended } from "@/lib/internal/env";
 import { logoutAction } from "./actions";
 import styles from "./internal.module.css";
 
@@ -39,14 +40,40 @@ export default async function InternalLayout({
         ...(can(employee.role, "audit.view")
           ? [{ href: `/${locale}/internal/audit`, label: dict.nav.audit }]
           : []),
+        ...(can(employee.role, "readiness.view")
+          ? [{ href: `/${locale}/internal/readiness`, label: dict.p4b.nav.readiness }]
+          : []),
+        ...(can(employee.role, "security.event.view")
+          ? [{ href: `/${locale}/internal/security`, label: dict.p4b.nav.security }]
+          : []),
         ...(can(employee.role, "user.manage")
           ? [{ href: `/${locale}/internal/admin/users`, label: dict.nav.users }]
           : []),
       ]
     : [];
 
+  const mode = operationMode();
+  const suspended = pilotSuspended();
+  const banner = suspended
+    ? { text: dict.p4b.banner.suspended, kind: "suspended" as const }
+    : mode === "pilot"
+      ? { text: dict.p4b.banner.pilot, kind: "pilot" as const }
+      : mode === "validation"
+        ? { text: dict.p4b.banner.validation, kind: "validation" as const }
+        : null;
+
   return (
     <div className={styles.app}>
+      {employee && banner ? (
+        <div
+          className={styles.envBanner}
+          data-kind={banner.kind}
+          role="status"
+          aria-live="polite"
+        >
+          {banner.text}
+        </div>
+      ) : null}
       <header className={styles.header}>
         <div>
           <Link href={`/${locale}/internal`} className={styles.brand}>

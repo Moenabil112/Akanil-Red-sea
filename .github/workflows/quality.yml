@@ -71,3 +71,38 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      # ---- P4-B controlled security checks (no deployment, no cloud secrets) ----
+
+      - name: Audit hash-chain tests
+        run: npm run internal:audit:test
+
+      - name: Backup-and-restore smoke (synthetic)
+        run: npm run internal:backup:smoke
+
+      - name: Audit hash-chain verification (test database)
+        run: npm run internal:audit:verify
+
+      - name: Migration drift / status
+        run: npx prisma migrate status
+        continue-on-error: true
+
+      - name: Committed-secret scan
+        run: |
+          echo "Scanning tracked files for obviously-committed secrets…"
+          # Fail if a real .env is tracked, or a private key / high-entropy secret assignment lands in source.
+          if git ls-files | grep -E '^\.env$|^\.env\.(local|production)$'; then
+            echo "A real .env file is tracked."; exit 1
+          fi
+          if git grep -nE 'BEGIN (RSA|OPENSSH|EC|PGP) PRIVATE KEY' -- . ':!*.md'; then
+            echo "A private key appears to be committed."; exit 1
+          fi
+          # Placeholder values in .env.example / docker-compose are allowed; real-looking AUTH_SECRET values are not.
+          if git grep -nE 'AUTH_SECRET\s*[:=]\s*["'\'']?[A-Za-z0-9+/]{40,}' -- . ':!*.md' ':!.env.example'; then
+            echo "A real-looking AUTH_SECRET value appears to be committed."; exit 1
+          fi
+          echo "No committed secrets detected."
+
+      - name: Dependency vulnerability audit (high/critical)
+        run: npm audit --audit-level=high
+        continue-on-error: true
