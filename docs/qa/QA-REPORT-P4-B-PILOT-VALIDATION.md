@@ -102,6 +102,71 @@ incident-view-fr. All show synthetic `@akanil.example` accounts and clearly
 synthetic data — no passwords, tokens, secrets, real names, real organizations
 or full database URLs.
 
+## CI and Vercel Preview remediation
+
+After the branch was pushed, PR #8 showed a failing GitHub **Quality** check and
+a failed **Vercel Preview**. Both were diagnosed and fixed without introducing
+any production database or secret.
+
+### GitHub Actions — backup step
+
+- **Root cause:** the `Backup-and-restore smoke` step passed the workflow
+  `DATABASE_URL` (which carries the Prisma-only `?schema=public` query
+  parameter) directly to `pg_dump`. PostgreSQL CLI tools reject that parameter
+  (`invalid URI query parameter: "schema"`), so the step failed.
+- **Fix:** a dedicated **`PGTOOLS_DATABASE_URL`** is used for all `pg_dump`/`psql`
+  operations, derived as
+  `PGTOOLS_DATABASE_URL="${PGTOOLS_DATABASE_URL:-${DATABASE_URL%%\?*}}"`.
+  `DATABASE_URL` is unchanged for Prisma. `scripts/internal/backup-restore-smoke.sh`
+  and `scripts/internal/backup-verify.sh` add explicit prerequisite checks
+  (`pg_dump`, `psql`, `gzip`, `gunzip`, and `sha256sum` where used) and a
+  `cleanup` **trap** that drops the temporary restore database and removes
+  temporary dump/checksum/manifest files on success or failure. Passwords and
+  full connection strings are never logged. The CI workflow sets
+  `PGTOOLS_DATABASE_URL` (a URL without `?schema`), keeps the backup step **not**
+  `continue-on-error`, runs `internal:backup:smoke` **and** `internal:restore:verify`,
+  and runs the security checks only after the backup steps succeed.
+
+### Vercel Preview — build
+
+- **Deployment inspected:** `7k2hcsEY824Nu5VWYvHZbvPtK22z`.
+- **Exact first failing command/error:** `npm run build` → `Failed to compile.`
+  → `./lib/internal/db.ts  Module not found: Can't resolve
+  '@/lib/generated/prisma'` → `Build failed because of webpack errors` →
+  `Error: Command "npm run build" exited with 1`.
+- **Root cause:** the generated Prisma client is git-ignored (correctly), and
+  Vercel Preview runs only `npm install && npm run build` — it never runs
+  `prisma generate` (CI runs it explicitly), so the import could not resolve.
+- **Fix:** a build-safe generation script
+  (`scripts/prisma-generate-build.mjs`) runs `prisma generate` before Next.js
+  compilation via a `prebuild` npm hook. When `DATABASE_URL` is absent it
+  supplies a **syntactically valid, unreachable placeholder for code generation
+  only** — it never connects, never runs migrations, never seeds, never enables
+  P4, and is never exposed to the browser. In addition, `lib/internal/db.ts` now
+  constructs `PrismaClient` **lazily** (a bound proxy), so a disabled public
+  build never constructs the client or validates operational secrets, while
+  internal runtime operations still fail closed. The generated client is **not**
+  committed.
+
+### Validation of the fixes
+
+- **Scenario A (public build, no operational vars):**
+  `env -u DATABASE_URL -u AUTH_SECRET P4_INTERNAL_ENABLED=false
+  P4_OPERATION_MODE=disabled npm run build` — **succeeds** (client generated via
+  placeholder; 131 pages prerendered).
+- **Vercel-equivalent clean build** (generated client deleted, no DB/secret) —
+  **succeeds**.
+- **Backup scripts** with a `?schema=public` `DATABASE_URL` and with an explicit
+  `PGTOOLS_DATABASE_URL` — both **succeed**; the temporary restore database and
+  dump files are removed by the trap; `backups/` remains empty and git-ignored.
+- **Restore verification** re-verifies the audit hash chain in the restored
+  database (27/27 events).
+- Gates re-run green: typecheck 0, lint 0, 221 unit tests, 23 integration tests,
+  audit hash-chain suite, build, migration status up to date, committed-secret
+  scan clean.
+- **No production database or secret was introduced**; no cloud database was
+  added to Vercel; no real `AUTH_SECRET` was added to make Preview pass.
+
 ## Known limitations
 
 Carried residual risks are recorded in

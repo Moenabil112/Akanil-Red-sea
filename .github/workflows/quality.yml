@@ -35,6 +35,8 @@ jobs:
       # internal system stays disabled unless P4_INTERNAL_ENABLED=true.
       DATABASE_URL: postgresql://akanil_p4:ci_synthetic_only@localhost:5432/akanil_p4_test?schema=public
       DATABASE_URL_TEST: postgresql://akanil_p4:ci_synthetic_only@localhost:5432/akanil_p4_test?schema=public
+      # pg-tools-safe URL (no Prisma-only ?schema param) for pg_dump/psql.
+      PGTOOLS_DATABASE_URL: postgresql://akanil_p4:ci_synthetic_only@localhost:5432/akanil_p4_test
       AUTH_SECRET: ci_synthetic_secret_not_for_production_use_only
       P4_INTERNAL_ENABLED: "false"
 
@@ -79,6 +81,9 @@ jobs:
 
       - name: Backup-and-restore smoke (synthetic)
         run: npm run internal:backup:smoke
+
+      - name: Backup-and-restore verification (synthetic)
+        run: npm run internal:restore:verify
 
       - name: Audit hash-chain verification (test database)
         run: npm run internal:audit:verify

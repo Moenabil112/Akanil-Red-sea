@@ -5,8 +5,10 @@
   "description": "Akanil Morocco–Red Sea Economic Gateway — trilingual institutional introduction window",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/prisma-generate-build.mjs",
     "build": "next build",
     "start": "next start",
+    "db:generate:build": "node scripts/prisma-generate-build.mjs",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

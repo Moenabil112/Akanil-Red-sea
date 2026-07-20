@@ -6,11 +6,25 @@
 # temporary restored database. Never commits a dump (backups/ is git-ignored),
 # never includes real data, and never configures a production backup provider.
 #
-# Usage: DATABASE_URL=postgresql://user:pass@localhost:5432/akanil_p4_dev \
-#        bash scripts/internal/backup-verify.sh
+# PostgreSQL CLI tools (pg_dump/psql) must NOT receive Prisma-only query
+# parameters such as "?schema=public". Use PGTOOLS_DATABASE_URL — a pg-tools-safe
+# connection URL — for all CLI operations. DATABASE_URL stays unchanged for
+# Prisma. Passwords and full connection strings are never logged.
+#
+# Usage:
+#   DATABASE_URL=postgresql://user:pass@localhost:5432/akanil_p4_dev?schema=public \
+#     bash scripts/internal/backup-verify.sh
 set -euo pipefail
 
-: "${DATABASE_URL:?Set DATABASE_URL to the source (development/test) database}"
+# Prerequisite tools.
+for tool in pg_dump psql gzip gunzip sha256sum npx; do
+  command -v "$tool" >/dev/null 2>&1 || { echo "Missing required tool: ${tool}"; exit 2; }
+done
+
+: "${DATABASE_URL:=}"
+# pg-tools-safe URL: strip any ?query from DATABASE_URL if not provided directly.
+PGTOOLS_DATABASE_URL="${PGTOOLS_DATABASE_URL:-${DATABASE_URL%%\?*}}"
+: "${PGTOOLS_DATABASE_URL:?Set PGTOOLS_DATABASE_URL or DATABASE_URL (source database)}"
 
 mkdir -p backups
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -18,27 +32,37 @@ DUMP="backups/akanil-p4-verify-${STAMP}.sql.gz"
 MANIFEST="backups/akanil-p4-verify-${STAMP}.manifest.txt"
 VERIFY_DB="akanil_p4_restore_verify"
 
-proto_removed="${DATABASE_URL#*://}"
+# Parse host/port/user/db from the pg-tools-safe URL (no query string present).
+proto_removed="${PGTOOLS_DATABASE_URL#*://}"
 creds="${proto_removed%%@*}"
 hostportdb="${proto_removed#*@}"
 PGUSER="${creds%%:*}"
-PGPASSWORD_LOCAL="${creds#*:}"
-PGPASSWORD_LOCAL="${PGPASSWORD_LOCAL%%@*}"
+PGPASSWORD_LOCAL="${creds#*:}"; PGPASSWORD_LOCAL="${PGPASSWORD_LOCAL%%@*}"
 hostport="${hostportdb%%/*}"
 PGHOST="${hostport%%:*}"
 PGPORT="${hostport#*:}"; [ "$PGPORT" = "$PGHOST" ] && PGPORT=5432
 export PGPASSWORD="$PGPASSWORD_LOCAL"
 
-# Source database name without any ?query string (pg_dump/psql reject it).
-SRC_DB="${hostportdb#*/}"; SRC_DB="${SRC_DB%%\?*}"
-SRC_CLEAN="postgresql://${PGUSER}:${PGPASSWORD_LOCAL}@${PGHOST}:${PGPORT}/${SRC_DB}"
+SRC_DB="${hostportdb#*/}"
+# Prisma exposes DATABASE_URL to tsx via the same env, but audit-verify only
+# needs a reachable URL for the RESTORED database; build it without a password
+# in logs. The password is only ever in PGPASSWORD / this variable, never echoed.
 RESTORE_URL="postgresql://${PGUSER}:${PGPASSWORD_LOCAL}@${PGHOST}:${PGPORT}/${VERIFY_DB}?schema=public"
 
 psql_src() { psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$SRC_DB" -tAc "$1" 2>/dev/null | tr -d '[:space:]'; }
 psql_dst() { psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$VERIFY_DB" -tAc "$1" 2>/dev/null | tr -d '[:space:]'; }
 
-echo "1) Logical backup → ${DUMP}"
-pg_dump "$SRC_CLEAN" | gzip > "$DUMP"
+# Cleanup on success OR failure: drop the temp restore DB and remove the dump,
+# checksum and manifest. Committed backups remain prohibited (backups/ ignored).
+cleanup() {
+  psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres \
+    -c "DROP DATABASE IF EXISTS ${VERIFY_DB};" >/dev/null 2>&1 || true
+  rm -f "$DUMP" "${DUMP}.sha256" "$MANIFEST"
+}
+trap cleanup EXIT
+
+echo "1) Logical backup (source db: ${SRC_DB} on ${PGHOST})"
+pg_dump "$PGTOOLS_DATABASE_URL" | gzip > "$DUMP"
 
 echo "2) SHA-256 checksum"
 sha256sum "$DUMP" | tee "${DUMP}.sha256"
@@ -74,11 +98,8 @@ if [ "${DST_AUDIT:-0}" -gt 0 ]; then
   DATABASE_URL="$RESTORE_URL" npx tsx scripts/internal/audit-verify.ts
 fi
 
-echo "8) Synthetic end-to-end case check (restored cases are present or table exists)"
+echo "8) Synthetic end-to-end case check (restored cases present or table exists)"
 DST_CASES="$(psql_dst "SELECT count(*) FROM \"Case\";")"
 echo "   restored cases: ${DST_CASES}"
-
-echo "9) Clean up the temporary restored database"
-psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d postgres -c "DROP DATABASE IF EXISTS ${VERIFY_DB};" >/dev/null
 
 echo "BACKUP-AND-RESTORE VERIFICATION OK"
