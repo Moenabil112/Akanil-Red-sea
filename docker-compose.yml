@@ -1,0 +1,27 @@
+# P4-A local development database (§20). PostgreSQL only. Local development
+# values only — NOT a production configuration and NOT a cloud connection.
+# Override POSTGRES_PASSWORD locally; never commit a real password.
+services:
+  akanil-p4-postgres:
+    image: postgres:16-alpine
+    container_name: akanil-p4-postgres
+    environment:
+      POSTGRES_USER: akanil_p4
+      # Local development only. Set a real value in your shell:
+      #   POSTGRES_PASSWORD=... docker compose up -d
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_local_dev}
+      POSTGRES_DB: akanil_p4_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - akanil-p4-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U akanil_p4 -d akanil_p4_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  akanil-p4-pgdata:
+    driver: local

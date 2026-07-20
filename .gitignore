@@ -18,6 +18,14 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 
+# P4-A: generated Prisma client (run `npm run db:generate`)
+/lib/generated/
+
+# P4-A: local database backups and dumps (never commit)
+/backups/
+*.sql.gz
+*.dump
+
 # governing archives and source-resolution artwork stay outside the repo
 /project-inputs/
 *.zip

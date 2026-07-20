@@ -535,9 +535,13 @@ function walk(dir: string, out: string[] = []): string[] {
 }
 
 describe("privacy boundaries in application source", () => {
-  const files = ["app", "components", "lib", "content"].flatMap((dir) =>
-    walk(join(process.cwd(), dir)),
-  );
+  // The PUBLIC surface only. The P4-A internal employee application
+  // (lib/internal, app/**/internal, content/internal) and the generated
+  // Prisma client legitimately use server actions and cookies; they are
+  // covered by the P4-A boundary and prohibited-feature tests instead.
+  const files = ["app", "components", "lib", "content"]
+    .flatMap((dir) => walk(join(process.cwd(), dir)))
+    .filter((file) => !/[/\\](internal|generated)[/\\]/.test(file));
 
   it("introduces no storage, cookies, analytics or network submission", () => {
     const banned = [

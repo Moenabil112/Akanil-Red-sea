@@ -13,5 +13,8 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     include: ["tests/**/*.test.{ts,tsx}"],
+    // Integration tests run against PostgreSQL under a separate Node config
+    // (vitest.integration.config.ts); they are excluded from the default run.
+    exclude: ["tests/integration/**", "node_modules/**"],
   },
 });
